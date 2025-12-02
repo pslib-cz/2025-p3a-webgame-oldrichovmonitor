@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
     return(
-        <p>n</p>
+        <h2>Hello, <span className='text-gradient'>Patis</span></h2>
     )
 }
 
