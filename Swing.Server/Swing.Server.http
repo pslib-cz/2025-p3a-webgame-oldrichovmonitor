@@ -1,0 +1,6 @@
+@Swing.Server_HostAddress = http://localhost:5143
+
+GET {{Swing.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
