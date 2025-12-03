@@ -1,10 +1,11 @@
-import './App.css';
-
-
-
+import "./css/main.css"
 function App() {
     return(
-        <h2>Hello, <span className='text-gradient'>Patis</span></h2>
+        <div>
+            <h2>Hello, <span className='text-gradient'>Patis</span></h2>
+            <p className='button'>Enter Platform</p>
+        </div>
+        
     )
 }
 
