@@ -16,13 +16,17 @@ která ovlivňují celkovou strukturu.
     #0f1c2e 38.91%,
     #141636 80.11%
   );
-  height: 100vh;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* header | main | footer */
 }
 .home-page__header {
   display: flex;
   padding: 1.25rem 0.75rem 2rem;
   justify-content: space-between;
+  justify-self: stretch;
   align-items: flex-start;
+  /* width: 100%; */
 }
 .home-page__nav {
   display: flex;
@@ -133,4 +137,19 @@ která ovlivňují celkovou strukturu.
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+}
+footer {
+  position: static;
+}
+.footer__text {
+  color: #64758b;
+  font-family: "IBM Plex Mono";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-align: center;
+  padding-block: 1rem;
+  transform: none;
+  left: auto;
 }

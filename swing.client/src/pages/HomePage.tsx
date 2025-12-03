@@ -24,7 +24,7 @@ const HomePage = () => {
                 fill="#EBB30B"
               />
             </svg>
-            <p className="subtitle ibmplexmono white">Balance: 1 000 000$</p>
+            <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
           </div>
           <p className="subtitle">Sign out</p>
         </div>
@@ -164,6 +164,9 @@ const HomePage = () => {
           </article>
         </section>
       </main>
+      <footer>
+        <p className="footer__text">© 2025 Oldřichov Monitor</p>
+      </footer>
     </div>
   );
 };
