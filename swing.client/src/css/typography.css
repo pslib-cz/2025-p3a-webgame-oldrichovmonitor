@@ -34,7 +34,7 @@ h3 {
   -webkit-text-fill-color: transparent;
 }
 .subtext {
-  color: #979797;
+  color: rgba(255, 255, 255, 0.5);
   font-family: Inter;
   font-size: 0.875rem;
   font-style: normal;
@@ -47,5 +47,23 @@ h3 {
   font-size: 2rem;
   font-style: normal;
   font-weight: 700;
+  line-height: normal;
+}
+.text-label {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.text-label--sm {
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
   line-height: normal;
 }
