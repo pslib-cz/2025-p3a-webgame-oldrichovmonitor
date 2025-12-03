@@ -1,0 +1,28 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@layer reset, init, hamburger, components, layout;
+
+@import url(normalize.css) layer(reset);
+@import url(typography.css) layer(init);
+@import url(layout.css) layer(layout);
+@import url(hamburger.css) layer(hamburger);
+@import url(components.css) layer(components);
+
+
+
+@layer init {
+    :root {
+        --background: #1D1616;
+        --primary: #8E1616;
+        --secondary: #D84040;
+        --text: #EEEEEE;
+        --hamburger-color: #EEEEEE;
+    }
+    html{
+      scroll-behavior: smooth;
+      box-sizing: border-box;
+    }
+    
+
+}
+
