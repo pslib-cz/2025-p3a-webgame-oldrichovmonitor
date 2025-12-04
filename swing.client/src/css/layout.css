@@ -9,24 +9,28 @@ která ovlivňují celkovou strukturu.
   margin: 0 auto;
 }
 .home-page {
-  background-image: url(/images/grid-lines.svg);
-  background: linear-gradient(
-    119deg,
-    rgba(47, 26, 67, 0.88) -17.78%,
-    #0f1c2e 38.91%,
-    #141636 80.11%
-  );
+  background: linear-gradient(119deg, rgba(59, 26, 67, 1) -17.78%, rgba(15, 28, 46, 1) 38.91%, rgba(27, 20, 54, 1) 80.11%);
   min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto; /* header | main | footer */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: -1;
+}
+.home-page > * {
+  z-index: 1;
 }
 .home-page__header {
-  display: flex;
+  
   padding: 1.25rem 0.75rem 2rem;
-  justify-content: space-between;
-  justify-self: stretch;
+  
   align-items: flex-start;
+  align-self: stretch;
   /* width: 100%; */
+}
+.header__content-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 }
 .home-page__nav {
   display: flex;
@@ -49,16 +53,42 @@ která ovlivňují celkovou strukturu.
   align-items: center;
   gap: 0.5rem;
 }
-
+.balance--mobile{
+  display: none;
+}
+.home-page__content-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  padding: .75rem;
+  
+  gap: 1rem;
+}
 .home-page__main {
   text-align: center;
+  flex-grow: 1;
 }
-
+@media (max-width: 768px) {
+  .logo {
+    display: none;
+  }
+  .home-page__balance {
+    display: none;
+  }
+  .balance--mobile{
+    display: flex;
+  }
+  .home-page__content-wrapper{
+    padding-top: 2.5rem;
+  }
+  .header__content-wrapper{
+    align-items: center;
+  }
+}
 .home-page__games {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 4 equal cards per row */
   gap: 1rem;
-  padding: 0.75rem;
   align-items: stretch;
 }
 

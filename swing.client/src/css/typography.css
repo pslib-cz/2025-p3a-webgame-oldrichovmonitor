@@ -94,3 +94,10 @@ p {
 .ibmplexmono{
   font-family: "IBM Plex Mono";
 }
+.hoverable {
+  cursor: pointer;
+  transition: color .3s ease-in-out;
+}
+.hoverable:hover {
+  color: hsl(215, 20%, 40%);
+}

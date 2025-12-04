@@ -13,3 +13,12 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
   background: #4e47dd;
   box-shadow: 0 4px 8.1px 0 rgba(78, 71, 221, 0.52);
 }
+.grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #30384d;
+  opacity: 0.2;
+  -webkit-mask: url(/images/grid-lines.svg) center/cover no-repeat;
+  mask: url(/images/grid-lines.svg) center/cover no-repeat;
+}
