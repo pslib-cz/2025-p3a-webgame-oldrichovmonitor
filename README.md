@@ -23,4 +23,4 @@ React frontend: Vít Provazník
 - seed nebo ID generátoru
 - pravidla multipliérů
 
-##Odkaz na [Figmu](https://www.figma.com/design/xWhOSulI4XEDG3u46bf1Qg/Swing?node-id=0-1&t=opeDoBi9OIWncl0L-1)
+### Odkaz na [Figmu](https://www.figma.com/design/xWhOSulI4XEDG3u46bf1Qg/Swing?node-id=0-1&t=opeDoBi9OIWncl0L-1)
