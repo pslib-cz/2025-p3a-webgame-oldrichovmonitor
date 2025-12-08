@@ -2,6 +2,14 @@
 {
     public class MemoryPattern
     {
+        public MemoryPattern(int startSequence, int showSpeed, float speedMultiplier, float multiplierIncrease)
+        {
+            this.startSequence = startSequence;
+            this.showSpeed = showSpeed;
+            this.speedMultiplier = speedMultiplier;
+            this.multiplierIncrease = multiplierIncrease;
+        }
+
         public int startSequence {  get; set; } //length of the first sequence
         public int showSpeed {  get; set; } //speed at which sequence is shown (ms)
         public float speedMultiplier { get; set; } //how much faster is a higher difficulty
