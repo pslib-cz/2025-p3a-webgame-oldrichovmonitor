@@ -96,8 +96,8 @@ p {
 }
 .hoverable {
   cursor: pointer;
-  transition: color .3s ease-in-out;
+  transition: color .1s ease-in-out;
 }
 .hoverable:hover {
-  color: hsl(215, 20%, 40%);
+  color: hsl(215, 20%, 75%);
 }
