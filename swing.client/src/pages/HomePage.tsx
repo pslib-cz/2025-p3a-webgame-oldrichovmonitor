@@ -34,7 +34,7 @@ const HomePage = () => {
       </header>
       <main className="home-page__main">
         <img
-          className="logo"
+          className="logo hide-on-mobile"
           src="/images/logo.png"
           alt="Logo"
           width={186}

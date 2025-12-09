@@ -73,7 +73,7 @@ která ovlivňují celkovou strukturu.
   flex-grow: 1;
 }
 @media (max-width: 768px) {
-  .logo {
+  .hide-on-mobile {
     display: none;
   }
   .home-page__balance {
@@ -167,23 +167,7 @@ která ovlivňují celkovou strukturu.
   align-items: center;
   justify-content: center;
 }
-@keyframes horizontal-shaking {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(5px);
-  }
-  50% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
+
 .comming-soon__icon {
   display: flex;
   width: 1.2rem;
@@ -204,18 +188,102 @@ která ovlivňují celkovou strukturu.
   font-weight: 700;
   line-height: normal;
 }
-footer {
-  position: static;
+
+/* Login page styles */
+
+.login-page__header {
+  text-align: center;
 }
-.footer__text {
-  color: #64758b;
+.login-page__header .logo {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+.login-page__content {
+  margin: 0 auto;
+}
+.login-page__title {
+  color: #fff;
   font-family: "IBM Plex Mono";
-  font-size: 0.875rem;
+  font-size: 2rem;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+.login-page__input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  align-self: stretch;
+  min-width: 0; /* allow input-wrapper to shrink */
+}
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+  min-width: 0; /* prevent overflow in flex contexts */
+}
+.input-label {
+  color: var(--subtitile, rgba(255, 255, 255, 0.5));
   text-align: center;
-  padding-block: 1rem;
-  transform: none;
-  left: auto;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.input-wrapper .icon--input {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  aspect-ratio: 1/1;
+  color: #94a3b8; /* if SVG uses currentColor */
+  pointer-events: none;
+}
+.input-wrapper input {
+  box-sizing: border-box; /* include padding/border in width */
+  width: 100%;
+  padding: 0.75rem;
+  padding-left: 44px; /* room for icon */
+  border: 1px solid #364154;
+  border-radius: 8px;
+  font-family: Inter;
+  font-size: 0.875rem;
+  background: #181f30;
+}
+.login-page__main {
+  display: flex;
+  padding: 1.5rem 2rem;
+
+  width: min(100%, 24.625rem);
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid #343a4a;
+  background: #1e2536;
+}
+.login-page__card-header {
+  text-align: center;
+}
+.login-page__card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  align-self: stretch;
+  min-width: 0; /* allow children to shrink */
+}
+
+.login-page__card-subtext {
+  color: #657286;
+  text-align: center;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
