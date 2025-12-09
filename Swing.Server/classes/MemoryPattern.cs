@@ -34,5 +34,6 @@
             float nextMultiplier = multiplierIncrease * currentValue;
             return nextMultiplier;
         }
+
     }
 }
