@@ -11,7 +11,7 @@ h2 {
   font-family: "IBM Plex Mono";
   font-size: 1.75rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
 }
 
@@ -59,7 +59,7 @@ p {
   font-family: Inter;
   font-size: 0.875rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: normal;
 }
 .text-welcomeback {
