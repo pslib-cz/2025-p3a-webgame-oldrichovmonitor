@@ -11,7 +11,26 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
   align-self: stretch;
   border-radius: 8px;
   background: #4e47dd;
+  text-decoration: none;
   box-shadow: 0 4px 8.1px 0 rgba(78, 71, 221, 0.52);
+}
+.button__text {
+  color: #FFF;
+font-family: "IBM Plex Mono";
+font-size: 1rem;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+text-decoration: none;
+}
+.button__icon{
+  width: 1.5rem;
+height: 1.5rem;
+aspect-ratio: 1/1;
+}
+.page__section {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 .grid-lines {
   position: absolute;
@@ -22,3 +41,19 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
   -webkit-mask: url(/images/grid-lines.svg) center/cover no-repeat;
   mask: url(/images/grid-lines.svg) center/cover no-repeat;
 }
+footer {
+  position: static;
+}
+.footer__text {
+  color: #64758b;
+  font-family: "IBM Plex Mono";
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-align: center;
+  padding-block: 1rem;
+  transform: none;
+  left: auto;
+}
+
