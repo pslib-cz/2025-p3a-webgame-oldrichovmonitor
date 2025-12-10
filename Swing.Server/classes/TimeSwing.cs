@@ -2,22 +2,14 @@
 {
     public class TimeSwing
     {
-        public TimeSwing(int easySpeed, int mediumSpeed, int hardSpeed, float easyMultiplier, float mediumMultiplier, float hardMultiplier)
-        {
-            this.easySpeed = easySpeed;
-            this.mediumSpeed = mediumSpeed;
-            this.hardSpeed = hardSpeed;
-            this.easyMultiplier = easyMultiplier;
-            this.mediumMultiplier = mediumMultiplier;
-            this.hardMultiplier = hardMultiplier;
-        }
 
-        public int easySpeed {  get; set; }
-        public int mediumSpeed {  get; set; }
-        public int hardSpeed { get; set; }
-        public float easyMultiplier { get; set; }
-        public float mediumMultiplier { get; set; }
-        public float hardMultiplier { get; set; }
+
+        public int easySpeed { get; set; } = 10;
+        public int mediumSpeed { get; set; } = 20;
+        public int hardSpeed { get; set; } = 30;
+        public float easyMultiplier { get; set; } = 1.2f;
+        public float mediumMultiplier { get; set; } = 1.5f;
+        public float hardMultiplier { get; set; } = 2.0f;
 
     }
 }

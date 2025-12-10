@@ -8,23 +8,23 @@ namespace Swing.Server.Controllers
 {
     public class UserController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
+        //private readonly AppDbContext _dbContext;
         
         private readonly PrecisionSlider _precisionSlider;
         private readonly TimeSwing _timeSwing;
         private readonly MemoryPattern _memoryPattern;
         private readonly MinePattern _minePattern;
 
-        public UserController(AppDbContext dbContext, PrecisionSlider precisionSlider, MemoryPattern memoryPattern, MinePattern minePattern, TimeSwing timeSwing)
+        public UserController(/*AppDbContext dbContext,*/ PrecisionSlider precisionSlider, MemoryPattern memoryPattern, MinePattern minePattern, TimeSwing timeSwing)
         {
-            _dbContext = dbContext;
+            //_dbContext = dbContext;
             _precisionSlider = precisionSlider;
             _memoryPattern = memoryPattern;
             _minePattern = minePattern;
             _timeSwing = timeSwing;
         }
 
-        [HttpGet("{name}/{password}")]
+        /*[HttpGet("{name}/{password}")]
         public async Task<ActionResult<bool>> isPasswordCorrect(string name, string password)
         {
             var user = await _dbContext.Users.FindAsync(name);
@@ -69,7 +69,7 @@ namespace Swing.Server.Controllers
                 }
             }
             return BadRequest(user);
-        }
+        }*/
         [HttpGet("MinePattern/generate/{mines}")]
         public async Task<ActionResult<GridCoordinates[]>> generateMines(int mines)
         {
