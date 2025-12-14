@@ -2,8 +2,8 @@
 {
     public class GridCoordinates
     {
-        public int X;
-        public int Y;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public GridCoordinates(int x, int y)
         {

@@ -5,15 +5,15 @@
         public GridCoordinates[] placement(int mines, int diamonds)
         {
             List<GridCoordinates> result = new List<GridCoordinates>();
-            
+            Random random = new Random();
             while (mines > 0)
             {
                 int x;
                 int y;
                 bool isTaken = false;
-                Random random = new Random();
-                x = random.Next(0, 4);
-                y = random.Next(0, 4);
+                
+                x = random.Next(0, 5);
+                y = random.Next(0, 5);
                 for (int i = 0; i < result.Count; i++)
                 {
                     if(x == result[i].X && y == result[i].Y)
@@ -28,14 +28,15 @@
                 }
                 isTaken = false;
             }
+            
             while (diamonds > 0)
             {
                 int x;
                 int y;
                 bool isTaken = false;
-                Random random = new Random();
-                x = random.Next(0, 4);
-                y = random.Next(0, 4);
+                
+                x = random.Next(0, 5);
+                y = random.Next(0, 5);
                 for (int i = 0; i < result.Count; i++)
                 {
                     if (x == result[i].X && y == result[i].Y)
@@ -56,9 +57,11 @@
         {
             int remainingTiles = 25 - openedTiles;
             int remainingSafe = remainingTiles - mines;
-            float probability = remainingTiles / remainingSafe;
-            
-            return probability;
+
+            if (remainingSafe <= 0)
+                return 0f;
+
+            return (float)remainingTiles / remainingSafe;
         }
     }
 }
