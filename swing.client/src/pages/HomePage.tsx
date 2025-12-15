@@ -8,7 +8,7 @@ const HomePage = () => {
         <div className="page__section header__content-wrapper">
           <div className="home-page__title-text">
             <h2 className="">
-              Hello,<span className="text-gradient">pátis</span>
+              Hello,<span className="text-gradient">negr</span>
             </h2>
             <p className="subtitle">Ready to play?</p>
           </div>
