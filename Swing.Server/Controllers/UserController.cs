@@ -6,7 +6,8 @@ using Swing.Server.dbcontexts;
 
 namespace Swing.Server.Controllers
 {
-    [Route("api")]
+    [Controller]
+    [Route("")]
     public class UserController : ControllerBase
     {
         //private readonly AppDbContext _dbContext;
