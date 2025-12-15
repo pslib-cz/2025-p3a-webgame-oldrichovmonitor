@@ -24,23 +24,21 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
-      const response = await fetch(`https://localhost:54657/api/MinePattern/generate/${minesCount}`);
-     
-      if (!response.ok) {
-        throw new Error("Chyba při komunikaci se serverem");
-      }
-      {console.log(JSON.stringify(response))}
-      const mineCoordinates: Coordinates[] = await response.json();
+      const response = await fetch(`/MinePattern/generate/${minesCount}`);
+      const data = await response.json();
+      console.log(data);
   };
-  
 
   const handleTileClick = () => {};
   return (
-    <div className="grid-container">
-      {grid.map((tile, index) => (
-        <div key={tile.id} onClick={handleTileClick} className=""></div>
-      ))}
-    </div>
+    <>
+      <div className="grid-container">
+        {grid.map((tile, index) => (
+          <div key={tile.id} onClick={handleTileClick} className=""></div>
+        ))}
+      </div>
+      <button onClick={()=> startGame()}>bet</button>
+    </>
   );
 };
 
