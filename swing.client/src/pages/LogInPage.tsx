@@ -48,7 +48,7 @@ const LogInPage = () => {
                 <input type="text" placeholder="Enter your gamertag" />
               </div>
             </div>
-            <a href="#" className="button">
+            <a href="/homepage" className="button">
               <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
