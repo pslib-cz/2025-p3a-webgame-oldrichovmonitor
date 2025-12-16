@@ -24,7 +24,7 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
-      const response = await fetch(`/api/MinePattern/StartGame/10`);
+      const response = await fetch(`/api/MinePattern/StartGame/${minesCount}`);
       const data = await response.json();
       console.log(data);
   };
