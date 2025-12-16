@@ -287,3 +287,20 @@ která ovlivňují celkovou strukturu.
   font-weight: 600;
   line-height: normal;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 0px auto;
+  border-radius: 0.5rem;
+  border: 12px solid #0d131f;
+  opacity: 0.8;
+  background-color: #0d131f;
+  max-width: 324px;
+}
+.grid-container > div {
+  background-color: #171f2c;
+  display: inline-block;
+  aspect-ratio: 1/1;
+}
