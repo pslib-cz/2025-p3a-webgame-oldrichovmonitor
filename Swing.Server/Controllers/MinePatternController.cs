@@ -5,7 +5,7 @@ namespace Swing.Server.Controllers
 {
     [ApiController]
     [Route("api/MinePattern")]
-    public class MinePatternController: ControllerBase
+    public class MinePatternController : ControllerBase
     {
         private readonly MinePattern _minePattern;
 
@@ -31,6 +31,12 @@ namespace Swing.Server.Controllers
                 indices.Add(random.Next(1, 26));
             }
             return Ok(indices.ToArray());
+        }
+        [HttpGet("Multiplier")]
+        public ActionResult<float> GetMultiplier([FromQuery] int openedTiles, [FromQuery] int mines)
+        {
+            float multiplier = _minePattern.returnMultiplier(openedTiles, mines);
+            return Ok(multiplier);
         }
 
     }
