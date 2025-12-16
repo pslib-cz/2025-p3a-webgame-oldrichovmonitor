@@ -47,8 +47,9 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/UserController': {
-                target,
+            '^/api': {
+                target: 'https://localhost:7011',
+                changeOrigin: true,
                 secure: false
             }
         },
