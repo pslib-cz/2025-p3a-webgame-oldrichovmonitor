@@ -64,7 +64,7 @@ const LogInPage = () => {
                 />
               </div>
             </div>
-            <a href="#" className="button" onClick={onEnter}>
+            <a href="#" className="button">
               <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
