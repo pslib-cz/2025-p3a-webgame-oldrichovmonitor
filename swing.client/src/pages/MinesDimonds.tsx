@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface Tile {
   id: number;
@@ -10,7 +10,6 @@ const MinesDimonds = () => {
   const [minesCount, setMinesCount] = useState(2);
   const [betAmount, setBetAmount] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mineIndices, setMineIndices] = useState<number[]>([]);
   const [openedTiles, setOpenedTiles] = useState(0);
   const [win, setWin] = useState<number>(0);
   const [grid, setGrid] = useState<Tile[]>(
@@ -26,7 +25,6 @@ const MinesDimonds = () => {
     setIsPlaying(true);
     setOpenedTiles(0);
     setWin(0);
-    setMineIndices([]);
     setGrid(
       Array.from({ length: 25 }, (_, i) => ({
         id: i,
@@ -35,9 +33,8 @@ const MinesDimonds = () => {
       }))
     );
 
-    const response = await fetch(`/api/MinePattern/StartGame/${minesCount}`);
-    const data: number[] = await response.json();
-    setMineIndices(data);
+    await fetch(`/api/MinePattern/StartGame/${minesCount}`);
+    
   };
   const getMultiplier = async (openedTiles: number) => {
     const response = await fetch(
