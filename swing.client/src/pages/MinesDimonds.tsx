@@ -1,9 +1,4 @@
-import React, { useState } from "react";
-
-interface Coordinates {
-  x: number;
-  y: number;
-}
+import { useState } from "react";
 
 interface Tile {
   id: number;
@@ -15,7 +10,6 @@ const MinesDimonds = () => {
   const [minesCount, setMinesCount] = useState(2);
   const [betAmount, setBetAmount] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [mineIndices, setMineIndices] = useState<number[]>([]);
   const [openedTiles, setOpenedTiles] = useState(0);
   const [win, setWin] = useState<number>(0);
   const [grid, setGrid] = useState<Tile[]>(
@@ -27,10 +21,20 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
-    const response = await fetch(`/api/MinePattern/StartGame/${minesCount}`);
-    const data: number[] = await response.json();
-    setMineIndices(data);
-    console.log(data);
+    if(isPlaying) return
+    setIsPlaying(true);
+    setOpenedTiles(0);
+    setWin(0);
+    setGrid(
+      Array.from({ length: 25 }, (_, i) => ({
+        id: i,
+        status: "diamond",
+        hidden: true,
+      }))
+    );
+
+    await fetch(`/api/MinePattern/StartGame/${minesCount}`);
+    
   };
   const getMultiplier = async (openedTiles: number) => {
     const response = await fetch(
@@ -40,15 +44,30 @@ const MinesDimonds = () => {
     return multiplier;
   };
 
+  const cashOut = () =>{
+
+  }
+
   const handleTileClick = async (index: number) => {
-    if (mineIndices.includes(index)) {
-      alert("Bomba!");
+    if (!isPlaying || !grid[index].hidden) return;
+    const response = await fetch(`/api/MinePattern/Reveal?index=${index}`);
+    const data = await response.json();
+
+    const newGrid = [...grid];
+    newGrid[index].hidden = false;
+    newGrid[index].status = data.isMine ? "mine" : "diamond";
+    setGrid(newGrid);
+
+    if (data.isMine) {
+      setIsPlaying(false)
+      setWin(0)
     } else {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
-      setWin(betAmount * multiplier);
+      setWin(betAmount * multiplier)
       alert(`Diamant! Multiplier: ${multiplier}`);
+
     }
   };
   return (
