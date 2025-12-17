@@ -36,7 +36,7 @@ která ovlivňují celkovou strukturu.
   justify-content: space-between;
   align-items: start;
 }
-.home-page__nav {
+.header__nav {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -48,7 +48,7 @@ která ovlivňují celkovou strukturu.
   align-items: flex-start;
   gap: 0.25rem;
 }
-.home-page__balance {
+.header__balance {
   border-radius: 1rem;
   border: 1px solid #2f3547;
   background: rgba(25, 30, 54, 0.62);
@@ -288,19 +288,66 @@ která ovlivňují celkovou strukturu.
   line-height: normal;
 }
 
+/* Mines and Dimonds page styles */
+.mines-dimonds-page {
+  background: #080e1d;
+}
+.mines-diamonds__header {
+}
+.game-page__header-content-wrapper {
+  align-items: center;
+  padding-inline: 1rem;
+  padding-block: 1rem;
+}
+.game-page__header-title-wrapper {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.mines-button {
+  display: flex;
+  padding: 0.25rem 1rem;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  background: #6d28d9;
+}
+.mines-button__text {
+  color: #fff;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.mines-button__icon-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 0px auto;
-  border-radius: 0.5rem;
-  border: 12px solid #0d131f;
-  opacity: 0.8;
-  background-color: #0d131f;
-  max-width: 324px;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 450px;
+  padding: 0.25rem;
+  margin: 0 auto;
+  margin-block: 2rem;
 }
 .grid-container > div {
-  background-color: #171f2c;
-  display: inline-block;
-  aspect-ratio: 1/1;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #1c2b45;
+  border: none;
+  border-bottom: 4px solid #131e32;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
