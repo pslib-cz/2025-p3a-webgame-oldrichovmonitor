@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swing.Server.classes;
+using System.Collections.Generic;
 
 namespace Swing.Server.Controllers
 {
@@ -8,36 +9,37 @@ namespace Swing.Server.Controllers
     public class MinePatternController : ControllerBase
     {
         private readonly MinePattern _minePattern;
+        private static HashSet<int> _currentMines = new HashSet<int>();
 
         public MinePatternController(MinePattern minePattern)
         {
             _minePattern = minePattern;
         }
+
         [HttpGet("StartGame/{mines}")]
-        /*
-        public ActionResult<GridCoordinates[]> generateMines(int mines)
-        {
-            int diamonds = 25 - mines;
-            GridCoordinates[] gridCoordinates = _minePattern.placement(mines, diamonds);
-            return Ok(gridCoordinates);
-        }
-        */
-        public ActionResult<int[]> GetRandomMines(int mines)
+        public ActionResult<int[]> StartGame(int mines)
         {
             var random = new Random();
-            var indices = new HashSet<int>();
-            while (indices.Count < mines)
+            _currentMines.Clear();
+            while (_currentMines.Count < mines)
             {
-                indices.Add(random.Next(1, 26));
+                _currentMines.Add(random.Next(0, 26));
             }
-            return Ok(indices.ToArray());
+            return Ok(_currentMines.ToArray());
         }
+
+        [HttpGet("Reveal")]
+        public ActionResult Reveal([FromQuery] int index)
+        {
+            bool isMine = _currentMines.Contains(index);
+            return Ok(new { isMine });
+        }
+
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] int openedTiles, [FromQuery] int mines)
         {
             float multiplier = _minePattern.returnMultiplier(openedTiles, mines);
             return Ok(multiplier);
         }
-
     }
 }

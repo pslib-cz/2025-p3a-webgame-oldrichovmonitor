@@ -17,7 +17,7 @@ const MinesDimonds = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [mineIndices, setMineIndices] = useState<number[]>([]);
   const [openedTiles, setOpenedTiles] = useState(0);
-  const [win, setWin] = useState<number>(0)
+  const [win, setWin] = useState<number>(0);
   const [grid, setGrid] = useState<Tile[]>(
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
@@ -27,6 +27,7 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
+    setIsPlaying(true);
     const response = await fetch(`/api/MinePattern/StartGame/${minesCount}`);
     const data: number[] = await response.json();
     setMineIndices(data);
@@ -41,22 +42,32 @@ const MinesDimonds = () => {
   };
 
   const handleTileClick = async (index: number) => {
-    if (mineIndices.includes(index)) {
+    if (!isPlaying) return;
+    const response = await fetch(`/api/MinePattern/Reveal?index=${index}`);
+    const data = await response.json();
+
+    const newGrid = [...grid];
+    newGrid[index].hidden = false;
+    newGrid[index].status = data.isMine ? "mine" : "diamond";
+    setGrid(newGrid);
+
+    if (data.isMine) {
       alert("Bomba!");
     } else {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
-      setWin(betAmount * multiplier)
+      setWin(betAmount * multiplier);
       alert(`Diamant! Multiplier: ${multiplier}`);
-
     }
   };
   return (
     <>
       <div className="grid-container">
         {grid.map((tile, index) => (
-          <div key={tile.id} onClick={() => handleTileClick(index)}></div>
+          <div key={tile.id} onClick={() => handleTileClick(index)}>
+             {!tile.hidden && (tile.status === "mine" ? <img src="/images/bomba.svg" alt="bomba"/> : <img src="/images/diamand.svg" alt="diamand"/>)}
+          </div>
         ))}
       </div>
       <button onClick={() => startGame()}>bet</button>

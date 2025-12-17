@@ -55,13 +55,8 @@
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
-            int remainingTiles = 25 - openedTiles;
-            int remainingSafe = remainingTiles - mines;
-
-            if (remainingSafe <= 0)
-                return 0f;
-
-            return (float)remainingTiles / remainingSafe;
+            return (float)(25-openedTiles)/((25-mines)/openedTiles);
         }
+        
     }
 }
