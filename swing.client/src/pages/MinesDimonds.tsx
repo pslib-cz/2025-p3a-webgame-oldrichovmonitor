@@ -1,10 +1,5 @@
 import React, { useState } from "react";
 
-interface Coordinates {
-  x: number;
-  y: number;
-}
-
 interface Tile {
   id: number;
   status: "mine" | "diamond";
@@ -27,11 +22,22 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
+    if(isPlaying) return
     setIsPlaying(true);
+    setOpenedTiles(0);
+    setWin(0);
+    setMineIndices([]);
+    setGrid(
+      Array.from({ length: 25 }, (_, i) => ({
+        id: i,
+        status: "diamond",
+        hidden: true,
+      }))
+    );
+
     const response = await fetch(`/api/MinePattern/StartGame/${minesCount}`);
     const data: number[] = await response.json();
     setMineIndices(data);
-    console.log(data);
   };
   const getMultiplier = async (openedTiles: number) => {
     const response = await fetch(
@@ -41,8 +47,12 @@ const MinesDimonds = () => {
     return multiplier;
   };
 
+  const cashOut = () =>{
+
+  }
+
   const handleTileClick = async (index: number) => {
-    if (!isPlaying) return;
+    if (!isPlaying || !grid[index].hidden) return;
     const response = await fetch(`/api/MinePattern/Reveal?index=${index}`);
     const data = await response.json();
 
@@ -52,13 +62,13 @@ const MinesDimonds = () => {
     setGrid(newGrid);
 
     if (data.isMine) {
-      alert("Bomba!");
+      setIsPlaying(false)
+      setWin(0)
     } else {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
       setWin(betAmount * multiplier);
-      alert(`Diamant! Multiplier: ${multiplier}`);
     }
   };
   return (
@@ -66,16 +76,36 @@ const MinesDimonds = () => {
       <div className="grid-container">
         {grid.map((tile, index) => (
           <div key={tile.id} onClick={() => handleTileClick(index)}>
-             {!tile.hidden && (tile.status === "mine" ? <img src="/images/bomba.svg" alt="bomba"/> : <img src="/images/diamand.svg" alt="diamand"/>)}
+            {!tile.hidden &&
+              (tile.status === "mine" ? (
+                <img src="/images/bomba.svg" alt="bomba" />
+              ) : (
+                <img src="/images/diamand.svg" alt="diamand" />
+              ))}
           </div>
         ))}
       </div>
-      <button onClick={() => startGame()}>bet</button>
+      <button onClick={() => startGame()} disabled={isPlaying}>bet</button>
       <button>Bet Amount: {betAmount}</button>
       <button onClick={() => setBetAmount(betAmount - 10)}>-</button>
       <button onClick={() => setBetAmount(betAmount + 10)}>+</button>
+      <label>
+        Počet min:&nbsp;
+        <select
+          value={minesCount}
+          onChange={(e) => setMinesCount(Number(e.target.value))}
+          disabled={isPlaying}
+        >
+          {Array.from({ length: 24 }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {i + 1}
+            </option>
+          ))}
+        </select>
+      </label>
       <button>Pocet sebranych diamantu: {openedTiles}</button>
       <p>You win: {win}</p>
+      <button onClick={()=> cashOut()}>Cash Out</button>
     </>
   );
 };
