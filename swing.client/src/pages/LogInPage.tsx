@@ -1,5 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const LogInPage = () => {
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  const onEnter = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!username.trim()) return; // require a name
+    navigate("/", { state: { username } }); // go to HomePage with name
+  };
+
   return (
     <div className="login-page page">
       <span className="grid-lines"></span>
@@ -45,10 +56,15 @@ const LogInPage = () => {
                     stroke-linejoin="round"
                   />
                 </svg>
-                <input type="text" placeholder="Enter your gamertag" />
+                <input
+                  type="text"
+                  placeholder="Enter your gamertag"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
             </div>
-            <a href="#" className="button">
+            <a href="#" className="button" onClick={onEnter}>
               <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
@@ -68,7 +84,9 @@ const LogInPage = () => {
               </svg>
             </a>
           </div>
-          <p className="login-page__card-subtext">No account required. This is a demo.</p>
+          <p className="login-page__card-subtext">
+            No account required. This is a demo.
+          </p>
         </article>
       </main>
       <footer>
@@ -77,4 +95,5 @@ const LogInPage = () => {
     </div>
   );
 };
+
 export default LogInPage;
