@@ -11,6 +11,7 @@ const MinesDimonds = () => {
   const [betAmount, setBetAmount] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
   const [openedTiles, setOpenedTiles] = useState(0);
+  const [nextMultiplier, setNextMultiplier] = useState(0);
   const [win, setWin] = useState<number>(0);
   const [grid, setGrid] = useState<Tile[]>(
     Array.from({ length: 25 }, (_, i) => ({
@@ -65,6 +66,7 @@ const MinesDimonds = () => {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
+      setNextMultiplier(await getMultiplier(multiplier));
       setWin(betAmount * multiplier);
     }
   };
