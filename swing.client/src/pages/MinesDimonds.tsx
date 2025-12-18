@@ -104,6 +104,7 @@ const MinesDimonds = () => {
       </label>
       <button>Pocet sebranych diamantu: {openedTiles}</button>
       <p>You win: {win}</p>
+      <p>Next Multiplier: {nextMultiplier}</p>
       <button onClick={()=> cashOut()}>Cash Out</button>
     </>
   );
