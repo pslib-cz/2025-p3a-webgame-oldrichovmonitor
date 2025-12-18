@@ -371,3 +371,48 @@ která ovlivňují celkovou strukturu.
   align-items: center;
   justify-content: center;
 }
+.mines-button__bet-controls {
+  padding: .5rem .5rem .5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #20283e;
+  background: #121b2e;
+  display: flex;
+  gap: 1rem;
+}
+.bet-controls__text-input-group{
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.bet-controls__left-section{
+  display: flex;
+  align-items: end;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.bet-controls__buttons-group{
+  display: flex;
+  gap: 0.3rem;
+}
+.bet-controls__text{
+  font-weight: 400;
+  font-size: 0.7rem;
+}
+.bet-controls__input{
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: "IBM Plex Mono";
+  font-size: 1.2rem;
+  text-align: start;
+}
+.bet-controls__button{
+  background-color: #1C2B45;
+  border: none;
+  border-radius: 8px;
+}
+.bet-controls__middle-buttons{
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
