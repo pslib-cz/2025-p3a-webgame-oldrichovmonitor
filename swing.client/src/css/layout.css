@@ -344,6 +344,7 @@ která ovlivňují celkovou strukturu.
 }
 .mines-button__multiplier {
   background: #ebb30b;
+ align-items: end;
 }
 .mines-button__icon-wrapper {
   display: flex;
@@ -354,8 +355,6 @@ která ovlivňují celkovou strukturu.
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.25rem;
 }
 .grid-container > div {
   position: relative;
@@ -393,6 +392,7 @@ která ovlivňují celkovou strukturu.
 .bet-controls__buttons-group{
   display: flex;
   gap: 0.3rem;
+  align-items: center;
 }
 .bet-controls__text{
   font-weight: 400;
@@ -410,6 +410,15 @@ která ovlivňují celkovou strukturu.
   background-color: #1C2B45;
   border: none;
   border-radius: 8px;
+  padding: 0.5rem .8rem;
+  height: min-content;
+  font-family: Inter;
+  color: white;
+  font-size: 1rem;
+}
+.bet-controls__button--small{
+  padding: 0.3rem .6rem;
+  font-size: .6rem;
 }
 .bet-controls__middle-buttons{
   display: flex;

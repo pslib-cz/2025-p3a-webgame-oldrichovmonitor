@@ -20,6 +20,13 @@ const MinesDimonds = () => {
     }))
   );
 
+  // Helpers for bet center buttons
+  const clampBet = (val: number) => Math.max(1, Math.floor(val));
+  const decBet = () => setBetAmount((b) => clampBet(b - 10));
+  const incBet = () => setBetAmount((b) => clampBet(b + 10));
+  const doubleBet = () => setBetAmount((b) => clampBet(b * 2));
+  const halfBet = () => setBetAmount((b) => clampBet(b / 2));
+
   const startGame = async () => {
     if (isPlaying) return;
     setIsPlaying(true);
@@ -160,7 +167,10 @@ const MinesDimonds = () => {
                     type="number"
                     className="bet-controls__input"
                     value={betAmount}
-                    onChange={(e) => setBetAmount(Number(e.target.value))}
+                    onChange={(e) =>
+                      setBetAmount(clampBet(Number(e.target.value)))
+                    }
+                    min={1}
                   />
                 </div>
                 <svg
@@ -177,34 +187,25 @@ const MinesDimonds = () => {
                 </svg>
               </div>
               <div className="bet-controls__buttons-group">
-                <button className="bet-controls__button">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path d="M19 12.998H5V10.998H19V12.998Z" fill="white" />
-                  </svg>
+                <button className="bet-controls__button" onClick={decBet}>
+                  -
                 </button>
                 <div className="bet-controls__middle-buttons">
-                  <button className="bet-controls__button">2x</button>
-                  <button className="bet-controls__button">1/2</button>
-                </div>
-                <button className="bet-controls__button">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
+                  <button
+                    className="bet-controls__button bet-controls__button--small"
+                    onClick={doubleBet}
                   >
-                    <path
-                      d="M19 12.998H13V18.998H11V12.998H5V10.998H11V4.99799H13V10.998H19V12.998Z"
-                      fill="white"
-                    />
-                  </svg>
+                    2x
+                  </button>
+                  <button
+                    className="bet-controls__button bet-controls__button--small"
+                    onClick={halfBet}
+                  >
+                    1/2
+                  </button>
+                </div>
+                <button className="bet-controls__button" onClick={incBet}>
+                  +
                 </button>
               </div>
             </div>
