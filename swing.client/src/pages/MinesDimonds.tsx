@@ -21,7 +21,7 @@ const MinesDimonds = () => {
   );
 
   const startGame = async () => {
-    if(isPlaying) return
+    if (isPlaying) return;
     setIsPlaying(true);
     setOpenedTiles(0);
     setWin(0);
@@ -34,7 +34,6 @@ const MinesDimonds = () => {
     );
 
     await fetch(`/api/MinePattern/StartGame/${minesCount}`);
-    
   };
   const getMultiplier = async (openedTiles: number) => {
     const response = await fetch(
@@ -44,9 +43,7 @@ const MinesDimonds = () => {
     return multiplier;
   };
 
-  const cashOut = () =>{
-
-  }
+  const cashOut = () => {};
 
   const handleTileClick = async (index: number) => {
     if (!isPlaying || !grid[index].hidden) return;
@@ -59,15 +56,14 @@ const MinesDimonds = () => {
     setGrid(newGrid);
 
     if (data.isMine) {
-      setIsPlaying(false)
-      setWin(0)
+      setIsPlaying(false);
+      setWin(0);
     } else {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
-      setWin(betAmount * multiplier)
+      setWin(betAmount * multiplier);
       alert(`Diamant! Multiplier: ${multiplier}`);
-
     }
   };
   return (
@@ -108,57 +104,63 @@ const MinesDimonds = () => {
           <h1 className="game-title">Mines & Diamonds</h1>
           <p className="subtitle">Avoid mines and uncover shining diamonds.</p>
         </div>
-        <div className="mines-buttons">
-          <a className="mines-button mines-button__mines-count">
-            <div className="mines-button__icon-wrapper">
-              <p className="mines-button__text">MINES:</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="12"
-                viewBox="0 0 24 12"
-                fill="none"
-              >
-                <g clip-path="url(#clip0_72_199)">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M11.2889 10.1571L5.63186 4.50006L7.04586 3.08606L11.9959 8.03606L16.9459 3.08606L18.3599 4.50006L12.7029 10.1571C12.5153 10.3445 12.261 10.4498 11.9959 10.4498C11.7307 10.4498 11.4764 10.3445 11.2889 10.1571Z"
-                    fill="white"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_72_199">
-                    <rect
-                      width="12"
-                      height="24"
+        <div className="mines-game__wrapper">
+          <div className="mines-buttons">
+            <a className="mines-button mines-button__mines-count">
+              <div className="mines-button__icon-wrapper">
+                <p className="mines-button__text">MINES:</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="12"
+                  viewBox="0 0 24 12"
+                  fill="none"
+                >
+                  <g clip-path="url(#clip0_72_199)">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M11.2889 10.1571L5.63186 4.50006L7.04586 3.08606L11.9959 8.03606L16.9459 3.08606L18.3599 4.50006L12.7029 10.1571C12.5153 10.3445 12.261 10.4498 11.9959 10.4498C11.7307 10.4498 11.4764 10.3445 11.2889 10.1571Z"
                       fill="white"
-                      transform="matrix(0 1 -1 0 24 0)"
                     />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-            <p className="subtitle">{minesCount}</p>
-          </a>
-          <a className="mines-button mines-button__mines-count">
-            <div className="mines-button__icon-wrapper">
-              <p className="mines-button__text">MULTIPLIER:</p>
-            </div>
-            <p className="subtitle">{}</p>
-          </a>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_72_199">
+                      <rect
+                        width="12"
+                        height="24"
+                        fill="white"
+                        transform="matrix(0 1 -1 0 24 0)"
+                      />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <p className="mines-button__subtext">{minesCount}</p>
+            </a>
+            <a className="mines-button mines-button__multiplier">
+              <div className="mines-button__icon-wrapper">
+                <p className="mines-button__text">NEXT MULTIPLIER:</p>
+              </div>
+              <p className="mines-button__subtext">1,7x</p>
+            </a>
+          </div>
+          <div className="grid-container">
+            {grid.map((tile, index) => (
+              <div key={tile.id} onClick={() => handleTileClick(index)}></div>
+            ))}
+          </div>
+          
+          <div className="mines__game-nav">
+            
+            <button onClick={() => startGame()}>bet</button>
+            <button>Bet Amount: {betAmount}</button>
+            <button onClick={() => setBetAmount(betAmount - 10)}>-</button>
+            <button onClick={() => setBetAmount(betAmount + 10)}>+</button>
+            <button>Pocet sebranych diamantu: {openedTiles}</button>
+            <p>You win: {win}</p>
+          </div>
         </div>
-        <div className="grid-container">
-          {grid.map((tile, index) => (
-            <div key={tile.id} onClick={() => handleTileClick(index)}></div>
-          ))}
-        </div>
-        <button onClick={() => startGame()}>bet</button>
-        <button>Bet Amount: {betAmount}</button>
-        <button onClick={() => setBetAmount(betAmount - 10)}>-</button>
-        <button onClick={() => setBetAmount(betAmount + 10)}>+</button>
-        <button>Pocet sebranych diamantu: {openedTiles}</button>
-        <p>You win: {win}</p>
       </main>
     </div>
   );
