@@ -66,7 +66,7 @@ const MinesDimonds = () => {
       const newOpened = openedTiles + 1;
       setOpenedTiles(newOpened);
       const multiplier = await getMultiplier(newOpened);
-      setNextMultiplier(await getMultiplier(multiplier));
+      setNextMultiplier(await getMultiplier(newOpened + 1));
       setWin(betAmount * multiplier);
     }
   };
@@ -106,6 +106,7 @@ const MinesDimonds = () => {
       <p>You win: {win}</p>
       <p>Next Multiplier: {nextMultiplier}</p>
       <button onClick={()=> cashOut()}>Cash Out</button>
+      <p>Next Multiplier: {nextMultiplier}</p>
     </>
   );
 };
