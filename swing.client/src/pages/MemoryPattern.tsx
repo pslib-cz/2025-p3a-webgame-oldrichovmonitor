@@ -6,7 +6,11 @@ const MemoryPattern = () => {
 
 
   return (
-    <div>MemoryPattern</div>
+    <>
+      <div>
+        
+      </div>
+    </>
   )
 }
 

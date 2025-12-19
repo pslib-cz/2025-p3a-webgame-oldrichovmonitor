@@ -7,10 +7,9 @@ const TimeSplit = () => {
   const [win, setWin] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState(targetTime);
   const intervalRef = useRef<number | null>(null);
-
   useEffect(() => {
     if (!isPlaying) setCurrentTime(targetTime);
-  }, [targetTime, isPlaying]);
+  }, [targetTime]);
 
   const startGame = () => {
     if (isPlaying) return;
