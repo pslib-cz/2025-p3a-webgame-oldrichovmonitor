@@ -43,6 +43,13 @@ namespace Swing.Server.Controllers
             bool correct = _currentPattern.SequenceEqual(userInput);
             return Ok(correct);
         }
+
+        [HttpGet("Multiplier")]
+        public ActionResult<float> GetMultiplier([FromQuery] int length)
+        {
+            double multiplier = Math.Pow(_memoryPattern.multiplierIncrease, length - 2);
+            return Ok((float)multiplier);
+        }
     }
 
 
@@ -62,5 +69,5 @@ namespace Swing.Server.Controllers
             this.speedIncrease = speedIncrease;
         }
     }
-    
+
 }
