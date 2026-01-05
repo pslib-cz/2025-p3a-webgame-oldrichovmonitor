@@ -74,7 +74,7 @@ const MinesDimonds = () => {
     <>
       <div className="grid-container">
         {grid.map((tile, index) => (
-          <div key={tile.id} onClick={() => handleTileClick(index)}>
+          <div className="tile" key={tile.id} onClick={() => handleTileClick(index)}>
             {!tile.hidden &&
               (tile.status === "mine" ? (
                 <img src="/images/bomba.svg" alt="bomba" />

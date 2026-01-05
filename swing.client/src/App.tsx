@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogInPage";
 import MinesDimonds from "./pages/MinesDimonds";
 import TimeSplit from "./pages/TimeSplit";
+import MemoryPattern from "./pages/MemoryPattern";
 function App() {
   return (
     <Routes>
@@ -11,6 +12,7 @@ function App() {
       <Route path="/homepage" element={<HomePage />} />
       <Route path="/mines" element={<MinesDimonds />} />
       <Route path="/timesplit" element={<TimeSplit />} />
+      <Route path="/memmorypattern" element={<MemoryPattern/>}/>
     </Routes>
   );
 }

@@ -299,8 +299,15 @@ která ovlivňují celkovou strukturu.
   background-color: #0d131f;
   max-width: 324px;
 }
-.grid-container > div {
+.tile{
   background-color: #171f2c;
   display: inline-block;
   aspect-ratio: 1/1;
+}
+.grid-container--memmory{
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.tile--highlighted {
+  background: #f1c40f;
 }
