@@ -15,18 +15,18 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
   box-shadow: 0 4px 8.1px 0 rgba(78, 71, 221, 0.52);
 }
 .button__text {
-  color: #FFF;
-font-family: "IBM Plex Mono";
-font-size: 1rem;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-text-decoration: none;
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-decoration: none;
 }
-.button__icon{
+.button__icon {
   width: 1.5rem;
-height: 1.5rem;
-aspect-ratio: 1/1;
+  height: 1.5rem;
+  aspect-ratio: 1/1;
 }
 .page__section {
   max-width: 1280px;
@@ -56,4 +56,3 @@ footer {
   transform: none;
   left: auto;
 }
-
