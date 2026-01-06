@@ -328,6 +328,16 @@ která ovlivňují celkovou strukturu.
   align-items: center;
   gap: 1rem;
 }
+
+@media (max-width: 768px) {
+  .balance--order-switch{
+    order: -1;
+  }
+  .game-page__nav{
+    justify-content: space-between;
+    width: 100%;
+  }
+}
 .balance-info{
   display: flex;
 }
@@ -342,6 +352,13 @@ která ovlivňují celkovou strukturu.
 @media screen and (min-width: 768px) {
   .game-page__header-content-wrapper {
     flex-direction: row;
+    
+  }
+}
+@media screen and (max-width: 768px) {
+  .game-page__header-content-wrapper {
+    margin-bottom: 1rem;
+
   }
 }
 .game-page__header-title-wrapper {
@@ -548,6 +565,7 @@ která ovlivňují celkovou strukturu.
     grid-template-columns: 1fr;
   }
 } */
- .header__balance {
-  margin-top: 0;
+
+.balance-info--header{
+  margin: 0;
 }

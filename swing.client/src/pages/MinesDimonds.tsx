@@ -103,7 +103,7 @@ const MinesDimonds = () => {
           />
 
           <div className="header__nav game-page__nav">
-            <div className="balance-info header__balance">
+            <div className="balance-info balance-info--header header__balance">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -120,7 +120,7 @@ const MinesDimonds = () => {
                 Balance: {balance.toFixed(2)}$
               </p>
             </div>
-            <p className="subtitle hoverable">Exit to Arcade</p>
+            <p className="subtitle hoverable balance--order-switch">Exit to Arcade</p>
           </div>
         </div>
       </header>
