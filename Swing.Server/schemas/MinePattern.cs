@@ -55,7 +55,12 @@
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
-            return (float)(25-openedTiles)/((25-mines)/openedTiles);
+            float multiplier = 1.0f;
+            for (int i = 0; i < openedTiles; i++)
+            {
+                multiplier *= (25.0f - i) / (25.0f - mines - i);
+            }
+            return multiplier;
         }
         
     }
