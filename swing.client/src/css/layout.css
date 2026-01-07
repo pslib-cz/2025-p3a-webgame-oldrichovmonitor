@@ -315,18 +315,7 @@ která ovlivňují celkovou strukturu.
   opacity: 0.8;
   background-color: #0d131f;
 }
-.tile{
-  background-color: #171f2c;
-  display: inline-block;
-  aspect-ratio: 1/1;
-} */
-.grid-container--memmory {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.tile--highlighted {
-  background: #f1c40f;
-}
+ */
 
 /* Mines and Dimonds page styles */
 .mines-dimonds-page {
@@ -447,7 +436,6 @@ která ovlivňují celkovou strukturu.
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
   border-radius: 0.5rem;
   opacity: 0.8;
@@ -583,4 +571,14 @@ která ovlivňují celkovou strukturu.
 
 .balance-info--header {
   margin: 0;
+}
+
+.grid-container--memmory {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid-container--mines {
+  grid-template-columns: repeat(5, 1fr);
+}
+.grid-container > div.tile--highlighted {
+  background-color: #f1c40f;
 }

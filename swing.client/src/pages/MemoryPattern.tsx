@@ -137,29 +137,36 @@ const MemoryPattern = () => {
         ))}
       </div>
 
-      {!isPlaying ? (
-        <>
-          <button onClick={startGame}>Bet</button>
-          <button>Bet Amount: {betAmount}</button>
-          <button onClick={() => setBetAmount(betAmount - 10)}>-</button>
-          <button onClick={() => setBetAmount(betAmount + 10)}>+</button>
-          {win > 0 && <p>Last Win: {win}</p>}
-        </>
-      ) : (
-        <>
-          {roundOver ? (
-            <div className="game-controls">
-              <p>Level Complete! Current Win: {win}</p>
-              <button onClick={continueGame}>
-                Next Level (Length {patternLength + 1})
-              </button>
-              <button onClick={cashOut}>Cash Out</button>
-            </div>
-          ) : (
-            <p>{isUserTurn ? "Your Turn!" : "Watch the pattern..."}</p>
-          )}
-        </>
-      )}
+      <div className="game-controls">
+        <button
+          onClick={() => setBetAmount(betAmount - 10)}
+          disabled={isPlaying}
+        >
+          -
+        </button>
+        <button disabled={isPlaying}>Bet Amount: {betAmount}</button>
+        <button
+          onClick={() => setBetAmount(betAmount + 10)}
+          disabled={isPlaying}
+        >
+          +
+        </button>
+
+        {!isPlaying ? (
+          <>
+            <button onClick={startGame}>Bet</button>
+            {win > 0 && <p>Last Win: {win}</p>}
+          </>
+        ) : roundOver ? (
+          <>
+            <p>Current Win: {win}</p>
+            <button onClick={continueGame}>
+              Next: (Length {patternLength + 1})
+            </button>
+            <button onClick={cashOut}>Cash Out</button>
+          </>
+        ) : null}
+      </div>
     </>
   );
 };

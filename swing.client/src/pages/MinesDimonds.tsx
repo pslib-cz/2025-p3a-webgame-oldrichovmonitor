@@ -204,7 +204,7 @@ const MinesDimonds = () => {
               <p className="mines-button__subtext">{nextMultiplier}x</p>
             </label>
           </div>
-          <div className="grid-container">
+          <div className="grid-container grid-container--mines">
             {grid.map((tile, index) => (
               <div
                 className="tile"
