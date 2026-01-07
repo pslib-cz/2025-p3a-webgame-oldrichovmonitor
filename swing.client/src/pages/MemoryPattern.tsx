@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
 interface Tile {
   id: number;

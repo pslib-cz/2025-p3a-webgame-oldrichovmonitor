@@ -34,12 +34,20 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
 }
 .grid-lines {
   position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-color: #30384d;
-  opacity: 0.2;
-  -webkit-mask: url(/images/grid-lines.svg) center/cover no-repeat;
-  mask: url(/images/grid-lines.svg) center/cover no-repeat;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Nejnižší vrstva nad pozadím */
+
+  /* Použijeme rovnou obrázek, je to spolehlivější než maska */
+  background-image: url(/images/grid-lines.svg);
+  background-position: center top;
+  background-repeat: repeat; /* Opakovat vzor, aby byl všude */
+  background-size: auto; /* Necháme přirozenou velikost mřížky */
+
+  opacity: 0.3;
+  pointer-events: none;
 }
 footer {
   position: static;

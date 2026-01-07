@@ -19,10 +19,26 @@ která ovlivňují celkovou strukturu.
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  z-index: -1;
+  position: relative;
+  isolation: auto; /* Resetujeme pro jistotu */
 }
-.page > * {
+
+/* Všechny přímé děti stránky AŽ NA grid-lines budou v horní vrstvě */
+.page > *:not(.grid-lines) {
+  position: relative;
   z-index: 1;
+}
+
+/* Explicitně odstraníme předchozí pravidla, pokud tam zůstala */
+.page > header,
+.page > main,
+.page > footer {
+  z-index: 1;
+  position: relative;
+}
+
+.page > .grid-lines {
+  /* Z-index je řešen v components.css (z-index: 0) */
 }
 .home-page__header {
   padding: 1.25rem 0.75rem 2rem;
@@ -65,7 +81,8 @@ která ovlivňují celkovou strukturu.
   flex-direction: column;
   align-items: end;
   padding: 0.75rem;
-
+  max-width: 1280px;
+  margin: 0 auto;
   gap: 1rem;
 }
 .home-page__main {
@@ -258,7 +275,7 @@ která ovlivňují celkovou strukturu.
   display: flex;
   padding: 1.5rem 2rem;
 
-  width: min(100%, 24.625rem);
+  min-width: 24.625rem;
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
@@ -323,22 +340,22 @@ která ovlivňují celkovou strukturu.
   font-weight: 600;
   line-height: normal;
 }
-.game-page__nav{
+.game-page__nav {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
 @media (max-width: 768px) {
-  .balance--order-switch{
+  .balance--order-switch {
     order: -1;
   }
-  .game-page__nav{
+  .game-page__nav {
     justify-content: space-between;
     width: 100%;
   }
 }
-.balance-info{
+.balance-info {
   display: flex;
 }
 
@@ -352,13 +369,11 @@ která ovlivňují celkovou strukturu.
 @media screen and (min-width: 768px) {
   .game-page__header-content-wrapper {
     flex-direction: row;
-    
   }
 }
 @media screen and (max-width: 768px) {
   .game-page__header-content-wrapper {
     margin-bottom: 1rem;
-
   }
 }
 .game-page__header-title-wrapper {
@@ -487,7 +502,7 @@ která ovlivňují celkovou strukturu.
   font-family: "IBM Plex Mono";
   font-size: 1.2rem;
   text-align: start;
- /*  width: 100%; */
+  /*  width: 100%; */
   max-width: 100px; /* Or whatever width fits the design */
 }
 .bet-controls__button {
@@ -566,6 +581,6 @@ která ovlivňují celkovou strukturu.
   }
 } */
 
-.balance-info--header{
+.balance-info--header {
   margin: 0;
 }

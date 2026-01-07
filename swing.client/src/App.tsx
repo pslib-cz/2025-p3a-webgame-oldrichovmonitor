@@ -8,8 +8,8 @@ import MemoryPattern from "./pages/MemoryPattern";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LogInPage />} />
-      <Route path="/homepage" element={<HomePage />} />
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/mines" element={<MinesDimonds />} />
       <Route path="/timesplit" element={<TimeSplit />} />
       <Route path="/memmorypattern" element={<MemoryPattern/>}/>

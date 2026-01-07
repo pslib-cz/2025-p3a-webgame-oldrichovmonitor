@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
 const LogInPage = () => {
   const [username, setUsername] = useState("");
@@ -13,7 +15,7 @@ const LogInPage = () => {
 
   return (
     <div className="login-page page">
-      <span className="grid-lines"></span>
+      <GridLines />
       <header className="login-page__header">
         <img
           className="logo"
@@ -64,7 +66,7 @@ const LogInPage = () => {
                 />
               </div>
             </div>
-            <a href="#" className="button">
+            <Link to="/" className="button">
               <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
@@ -82,16 +84,14 @@ const LogInPage = () => {
                   stroke-linejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
           <p className="login-page__card-subtext">
             No account required. This is a demo.
           </p>
         </article>
       </main>
-      <footer>
-        <p className="footer__text">© 2025 Oldřichov Monitor</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

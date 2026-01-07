@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
 const TimeSplit = () => {
   const [targetTime, setTargetTime] = useState(7000);

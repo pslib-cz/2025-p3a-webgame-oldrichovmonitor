@@ -1,9 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
 const HomePage = () => {
   return (
     <div className="home-page page">
-      <span className="grid-lines"></span>
+      <GridLines />
       <header className=" home-page__header">
         <div className="page__section header__content-wrapper">
           <div className="home-page__title-text">
@@ -28,7 +31,13 @@ const HomePage = () => {
               </svg>
               <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
             </div>
-            <p className="subtitle hoverable">Sign out</p>
+            <Link
+              to="/login"
+              className="subtitle hoverable"
+              style={{ textDecoration: "none" }}
+            >
+              Sign out
+            </Link>
           </div>
         </div>
       </header>
@@ -56,8 +65,9 @@ const HomePage = () => {
             </svg>
             <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
           </div>
-          <section className="page__section home-page__games">
-            <a href="#" className="game-link">
+          <p className="subtitle">Available games:</p>
+          <div className="home-page__games">
+            <Link to="/timesplit" className="game-link">
               <article className="game">
                 <div className="game__icon">
                   <svg
@@ -70,16 +80,16 @@ const HomePage = () => {
                     <path
                       d="M1 10C1 11.1819 1.23279 12.3522 1.68508 13.4442C2.13738 14.5361 2.80031 15.5282 3.63604 16.364C4.47177 17.1997 5.46392 17.8626 6.55585 18.3149C7.64778 18.7672 8.8181 19 10 19C11.1819 19 12.3522 18.7672 13.4442 18.3149C14.5361 17.8626 15.5282 17.1997 16.364 16.364C17.1997 15.5282 17.8626 14.5361 18.3149 13.4442C18.7672 12.3522 19 11.1819 19 10C19 7.61305 18.0518 5.32387 16.364 3.63604C14.6761 1.94821 12.3869 1 10 1C7.61305 1 5.32387 1.94821 3.63604 3.63604C1.94821 5.32387 1 7.61305 1 10Z"
                       stroke="#24D3EF"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M10 5V10L13 13"
                       stroke="#24D3EF"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>
@@ -90,8 +100,8 @@ const HomePage = () => {
                   </p>
                 </div>
               </article>
-            </a>
-            <a href="#" className="game-link">
+            </Link>
+            <Link to="/memmorypattern" className="game-link">
               <article className="game">
                 <div className="game__icon">
                   <svg
@@ -115,8 +125,12 @@ const HomePage = () => {
                   </p>
                 </div>
               </article>
-            </a>
-            <a role="link" className="game-link">
+            </Link>
+            <Link
+              to="/homepage"
+              className="game-link"
+              style={{ pointerEvents: "none", opacity: 0.7 }}
+            >
               <article className="game">
                 <div className="game__icon">
                   <svg
@@ -129,9 +143,9 @@ const HomePage = () => {
                     <path
                       d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
                       stroke="#E979F9"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>
@@ -143,8 +157,8 @@ const HomePage = () => {
                   </p>
                 </div>
               </article>
-            </a>
-            <a href="#" className="game-link">
+            </Link>
+            <Link to="/mines" className="game-link">
               <article className="game">
                 <div className="game__icon">
                   <svg
@@ -157,16 +171,16 @@ const HomePage = () => {
                     <path
                       d="M6 5H18L21 10L12.5 19.5C12.4348 19.5665 12.357 19.6194 12.2712 19.6554C12.1853 19.6915 12.0931 19.7101 12 19.7101C11.9069 19.7101 11.8147 19.6915 11.7288 19.6554C11.643 19.6194 11.5652 19.5665 11.5 19.5L3 10L6 5Z"
                       stroke="#F46464"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M10 12L8 9.80005L8.6 8.80005"
                       stroke="#F46464"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>
@@ -178,7 +192,7 @@ const HomePage = () => {
                   </p>
                 </div>
               </article>
-            </a>
+            </Link>
             <article className="game comming-soon">
               <div className="game__icon comming-soon__icon">
                 <svg
@@ -198,12 +212,10 @@ const HomePage = () => {
                 Coming soon
               </p>
             </article>
-          </section>
+          </div>
         </div>
       </main>
-      <footer>
-        <p className="footer__text">© 2025 Oldřichov Monitor</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
