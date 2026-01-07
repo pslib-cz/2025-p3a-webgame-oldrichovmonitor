@@ -28,7 +28,7 @@
                 }
                 isTaken = false;
             }
-            
+        
             while (diamonds > 0)
             {
                 int x;

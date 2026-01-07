@@ -7,24 +7,24 @@ const TimeSplit = () => {
   const [betAmount, setBetAmount] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
   const [win, setWin] = useState<number>(0);
-  const [currentTime, setCurrentTime] = useState(targetTime);
+  const [currentTime, setCurrentTime] = useState(0);
   const intervalRef = useRef<number | null>(null);
   useEffect(() => {
-    if (!isPlaying) setCurrentTime(targetTime);
+    if (!isPlaying) setCurrentTime(0);
   }, [targetTime]);
 
   const startGame = () => {
     if (isPlaying) return;
     setIsPlaying(true);
-    setCurrentTime(targetTime);
+    setCurrentTime(0);
     intervalRef.current = setInterval(() => {
       setCurrentTime((prev) => {
-        if (prev <= -5000) {
+        if (prev >= targetTime + 5000) {
           clearInterval(intervalRef.current!);
           setIsPlaying(false);
-          return -5000;
+          return targetTime + 5000;
         }
-        return prev - 10;
+        return prev + 10;
       });
     }, 10);
   };
@@ -32,8 +32,9 @@ const TimeSplit = () => {
   const stopGame = async () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setIsPlaying(false);
+    const stoppedTime = targetTime - currentTime;
     const response = await fetch(
-      `/api/TimeSwing/Result?targetTime=${targetTime}&stoppedTime=${currentTime}&bet=${betAmount}`
+      `/api/TimeSwing/Result?targetTime=${targetTime}&stoppedTime=${stoppedTime}&bet=${betAmount}`
     );
     const win = await response.json();
     setWin(win);
