@@ -1,0 +1,265 @@
+/* Mines and Dimonds page styles */
+.mines-dimonds-page {
+  background: #080e1d;
+}
+.game-title {
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.game-page__nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .balance--order-switch {
+    order: -1;
+  }
+  .game-page__nav {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+.balance-info {
+  display: flex;
+}
+
+.mines-diamonds__header {
+}
+.game-page__header-content-wrapper {
+  align-items: center;
+  padding-inline: 1rem;
+  padding-top: 1rem;
+}
+@media screen and (min-width: 768px) {
+  .game-page__header-content-wrapper {
+    flex-direction: row;
+  }
+}
+@media screen and (max-width: 768px) {
+  .game-page__header-content-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.game-page__header-title-wrapper {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.mines-game__wrapper {
+  max-width: 450px;
+  margin: 0 auto;
+  margin-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (max-width: 487px) {
+  .mines-game__wrapper {
+    margin-inline: 1rem;
+  }
+}
+.mines-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mines-button {
+  display: flex;
+  padding: 0.25rem 1rem;
+  flex-direction: column;
+  align-items: start;
+  border-radius: 0.5rem;
+  background: #6d28d9;
+}
+.mines-button__select {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding-right: 1rem; /* space for custom arrow if needed */
+  cursor: pointer;
+}
+.mines-button__text {
+  color: #fff;
+  font-family: Inter;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.mines-button__subtext {
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.mines-button__multiplier {
+  background: #ebb30b;
+  align-items: end;
+}
+.mines-button__icon-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.grid-container {
+  display: grid;
+  gap: 8px;
+  border-radius: 0.5rem;
+  opacity: 0.8;
+  background-color: #0d131f;
+}
+.grid-container > div {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #1c2b45;
+  border: none;
+  border-bottom: 4px solid #131e32;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mines-button__bet-controls {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #20283e;
+  background: #121b2e;
+  display: flex;
+  gap: 1rem;
+}
+.bet-controls__text-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.bet-controls__left-section {
+  display: flex;
+  align-items: end;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.bet-controls__buttons-group {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.bet-controls__text {
+  font-weight: 400;
+  font-size: 0.7rem;
+}
+.bet-controls__input {
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: "IBM Plex Mono";
+  font-size: 1.2rem;
+  text-align: start;
+  /*  width: 100%; */
+  max-width: 100px; /* Or whatever width fits the design */
+}
+.bet-controls__button {
+  background-color: #1c2b45;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  height: min-content;
+  font-family: Inter;
+  color: white;
+  font-size: 1rem;
+}
+.bet-button {
+  width: 100%;
+  display: flex;
+  padding: 16px 48px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: #4e47dd;
+  text-decoration: none;
+  box-shadow: 0 4px 8.1px 0 rgba(78, 71, 221, 0.52);
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  cursor: pointer;
+  background-color: #8b5cf6;
+  color: white;
+  font-family: "IBM Plex Mono";
+  border: none;
+  border-bottom: 4px solid;
+  border-bottom-color: #581c87;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  margin-top: 1rem;
+}
+.bet-controls__button--small {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.6rem;
+}
+.bet-controls__middle-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.balance-info {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #20283e;
+  background: #121b2e;
+  width: fit-content;
+  font-family: "Inter";
+  color: white;
+  margin: 0 auto;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+}
+
+.tile img[alt="diamand"] {
+  filter: drop-shadow(0 0 10px rgba(78, 237, 225, 0.8));
+}
+
+.tile img[alt="bomba"] {
+  filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.8));
+}
+
+/* @media (max-width: 768px) {
+  .mines-buttons {
+    grid-template-columns: 1fr;
+  }
+} */
+
+.balance-info--header {
+  margin: 0;
+}
+
+.grid-container--memmory {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid-container--mines {
+  grid-template-columns: repeat(5, 1fr);
+}
+.grid-container > div.tile--highlighted {
+  background-color: #f1c40f;
+}
