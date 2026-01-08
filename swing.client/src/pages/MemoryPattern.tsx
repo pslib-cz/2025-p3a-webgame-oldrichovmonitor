@@ -130,7 +130,7 @@ const MemoryPattern = () => {
             key={tile.id}
             onClick={() => handleTileClick(index)}
             className={
-              index === highlighted ? "tile tile--highlighted" : "tile"
+              index === highlighted ? "tile--highlighted" : ""
             }
             style={{ cursor: isUserTurn ? "pointer" : "default" }}
           ></div>
