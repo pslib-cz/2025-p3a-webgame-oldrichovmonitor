@@ -12,10 +12,13 @@ const TimeSplit = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [win, setWin] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState(0);
-  // Track game result state: 'idle' | 'playing' | 'won' | 'lost'
   const [gameState, setGameState] = useState<
     "idle" | "playing" | "won" | "lost"
   >("idle");
+  const [activeTier, setActiveTier] = useState<number | null>(null);
+
+  // New state for the result text
+  const [resultMessage, setResultMessage] = useState<string | null>(null);
 
   const intervalRef = useRef<number | null>(null);
 
@@ -36,10 +39,12 @@ const TimeSplit = () => {
     const newTarget = Math.floor(randomTime / 10) * 10;
     setTargetTime(newTarget);
 
+    setActiveTier(null);
+    setResultMessage(null); // Clear previous message
     setBalance((prev) => prev - betAmount);
     setWin(0);
     setIsPlaying(true);
-    setGameState("playing"); // Set playing state
+    setGameState("playing");
     setCurrentTime(0);
 
     intervalRef.current = setInterval(() => {
@@ -47,8 +52,9 @@ const TimeSplit = () => {
         if (newTarget && prev >= newTarget + 5000) {
           if (intervalRef.current) clearInterval(intervalRef.current);
           setIsPlaying(false);
-          setGameState("lost"); // Auto lose if timeout
-          return newTarget + 5000;
+          setGameState("lost");
+          setResultMessage("Too Late"); // Auto loss is always late
+          return newTarget + 5000; // Cap it visualy
         }
         return prev + 10;
       });
@@ -61,32 +67,48 @@ const TimeSplit = () => {
 
     if (!targetTime) return;
 
-    const timeDifference = Math.abs(targetTime - currentTime);
+    const timeDiff = currentTime - targetTime;
+    const absDiff = Math.abs(timeDiff);
+
+    let multiplier = 0;
+    let tier = null;
+
+    if (absDiff <= 50) {
+      multiplier = 10;
+      tier = 50;
+    } else if (absDiff <= 150) {
+      multiplier = 3;
+      tier = 150;
+    } else if (absDiff <= 500) {
+      multiplier = 1.1;
+      tier = 500;
+    }
+
+    setActiveTier(tier);
+
+    const winAmount = betAmount * multiplier;
+    setWin(winAmount);
+
+    if (winAmount > 0) {
+      setBalance((prev) => prev + winAmount);
+      setGameState("won");
+      setResultMessage(`+${winAmount.toFixed(2)}$`);
+    } else {
+      setGameState("lost");
+      // Determine if early or late
+      if (timeDiff < 0) {
+        setResultMessage("Too Early");
+      } else {
+        setResultMessage("Too Late");
+      }
+    }
 
     try {
-      const response = await fetch(
-        `/api/TimeSwing/Result?targetTime=${targetTime}&actualTime=${currentTime}&diff=${timeDifference}&bet=${betAmount}`
+      await fetch(
+        `/api/TimeSwing/Result?targetTime=${targetTime}&actualTime=${currentTime}&diff=${absDiff}&bet=${betAmount}&win=${winAmount}`
       );
-
-      if (response.ok) {
-        const winAmount = await response.json();
-        setWin(winAmount);
-
-        if (winAmount > 0) {
-          setBalance((prev) => prev + winAmount);
-          setGameState("won");
-        } else {
-          setGameState("lost");
-        }
-      } else {
-        console.error("Failed to fetch game result");
-        setWin(0);
-        setGameState("lost");
-      }
     } catch (e) {
-      console.error("Error connecting to game server", e);
-      setWin(0);
-      setGameState("lost");
+      console.warn("API sync failed", e);
     }
   };
 
@@ -134,7 +156,18 @@ const TimeSplit = () => {
         <div className="time-split-game__wrapper">
           <div className="timesplit__target-time">
             <div className="timesplit__target-time__content">
-              {/* SVG omitted for brevity, same as previous */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M12 22C10.6167 22 9.31667 21.7373 8.1 21.212C6.88334 20.6867 5.825 19.9743 4.925 19.075C4.025 18.1757 3.31267 17.1173 2.788 15.9C2.26333 14.6827 2.00067 13.3827 2 12C1.99933 10.6173 2.262 9.31733 2.788 8.1C3.314 6.88267 4.02633 5.82433 4.925 4.925C5.82367 4.02567 6.882 3.31333 8.1 2.788C9.318 2.26267 10.618 2 12 2C13.382 2 14.682 2.26267 15.9 2.788C17.118 3.31333 18.1763 4.02567 19.075 4.925C19.9737 5.82433 20.6863 6.88267 21.213 8.1C21.7397 9.31733 22.002 10.6173 22 12C21.998 13.3827 21.7353 14.6827 21.212 15.9C20.6887 17.1173 19.9763 18.1757 19.075 19.075C18.1737 19.9743 17.1153 20.687 15.9 21.213C14.6847 21.739 13.3847 22.0013 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20ZM12 18C10.3333 18 8.91667 17.4167 7.75 16.25C6.58333 15.0833 6 13.6667 6 12C6 10.3333 6.58333 8.91667 7.75 7.75C8.91667 6.58333 10.3333 6 12 6C13.6667 6 15.0833 6.58333 16.25 7.75C17.4167 8.91667 18 10.3333 18 12C18 13.6667 17.4167 15.0833 16.25 16.25C15.0833 17.4167 13.6667 18 12 18ZM12 16C13.1 16 14.0417 15.6083 14.825 14.825C15.6083 14.0417 16 13.1 16 12C16 10.9 15.6083 9.95833 14.825 9.175C14.0417 8.39167 13.1 8 12 8C10.9 8 9.95833 8.39167 9.175 9.175C8.39167 9.95833 8 10.9 8 12C8 13.1 8.39167 14.0417 9.175 14.825C9.95833 15.6083 10.9 16 12 16ZM12 14C11.45 14 10.9793 13.8043 10.588 13.413C10.1967 13.0217 10.0007 12.5507 10 12C9.99933 11.4493 10.1953 10.9787 10.588 10.588C10.9807 10.1973 11.4513 10.0013 12 10C12.5487 9.99867 13.0197 10.1947 13.413 10.588C13.8063 10.9813 14.002 11.452 14 12C13.998 12.548 13.8023 13.019 13.413 13.413C13.0237 13.807 12.5527 14.0027 12 14Z"
+                  fill="#8B5CF6"
+                />
+              </svg>
               <p className="subtitle ibmplexmono white">TARGET:</p>
             </div>
             <p className="subtitle ibmplexmono purple">
@@ -142,14 +175,52 @@ const TimeSplit = () => {
             </p>
           </div>
 
-          {/* Apply dynamic class based on gameState */}
           <div
             className={`timesplit__content timesplit__content--${gameState}`}
           >
-            <p className="subtitle ibmplexmono white timesplit__time">
-              {(currentTime / 1000).toFixed(2)}
-              <span className="timesplit__unit">s</span>
-            </p>
+            <div className="timesplit__timer-group">
+              <p className="subtitle ibmplexmono white timesplit__time">
+                {(currentTime / 1000).toFixed(2)}
+                <span className="timesplit__unit">s</span>
+              </p>
+              {/* Result Message Display */}
+              {resultMessage && !isPlaying && (
+                <p
+                  className={`subtitle ibmplexmono timesplit__result-text ${
+                    gameState === "won" ? "gold" : "red"
+                  }`}
+                >
+                  {resultMessage}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="timesplit__multiplier-container">
+            <article
+              className={`timesplit__multiplier ${
+                activeTier === 50 ? "timesplit__multiplier--active" : ""
+              }`}
+            >
+              <p className="subtitle inter white">±0.05s</p>
+              <p className="gold ibmplexmono subtitle">10X</p>
+            </article>
+            <article
+              className={`timesplit__multiplier ${
+                activeTier === 150 ? "timesplit__multiplier--active" : ""
+              }`}
+            >
+              <p className="subtitle inter white">±0.15s</p>
+              <p className="gold ibmplexmono subtitle">3X</p>
+            </article>
+            <article
+              className={`timesplit__multiplier ${
+                activeTier === 500 ? "timesplit__multiplier--active" : ""
+              }`}
+            >
+              <p className="subtitle inter white">±0.50s</p>
+              <p className="gold ibmplexmono subtitle">1.1X</p>
+            </article>
           </div>
 
           <BetControls
@@ -162,6 +233,7 @@ const TimeSplit = () => {
             cashOutLabel="STOP"
             winAmount={win}
             isCashingOut={false}
+            betColor="red"
           />
         </div>
       </main>

@@ -102,9 +102,16 @@ p {
 .ibmplexmono {
   font-family: "IBM Plex Mono";
 }
+.inter {
+  font-family: Inter;
+}
+.gold{
+  color: #EBB30B;
+}
 .hoverable {
   cursor: pointer;
   transition: color 0.1s ease-in-out;
+  text-decoration: none;
 }
 .hoverable:hover {
   color: hsl(215, 20%, 75%);

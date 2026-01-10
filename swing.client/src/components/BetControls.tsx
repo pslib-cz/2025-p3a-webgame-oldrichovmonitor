@@ -10,6 +10,7 @@ interface BetControlsProps {
   onCashOut: () => void;
   cashOutLabel?: string; // "CASH OUT" or "STOP"
   winAmount?: number;
+  betColor?: "green" | "red";
 }
 
 const BetControls: React.FC<BetControlsProps> = ({
@@ -21,11 +22,25 @@ const BetControls: React.FC<BetControlsProps> = ({
   onStart,
   onCashOut,
   cashOutLabel = "CASH OUT",
+  betColor = "green",
   winAmount = 0,
 }) => {
   const clampBet = (value: number) => {
     return Math.max(1, Math.min(Math.floor(value), balance));
   };
+  const greenStyle = {
+    background: "linear-gradient(to right, #10b981, #059669)",
+    borderBottomColor: "#064e3b",
+    boxShadow: "0 0 20px rgba(16, 185, 129, 0.4)",
+  };
+
+  const redStyle = {
+    background: "linear-gradient(to right, #EF4444, #B91C1C)",
+    borderBottomColor: "#7F1D1D",
+    boxShadow: "0 0 20px rgba(239, 68, 68, 0.4)",
+  };
+
+  const activeStyle = betColor === "red" ? redStyle : greenStyle;
 
   const incBet = () => setBetAmount(clampBet(betAmount + 10));
   const decBet = () => setBetAmount(clampBet(betAmount - 10));
@@ -91,16 +106,18 @@ const BetControls: React.FC<BetControlsProps> = ({
         <button
           className="bet-button"
           style={{
-            background: "linear-gradient(to right, #10b981, #059669)",
-            borderBottomColor: "#064e3b",
-            boxShadow: "0 0 20px rgba(16, 185, 129, 0.4)",
+            ...activeStyle,
             flexDirection: "column",
             gap: "4px",
           }}
           onClick={onCashOut}
         >
           <span>{cashOutLabel}</span>
-          {isCashingOut ? <span style={{ fontSize: "0.9em", opacity: 0.9 }}>{winAmount.toFixed(2)}$</span> : null}
+          {isCashingOut ? (
+            <span style={{ fontSize: "0.9em", opacity: 0.9 }}>
+              {winAmount.toFixed(2)}$
+            </span>
+          ) : null}
         </button>
       ) : (
         <button className="bet-button" onClick={onStart}>
