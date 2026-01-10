@@ -1,38 +1,105 @@
 /* Timesplit Game Styles */
 
 .time-split-page {
-  background: linear-gradient(111deg, #0E102F 10.88%, #0D0F19 54.87%, #0F102E 98.85%);
+  background: linear-gradient(
+    111deg,
+    #0e102f 10.88%,
+    #0d0f19 54.87%,
+    #0f102e 98.85%
+  );
 }
-.time-split-game__wrapper{
-    max-width: 450px;
+.time-split-game__wrapper {
+  max-width: 400px;
   margin: 0 auto;
   margin-block: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 }
-.timesplit-button{
-    display: flex;
-  padding: 0.25rem 1rem;
-  flex-direction: column;
-  align-items: start;
-  border-radius: 0.5rem;
-  background: #6d28d9;
-  max-width: fit-content;
+@media (max-width: 487px) {
+  .time-split-game__wrapper {
+    margin-inline: 1rem;
+  }
 }
-.timesplit-button__text{
-    color: #fff;
-  font-family: Inter;
-  font-size: 0.625rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+.timesplit__content {
+  display: flex;
+  padding: 2.375rem 2.375rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 0.625rem;
+  aspect-ratio: 1/1;
+  border-radius: 10000rem;
+  /* border: 6px solid #1e1e42;  */
+  background: #1b1945;
+  box-shadow: 0 0 48.7px 37px rgba(0, 0, 0, 0.42) inset;
 }
-.timesplit-button__subtext{
-    color: #fff;
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
+.timesplit__content::before,
+.timesplit__content::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10000rem;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  /* background-color: #1e1e42; */
+  /* Using hard stops to create distinct segments without fading */
+  background-image: conic-gradient(
+    from var(--angle),
+    #1e1e42 0% 50%,
+    #6d29d9 50% 75%,
+    #31136d 75% 100%
+  );
+  padding: 6px;
+  animation: rotate 2s linear infinite;
+  z-index: -1;
+}
+.timesplit__content::before{
+    filter: blur(1.5rem);
+}
+.timesplit__content--idle{
+    animation: none;
+    background-color: #1F1E44;
+}
+.timesplit__target-time {
+  display: flex;
+  padding: 0.75rem 2rem;
+  justify-content: center;
+  width: fit-content;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 3.875rem;
+  border: 1px solid #2c1a61;
+  background: #1b1643;
+  margin: 0 auto;
+}
+.timesplit__target-time__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.timesplit__time {
+  color: #fff;
   font-family: "IBM Plex Mono";
-  font-size: 1rem;
+  font-size: 4rem;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 700;
   line-height: normal;
 }

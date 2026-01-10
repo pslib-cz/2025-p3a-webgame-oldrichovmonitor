@@ -3,18 +3,24 @@ import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import BetControls from "../components/BetControls";
 import { Link } from "react-router-dom";
+import "../css/games/timesplit.css";
 
 const TimeSplit = () => {
   const [balance, setBalance] = useState(3000);
-  const [targetTime, setTargetTime] = useState(7000);
+  const [targetTime, setTargetTime] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
   const [win, setWin] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState(0);
+  // Track game result state: 'idle' | 'playing' | 'won' | 'lost'
+  const [gameState, setGameState] = useState<
+    "idle" | "playing" | "won" | "lost"
+  >("idle");
+
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isPlaying) setCurrentTime(0);
+    if (!isPlaying && targetTime) setCurrentTime(0);
   }, [targetTime]);
 
   const startGame = () => {
@@ -23,16 +29,26 @@ const TimeSplit = () => {
       alert("Insufficient balance!");
       return;
     }
+
+    const min = 6000;
+    const max = 14000;
+    const randomTime = Math.floor(Math.random() * (max - min + 1) + min);
+    const newTarget = Math.floor(randomTime / 10) * 10;
+    setTargetTime(newTarget);
+
     setBalance((prev) => prev - betAmount);
     setWin(0);
     setIsPlaying(true);
+    setGameState("playing"); // Set playing state
     setCurrentTime(0);
+
     intervalRef.current = setInterval(() => {
       setCurrentTime((prev) => {
-        if (prev >= targetTime + 5000) {
-          clearInterval(intervalRef.current!);
+        if (newTarget && prev >= newTarget + 5000) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
           setIsPlaying(false);
-          return targetTime + 5000;
+          setGameState("lost"); // Auto lose if timeout
+          return newTarget + 5000;
         }
         return prev + 10;
       });
@@ -42,22 +58,35 @@ const TimeSplit = () => {
   const stopGame = async () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     setIsPlaying(false);
-    const stoppedTime = targetTime - currentTime;
 
-    // Simulate win for now
+    if (!targetTime) return;
+
+    const timeDifference = Math.abs(targetTime - currentTime);
+
     try {
       const response = await fetch(
-        `/api/TimeSwing/Result?targetTime=${targetTime}&stoppedTime=${stoppedTime}&bet=${betAmount}`
+        `/api/TimeSwing/Result?targetTime=${targetTime}&actualTime=${currentTime}&diff=${timeDifference}&bet=${betAmount}`
       );
+
       if (response.ok) {
         const winAmount = await response.json();
         setWin(winAmount);
-        setBalance((prev) => prev + winAmount);
+
+        if (winAmount > 0) {
+          setBalance((prev) => prev + winAmount);
+          setGameState("won");
+        } else {
+          setGameState("lost");
+        }
       } else {
+        console.error("Failed to fetch game result");
         setWin(0);
+        setGameState("lost");
       }
     } catch (e) {
+      console.error("Error connecting to game server", e);
       setWin(0);
+      setGameState("lost");
     }
   };
 
@@ -103,47 +132,24 @@ const TimeSplit = () => {
           <p className="subtitle">Press to stop time with precision.</p>
         </div>
         <div className="time-split-game__wrapper">
-          <label className="timesplit-button timesplit-button__multiplier">
-            <div className="timesplit-button__icon-wrapper">
-              <p className="timesplit-button__text">PREVIOUS WIN:</p>
+          <div className="timesplit__target-time">
+            <div className="timesplit__target-time__content">
+              {/* SVG omitted for brevity, same as previous */}
+              <p className="subtitle ibmplexmono white">TARGET:</p>
             </div>
-            <p className="timesplit-button__subtext">
-              {win > 0 ? win.toFixed(2) + "$" : "-"}
+            <p className="subtitle ibmplexmono purple">
+              {targetTime ? (targetTime / 1000).toFixed(2) : "--.--"}s
             </p>
-          </label>
+          </div>
 
-          <div className="timesplit__content">
-            <p
-              className="subtitle ibmplexmono white"
-              style={{
-                fontSize: "3rem",
-                textAlign: "center",
-                margin: "2rem 0",
-              }}
-            >
-              {(currentTime / 1000).toFixed(2)} s
+          {/* Apply dynamic class based on gameState */}
+          <div
+            className={`timesplit__content timesplit__content--${gameState}`}
+          >
+            <p className="subtitle ibmplexmono white timesplit__time">
+              {(currentTime / 1000).toFixed(2)}
+              <span className="timesplit__unit">s</span>
             </p>
-            <label
-              style={{
-                display: "block",
-                textAlign: "center",
-                marginBottom: "1rem",
-                color: "white",
-              }}
-            >
-              Target:
-              <select
-                value={targetTime}
-                onChange={(e) => setTargetTime(Number(e.target.value))}
-                disabled={isPlaying}
-                style={{ marginLeft: "10px", padding: "5px" }}
-              >
-                <option value={3000}>3.00 s</option>
-                <option value={5000}>5.00 s</option>
-                <option value={7000}>7.00 s</option>
-                <option value={10000}>10.00 s</option>
-              </select>
-            </label>
           </div>
 
           <BetControls
@@ -155,6 +161,7 @@ const TimeSplit = () => {
             onCashOut={stopGame}
             cashOutLabel="STOP"
             winAmount={win}
+            isCashingOut={false}
           />
         </div>
       </main>
