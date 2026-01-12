@@ -208,6 +208,9 @@ která ovlivňují celkovou strukturu.
 
 /* Login page styles */
 
+.login-page{
+  position: relative;
+}
 .login-page__header {
   text-align: center;
 }
@@ -217,6 +220,7 @@ která ovlivňují celkovou strukturu.
 }
 .login-page__content {
   margin: 0 auto;
+  
   flex-grow: 1;
 }
 .login-page__title {
@@ -271,11 +275,11 @@ která ovlivňují celkovou strukturu.
   font-family: Inter;
   font-size: 0.875rem;
   background: #181f30;
+  color: white;
 }
 .login-page__main {
   display: flex;
   padding: 1.5rem 2rem;
-
   min-width: 24.625rem;
   flex-direction: column;
   align-items: center;
@@ -287,6 +291,7 @@ která ovlivňují celkovou strukturu.
 @media screen and (max-width: 550px) {
   .login-page__main {
     min-width: auto;
+    margin-top: 4rem;
   }
   .login-page__header .logo {
     margin-block: 2rem;
@@ -314,16 +319,5 @@ která ovlivňují celkovou strukturu.
   line-height: normal;
 }
 
-/* .grid-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 0px auto;
-  border-radius: 0.5rem;
-  border: 12px solid #0d131f;
-  opacity: 0.8;
-  background-color: #0d131f;
-}
- */
 
 
