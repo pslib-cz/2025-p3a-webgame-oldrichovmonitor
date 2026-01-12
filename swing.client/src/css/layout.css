@@ -4,6 +4,9 @@ jako jsou CSS Grid a Flexbox kontejnery, nastavení polohy pro
 <header>, <footer> a <main>, a globální responzivní pravidla,
 která ovlivňují celkovou strukturu.
 */
+main {
+  flex-grow: 1;
+}
 .page__section {
   max-width: 1280px;
   margin: 0 auto;
