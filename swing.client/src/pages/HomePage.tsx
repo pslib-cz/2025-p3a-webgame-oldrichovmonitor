@@ -1,9 +1,13 @@
-import React from "react";
+import React, { use } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 
-const HomePage = () => {
+interface Props {
+  username: string;
+}
+
+const HomePage:React.FC<Props> = ({username}) => {
   return (
     <div className="home-page page">
       <GridLines />
@@ -11,7 +15,7 @@ const HomePage = () => {
         <div className="page__section header__content-wrapper">
           <div className="home-page__title-text">
             <h2 className="">
-              Hello,<span className="text-gradient">negr</span>
+              Hello,<span className="text-gradient">{username}</span>
             </h2>
             <p className="subtitle">Ready to play?</p>
           </div>
