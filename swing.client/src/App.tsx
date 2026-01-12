@@ -11,8 +11,8 @@ function App() {
   const [username, setUsername] = useState("")
   return (
     <Routes>
-      <Route path="/login" element={<LogInPage setUsername={setUsername} />} />
-      <Route path="/" element={<HomePage username={username}/>} />
+      <Route path="/" element={<LogInPage setUsername={setUsername} />} />
+      <Route path="/homepgae" element={<HomePage username={username}/>} />
       <Route path="/mines" element={<MinesDimonds />} />
       <Route path="/timesplit" element={<TimeSplit />} />
       <Route path="/memmorypattern" element={<MemoryPattern/>}/>
