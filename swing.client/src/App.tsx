@@ -5,6 +5,7 @@ import LogInPage from "./pages/LogInPage";
 import MinesDimonds from "./pages/MinesDimonds";
 import TimeSplit from "./pages/TimeSplit";
 import MemoryPattern from "./pages/MemoryPattern";
+import PrecisionSlider from "./pages/PrecisionSlider";
 function App() {
   return (
     <Routes>
@@ -13,6 +14,7 @@ function App() {
       <Route path="/mines" element={<MinesDimonds />} />
       <Route path="/timesplit" element={<TimeSplit />} />
       <Route path="/memmorypattern" element={<MemoryPattern/>}/>
+      <Route path="/precisionslider" element={<PrecisionSlider/>}/>
     </Routes>
   );
 }
