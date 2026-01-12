@@ -142,7 +142,7 @@ const TimeSplit = () => {
                 Balance: {balance.toFixed(2)}$
               </p>
             </div>
-            <Link to="/" className="subtitle hoverable balance--order-switch">
+            <Link to="/homepage" className="subtitle hoverable balance--order-switch">
               Exit to Arcade
             </Link>
           </div>
