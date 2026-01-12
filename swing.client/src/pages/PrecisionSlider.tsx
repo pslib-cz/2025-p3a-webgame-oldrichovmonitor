@@ -76,7 +76,7 @@ function PrecisionSlider() {
 
   return (
     <div className="page-container">
-      <GridLines />
+      {/*<GridLines />*/}
       <div className="content-container">
         <h1>Precision Slider</h1>
         <p>Stop the slider at the center (50%) to win max multiplier!</p>
