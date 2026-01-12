@@ -15,7 +15,7 @@ const LogInPage:React.FC<Props> = ({setUsername}) => {
     e.preventDefault();
     if (!input.trim()) return; // require a name
     setUsername(input)
-    navigate("/"); // go to HomePage with name
+    navigate("/homepage"); // go to HomePage with name
   };
 
   return (
@@ -71,8 +71,8 @@ const LogInPage:React.FC<Props> = ({setUsername}) => {
                 />
               </div>
             </div>
-            <Link to="/homepage" className="button">
-              <p onClick={onEnter} className="button__text">Enter Platform</p>
+            <Link to="/homepage" className="button" onClick={onEnter} >
+              <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
                 xmlns="http://www.w3.org/2000/svg"

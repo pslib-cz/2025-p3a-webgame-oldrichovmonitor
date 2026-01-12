@@ -36,7 +36,7 @@ const HomePage:React.FC<Props> = ({username}) => {
               <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
             </div>
             <Link
-              to="/login"
+              to="/"
               className="subtitle hoverable"
               style={{ textDecoration: "none" }}
             >
