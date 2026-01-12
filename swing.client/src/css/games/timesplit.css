@@ -1,0 +1,192 @@
+/* Timesplit Game Styles */
+
+.time-split-page {
+  background: linear-gradient(
+    111deg,
+    #0e102f 10.88%,
+    #0d0f19 54.87%,
+    #0f102e 98.85%
+  );
+}
+.time-split-game__wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+@media (max-width: 487px) {
+  .time-split-game__wrapper {
+    margin-inline: 2rem;
+  }
+}
+.timesplit__content {
+  display: flex;
+  padding: 2.375rem 2.375rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 0.625rem;
+  aspect-ratio: 1/1;
+  border-radius: 10000rem;
+  /* border: 6px solid #1e1e42;  */
+  background: #1b1945;
+  box-shadow: 0 0 48.7px 37px rgba(0, 0, 0, 0.42) inset;
+}
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
+.timesplit__content::before,
+.timesplit__content::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10000rem;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+  /* background-color: #1e1e42; */
+  /* Using hard stops to create distinct segments without fading */
+  background-image: conic-gradient(
+    from var(--angle),
+    #1e1e42 0% 50%,
+    #6d29d9 50% 75%,
+    #31136d 75% 100%
+  );
+  padding: 6px;
+  animation: rotate 2s linear infinite;
+  z-index: -1;
+}
+.timesplit__content::before {
+  filter: blur(1.5rem);
+}
+.timesplit__content--idle::after,
+.timesplit__content--idle::before {
+  animation: none;
+  background-color: #1f1e44;
+  background-image: none;
+}
+.timesplit__content--idle * {
+  opacity: 0.5;
+}
+.timesplit__content--won::after,
+.timesplit__content--won::before {
+  animation: none;
+  background-color: #ebb30b;
+  background-image: none;
+}
+.timesplit__content--lost::after,
+.timesplit__content--lost::before {
+  animation: none;
+  background-color: #ef4444;
+  background-image: none;
+}
+.timesplit__target-time {
+  display: flex;
+  padding: 0.75rem 2rem;
+  justify-content: center;
+  width: fit-content;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 3.875rem;
+  border: 1px solid #2c1a61;
+  background: #1b1643;
+  margin: 0 auto;
+}
+.timesplit__unit {
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.timesplit__target-time__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.timesplit__time {
+  color: #fff;
+  font-family: "IBM Plex Mono";
+  font-size: 4rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.timesplit__content-wrapper {
+}
+.timesplit__multiplier-container {
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+}
+.timesplit__multiplier {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.6;
+  padding: 4px 8px; /* Added padding for background interaction */
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.timesplit__multiplier--active {
+  opacity: 1;
+  background: rgba(235, 179, 11, 0.15); /* Subtle gold background */
+  box-shadow: 0 0 10px rgba(235, 179, 11, 0.3); /* Gold glow */
+  transform: scale(1.1); /* Slight pop */
+  font-weight: bold;
+}
+
+/* Ensure the inner content stacks vertically */
+.timesplit__timer-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Ensure vertical center */
+  gap: 0; /* Remove gap since we position absolutely */
+  position: relative;
+  z-index: 10;
+  height: 100%; /* Fill container to help centering */
+  width: 100%;
+}
+
+.timesplit__result-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+
+  /* Position absolute to prevent layout shift */
+  position: absolute;
+  top: 70%; /* Position it below the visual center of the time */
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+
+.timesplit__result-text.red {
+  color: #ef4444;
+}
+
+.timesplit__result-text.gold {
+  color: #ebb30b;
+}

@@ -46,7 +46,7 @@ styly specifické pro opakovaně použitelné React komponenty (např. Tlacitko,
   background-repeat: repeat; /* Opakovat vzor, aby byl všude */
   background-size: auto; /* Necháme přirozenou velikost mřížky */
 
-  opacity: 0.3;
+  opacity: 0.4;
   pointer-events: none;
 }
 footer {

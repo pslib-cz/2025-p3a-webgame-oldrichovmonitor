@@ -5,7 +5,7 @@ a výchozí styly pro titulky (h1, h2, atd.) a .button.
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 h2 {
   color: #fff;
   font-family: "IBM Plex Mono";
@@ -91,12 +91,27 @@ p {
 .white {
   color: white;
 }
-.ibmplexmono{
+.purple {
+  color: #8b5cf6;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.ibmplexmono {
   font-family: "IBM Plex Mono";
+}
+.inter {
+  font-family: Inter;
+}
+.gold{
+  color: #EBB30B;
 }
 .hoverable {
   cursor: pointer;
-  transition: color .1s ease-in-out;
+  transition: color 0.1s ease-in-out;
+  text-decoration: none;
 }
 .hoverable:hover {
   color: hsl(215, 20%, 75%);
