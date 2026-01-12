@@ -1,13 +1,174 @@
-import React from 'react'
+import React, { useState } from "react";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
-
-
-const MemoryPattern = () => {
-
-
-  return (
-    <div>MemoryPattern</div>
-  )
+interface Tile {
+  id: number;
+  status: "active" | "inactive";
+  hidden: boolean;
 }
 
-export default MemoryPattern
+const MemoryPattern = () => {
+  const [highlighted, setHighlighted] = useState<number | null>(null);
+  const [pattern, setPattern] = useState<number[]>([]);
+
+  const [userSequence, setUserSequence] = useState<number[]>([]);
+  const [patternLength, setPatternLength] = useState(3);
+  const [isUserTurn, setIsUserTurn] = useState(false);
+  const [roundOver, setRoundOver] = useState(false);
+
+  const [betAmount, setBetAmount] = useState(100);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [win, setWin] = useState<number>(0);
+
+  const [grid, setGrid] = useState<Tile[]>(
+    Array.from({ length: 16 }, (_, i) => ({
+      id: i,
+      status: "inactive",
+      hidden: true,
+    }))
+  );
+
+  const startGame = async () => {
+    if (isPlaying && !roundOver) return;
+
+    setIsPlaying(true);
+    setRoundOver(false);
+    setWin(0);
+    setPatternLength(3);
+    setUserSequence([]);
+
+    fetchAndPlayPattern(3);
+  };
+
+  const continueGame = () => {
+    setRoundOver(false);
+    setUserSequence([]);
+    const newLength = patternLength + 1;
+    setPatternLength(newLength);
+    fetchAndPlayPattern(newLength);
+  };
+
+  const fetchAndPlayPattern = async (length: number) => {
+    setIsUserTurn(false);
+    try {
+      const response = await fetch(
+        `/api/MemoryPattern/GeneratePattern?length=${length}`
+      );
+      const data = await response.json();
+      setPattern(data);
+      playPattern(data);
+    } catch (error) {
+      console.error("Failed to fetch pattern", error);
+      setIsPlaying(false);
+    }
+  };
+
+  const getMultiplier = async (length: number) => {
+    const response = await fetch(
+      `/api/MemoryPattern/Multiplier?length=${length}`
+    );
+    const multiplier = await response.json();
+    return multiplier;
+  };
+
+  const playPattern = (currentPattern: number[]) => {
+    setTimeout(() => {
+      currentPattern.forEach((idx, i) => {
+        setTimeout(() => {
+          setHighlighted(idx);
+          setTimeout(() => setHighlighted(null), 400);
+        }, i * 600);
+      });
+
+      setTimeout(() => {
+        setIsUserTurn(true);
+      }, currentPattern.length * 600 + 200);
+    }, 500);
+  };
+
+  const handleTileClick = async (index: number) => {
+    if (!isPlaying || !isUserTurn || roundOver) return;
+
+    setHighlighted(index);
+    setTimeout(() => setHighlighted(null), 200);
+
+    const newUserSequence = [...userSequence, index];
+    setUserSequence(newUserSequence);
+
+    const currentIndex = newUserSequence.length - 1;
+
+    if (pattern[currentIndex] !== index) {
+      setIsPlaying(false);
+      setIsUserTurn(false);
+      setWin(0);
+      setRoundOver(false);
+      alert("Wrong pattern! You lost.");
+      return;
+    }
+
+    if (newUserSequence.length === pattern.length) {
+      setIsUserTurn(false);
+      setRoundOver(true);
+
+      const multiplier = await getMultiplier(patternLength);
+      setWin(Math.floor(betAmount * multiplier));
+    }
+  };
+
+  const cashOut = () => {
+    setIsPlaying(false);
+    setRoundOver(false);
+    setIsUserTurn(false);
+  };
+
+  return (
+    <>
+      <div className="grid-container grid-container--memmory">
+        {grid.map((tile, index) => (
+          <div
+            key={tile.id}
+            onClick={() => handleTileClick(index)}
+            className={
+              index === highlighted ? "tile--highlighted" : ""
+            }
+            style={{ cursor: isUserTurn ? "pointer" : "default" }}
+          ></div>
+        ))}
+      </div>
+
+      <div className="game-controls">
+        <button
+          onClick={() => setBetAmount(betAmount - 10)}
+          disabled={isPlaying}
+        >
+          -
+        </button>
+        <button disabled={isPlaying}>Bet Amount: {betAmount}</button>
+        <button
+          onClick={() => setBetAmount(betAmount + 10)}
+          disabled={isPlaying}
+        >
+          +
+        </button>
+
+        {!isPlaying ? (
+          <>
+            <button onClick={startGame}>Bet</button>
+            {win > 0 && <p>Last Win: {win}</p>}
+          </>
+        ) : roundOver ? (
+          <>
+            <p>Current Win: {win}</p>
+            <button onClick={continueGame}>
+              Next: (Length {patternLength + 1})
+            </button>
+            <button onClick={cashOut}>Cash Out</button>
+          </>
+        ) : null}
+      </div>
+    </>
+  );
+};
+
+export default MemoryPattern;

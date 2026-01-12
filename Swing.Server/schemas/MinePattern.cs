@@ -2,60 +2,24 @@
 {
     public class MinePattern
     {
-        public GridCoordinates[] placement(int mines, int diamonds)
+        public int[] placement(int mines)
         {
-            List<GridCoordinates> result = new List<GridCoordinates>();
+            List<int> result = new List<int>();
             Random random = new Random();
-            while (mines > 0)
+            for(int i = 0; i < mines; i++)
             {
-                int x;
-                int y;
-                bool isTaken = false;
-                
-                x = random.Next(0, 5);
-                y = random.Next(0, 5);
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if(x == result[i].X && y == result[i].Y)
-                    {
-                        isTaken = true;
-                    }
-                }
-                if (!isTaken)
-                {
-                    result.Add(new GridCoordinates(x, y));
-                    mines--;
-                }
-                isTaken = false;
-            }
-            
-            while (diamonds > 0)
-            {
-                int x;
-                int y;
-                bool isTaken = false;
-                
-                x = random.Next(0, 5);
-                y = random.Next(0, 5);
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if (x == result[i].X && y == result[i].Y)
-                    {
-                        isTaken = true;
-                    }
-                }
-                if (!isTaken)
-                {
-                    result.Add(new GridCoordinates(x, y));
-                    diamonds--;
-                }
-                isTaken = false;
+                result.Add(random.Next(0, 24));
             }
             return result.ToArray();
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
-            return (float)(25-openedTiles)/((25-mines)/openedTiles);
+            float multiplier = 1.0f;
+            for (int i = 0; i < openedTiles; i++)
+            {
+                multiplier *= (25.0f - i) / (25.0f - mines - i);
+            }
+            return multiplier;
         }
         
     }

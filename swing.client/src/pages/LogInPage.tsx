@@ -1,19 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
+import GridLines from "../components/GridLines";
 
-const LogInPage = () => {
-  const [username, setUsername] = useState("");
+interface Props{
+  setUsername: (name: string) => void
+}
+
+const LogInPage:React.FC<Props> = ({setUsername}) => {
+  const [input, setIpnut] = useState("");
   const navigate = useNavigate();
 
   const onEnter = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!username.trim()) return; // require a name
-    navigate("/", { state: { username } }); // go to HomePage with name
+    if (!input.trim()) return; // require a name
+    setUsername(input)
+    navigate("/homepage"); // go to HomePage with name
   };
 
   return (
     <div className="login-page page">
-      <span className="grid-lines"></span>
+      <GridLines />
       <header className="login-page__header">
         <img
           className="logo"
@@ -59,12 +66,12 @@ const LogInPage = () => {
                 <input
                   type="text"
                   placeholder="Enter your gamertag"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={input}
+                  onChange={(e) => setIpnut(e.target.value)}
                 />
               </div>
             </div>
-            <a href="#" className="button">
+            <Link to="/homepage" className="button" onClick={onEnter} >
               <p className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"
@@ -82,16 +89,14 @@ const LogInPage = () => {
                   stroke-linejoin="round"
                 />
               </svg>
-            </a>
+            </Link>
           </div>
           <p className="login-page__card-subtext">
             No account required. This is a demo.
           </p>
         </article>
       </main>
-      <footer>
-        <p className="footer__text">© 2025 Oldřichov Monitor</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

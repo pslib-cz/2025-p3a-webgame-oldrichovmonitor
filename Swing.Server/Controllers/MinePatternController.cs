@@ -19,13 +19,7 @@ namespace Swing.Server.Controllers
         [HttpGet("StartGame/{mines}")]
         public ActionResult<int[]> StartGame(int mines)
         {
-            var random = new Random();
-            _currentMines.Clear();
-            while (_currentMines.Count < mines)
-            {
-                _currentMines.Add(random.Next(0, 26));
-            }
-            return Ok(_currentMines.ToArray());
+            return Ok(_minePattern.placement(mines));
         }
 
         [HttpGet("Reveal")]

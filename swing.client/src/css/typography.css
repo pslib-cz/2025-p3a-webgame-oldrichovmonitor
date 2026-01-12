@@ -91,23 +91,28 @@ p {
 .white {
   color: white;
 }
+.purple {
+  color: #8b5cf6;
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
 .ibmplexmono {
   font-family: "IBM Plex Mono";
+}
+.inter {
+  font-family: Inter;
+}
+.gold{
+  color: #EBB30B;
 }
 .hoverable {
   cursor: pointer;
   transition: color 0.1s ease-in-out;
+  text-decoration: none;
 }
 .hoverable:hover {
   color: hsl(215, 20%, 75%);
-}
-.game-title {
-  color: #fff;
-
-  /* H1 - desktop */
-  font-family: "IBM Plex Mono";
-  font-size: 2rem;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
 }
