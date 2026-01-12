@@ -58,10 +58,10 @@ namespace Swing.Server.Controllers
     {
         public int startSize { get; set; }
         public int startSpeed { get; set; }
-        public GridCoordinates[] pattern { get; set; }
+        public int[] pattern { get; set; }
         public float speedIncrease { get; set; }
 
-        public MemoryPatternReturn(int startSize, int startSpeed, GridCoordinates[] pattern, float speedIncrease)
+        public MemoryPatternReturn(int startSize, int startSpeed, int[] pattern, float speedIncrease)
         {
             this.startSize = startSize;
             this.startSpeed = startSpeed;

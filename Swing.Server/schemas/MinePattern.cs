@@ -2,54 +2,13 @@
 {
     public class MinePattern
     {
-        public GridCoordinates[] placement(int mines, int diamonds)
+        public int[] placement(int mines)
         {
-            List<GridCoordinates> result = new List<GridCoordinates>();
+            List<int> result = new List<int>();
             Random random = new Random();
-            while (mines > 0)
+            for(int i = 0; i < mines; i++)
             {
-                int x;
-                int y;
-                bool isTaken = false;
-                
-                x = random.Next(0, 5);
-                y = random.Next(0, 5);
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if(x == result[i].X && y == result[i].Y)
-                    {
-                        isTaken = true;
-                    }
-                }
-                if (!isTaken)
-                {
-                    result.Add(new GridCoordinates(x, y));
-                    mines--;
-                }
-                isTaken = false;
-            }
-        
-            while (diamonds > 0)
-            {
-                int x;
-                int y;
-                bool isTaken = false;
-                
-                x = random.Next(0, 5);
-                y = random.Next(0, 5);
-                for (int i = 0; i < result.Count; i++)
-                {
-                    if (x == result[i].X && y == result[i].Y)
-                    {
-                        isTaken = true;
-                    }
-                }
-                if (!isTaken)
-                {
-                    result.Add(new GridCoordinates(x, y));
-                    diamonds--;
-                }
-                isTaken = false;
+                result.Add(random.Next(0, 24));
             }
             return result.ToArray();
         }
