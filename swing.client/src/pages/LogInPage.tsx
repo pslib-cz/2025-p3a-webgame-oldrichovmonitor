@@ -71,7 +71,7 @@ const LogInPage:React.FC<Props> = ({setUsername}) => {
                 />
               </div>
             </div>
-            <Link to="/" className="button">
+            <Link to="/homepage" className="button">
               <p onClick={onEnter} className="button__text">Enter Platform</p>
               <svg
                 className="button__icon"

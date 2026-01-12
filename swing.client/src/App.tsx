@@ -12,7 +12,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<LogInPage setUsername={setUsername} />} />
-      <Route path="/homepgae" element={<HomePage username={username}/>} />
+      <Route path="/homepage" element={<HomePage username={username}/>} />
       <Route path="/mines" element={<MinesDimonds />} />
       <Route path="/timesplit" element={<TimeSplit />} />
       <Route path="/memmorypattern" element={<MemoryPattern/>}/>
