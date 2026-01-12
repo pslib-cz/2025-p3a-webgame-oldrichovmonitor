@@ -115,7 +115,6 @@ const MinesDimonds = () => {
       const multiplier = await getMultiplier(newOpened);
       setNextMultiplier(await getMultiplier(newOpened + 1));
       setWin(betAmount * multiplier);
-      alert(`Diamant! Multiplier: ${multiplier}`);
     }
   };
   return (
