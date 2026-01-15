@@ -7,7 +7,7 @@ interface Props {
   username: string;
 }
 
-const HomePage:React.FC<Props> = ({username}) => {
+const HomePage: React.FC<Props> = ({ username }) => {
   return (
     <div className="home-page page">
       <GridLines />
@@ -130,11 +130,7 @@ const HomePage:React.FC<Props> = ({username}) => {
                 </div>
               </article>
             </Link>
-            <Link
-              to="/homepage"
-              className="game-link"
-              style={{ pointerEvents: "none", opacity: 0.7 }}
-            >
+            <Link to="/precisionslider" className="game-link">
               <article className="game">
                 <div className="game__icon">
                   <svg
