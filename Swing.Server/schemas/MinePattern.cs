@@ -1,24 +1,27 @@
-﻿namespace Swing.Server.classes
+﻿using System;
+
+namespace Swing.Server.classes
 {
     public class MinePattern
     {
         public int[] placement(int mines)
         {
-            List<int> result = new List<int>();
+            
+
+            HashSet<int> result = new HashSet<int>();
             Random random = new Random();
-            for(int i = 0; i < mines; i++)
+
+            while (result.Count < mines)
             {
-                result.Add(random.Next(0, 24));
+                result.Add(random.Next(0, 25));
             }
+
             return result.ToArray();
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
             float multiplier = 1.0f;
-            for (int i = 0; i < openedTiles; i++)
-            {
-                multiplier *= (25.0f - i) / (25.0f - mines - i);
-            }
+            multiplier = openedTiles / mines;
             return multiplier;
         }
         

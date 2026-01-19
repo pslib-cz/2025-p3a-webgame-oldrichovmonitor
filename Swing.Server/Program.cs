@@ -1,29 +1,35 @@
 using Microsoft.EntityFrameworkCore;
 using Swing.Server.classes;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<PrecisionSlider>();
 builder.Services.AddSingleton<MemoryPattern>();
 builder.Services.AddSingleton<MinePattern>();
 builder.Services.AddSingleton<TimeSwing>();
 
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost:54657")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,10 +38,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseCors("AllowFrontend");
+
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
 app.Run();
