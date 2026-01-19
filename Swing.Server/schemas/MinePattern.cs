@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Identity.Client;
+using System;
 
 namespace Swing.Server.classes
 {
@@ -21,22 +22,11 @@ namespace Swing.Server.classes
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
-            int totalTiles = 25;
-            int safeTiles = totalTiles - mines;
-
-            if (openedTiles <= 0 || safeTiles <= 0)
-                return 1f;
-
-            // Determine max multiplier based on mines
-            float minMultiplier = 1f; // base multiplier
-            float maxMultiplier = 1f + 2f * mines; // tweak factor to scale with mines
-
-            // Use a smooth exponential growth for multiplier
-            float progress = (float)openedTiles / safeTiles; // 0 -> 1
-            float multiplier = 1f + (maxMultiplier - 1f) * (float)Math.Pow(progress, 1.5); // smooth curve
-
-            return multiplier;
-
+            float risk = (float)(25 - openedTiles) / mines;
+            return risk;
         }
+
     }
+
+
 }
