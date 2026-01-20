@@ -153,7 +153,7 @@ const TimeSplit = () => {
           <h1 className="game-title">Time Split</h1>
           <p className="subtitle">Press to stop time with precision.</p>
         </div>
-        <div className="time-split-game__wrapper">
+        <div className="time-split-game__wrapper game__wrapper">
           <div className="timesplit__target-time">
             <div className="timesplit__target-time__content">
               <svg
