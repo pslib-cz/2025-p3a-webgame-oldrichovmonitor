@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
+import { useBalance } from "../context/BalanceContext";
 
-interface Props{
-  setUsername: (name: string) => void
-}
-
-const LogInPage:React.FC<Props> = ({setUsername}) => {
+const LogInPage = () => {
+  const { setUsername } = useBalance()
   const [input, setIpnut] = useState("");
   const navigate = useNavigate();
 

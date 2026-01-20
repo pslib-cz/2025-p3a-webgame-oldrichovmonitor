@@ -4,12 +4,9 @@ import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { useBalance } from "../context/BalanceContext";
 
-interface Props {
-  username: string;
-}
 
-const HomePage: React.FC<Props> = ({ username }) => {
-  const { balance } = useBalance()
+const HomePage = () => {
+  const { balance, username } = useBalance()
   return (
     <div className="home-page page">
       <GridLines />
