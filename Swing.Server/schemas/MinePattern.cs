@@ -22,8 +22,26 @@ namespace Swing.Server.classes
         }
         public float returnMultiplier(int openedTiles, int mines)
         {
-            float risk = (float)(25 - openedTiles) / mines;
-            return risk;
+
+            if (openedTiles <= 0)
+                return 0f;
+
+            int safeTiles = 25 - mines;
+
+            
+            
+            float probability = 1f;
+
+            for (int i = 0; i < openedTiles; i++)
+            {
+                probability *= (float)(safeTiles - i) / (25 - i);
+            }
+
+            
+            float multiplier = (1f - 0.05f) / probability;
+
+            
+            return multiplier / 2f;
         }
 
     }
