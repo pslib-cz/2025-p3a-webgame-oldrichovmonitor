@@ -7,18 +7,42 @@ import TimeSplit from "./pages/TimeSplit";
 import MemoryPattern from "./pages/MemoryPattern";
 import PrecisionSlider from "./pages/PrecisionSlider";
 import { useState } from "react";
+import { BalanceProvider } from "./context/BalanceContext";
 function App() {
-  const [username, setUsername] = useState("")
-  const [balance, setBalance] = useState<number>(1000)
+  const [username, setUsername] = useState("");
   return (
-    <Routes>
-      <Route path="/" element={<LogInPage setUsername={setUsername} setBalance={setBalance} balance={balance}/>} />
-      <Route path="/homepage" element={<HomePage username={username} balance={balance}/>}/>
-      <Route path="/mines" element={<MinesDimonds  setBalance={setBalance}/>} />
-      <Route path="/timesplit" element={<TimeSplit  setBalance={setBalance}/>} />
-      <Route path="/memmorypattern" element={<MemoryPattern setBalance={setBalance}/>}/>
-      <Route path="/precisionslider" element={<PrecisionSlider setBalance={setBalance}/>}/>
-    </Routes>
+    <BalanceProvider>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <LogInPage
+              setUsername={setUsername}
+            />
+          }
+        />
+        <Route
+          path="/homepage"
+          element={<HomePage username={username} />}
+        />
+        <Route
+          path="/mines"
+          element={<MinesDimonds/>}
+        />
+        <Route
+          path="/timesplit"
+          element={<TimeSplit />}
+        />
+        <Route
+          path="/memmorypattern"
+          element={<MemoryPattern />}
+        />
+        <Route
+          path="/precisionslider"
+          element={<PrecisionSlider />}
+        />
+      </Routes>
+    </BalanceProvider>
   );
 }
 

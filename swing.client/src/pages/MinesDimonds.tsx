@@ -4,10 +4,6 @@ import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import BetControls from "../components/BetControls"; // Import the new component
 
-interface Props{
-  balance: number;
-  setBalance: (balance: number)=> void
-}
 interface Tile {
   id: number;
   status: "mine" | "diamond";
@@ -22,6 +18,7 @@ const gemSound = new Audio(
 const boomSound = new Audio(bombSound);
 import gemSoundUrl from "../assets/sounds/gem.mp3";
 import { Link } from "react-router-dom";
+import { useBalance } from "../context/BalanceContext";
 const winSound = new Audio(gemSoundUrl);
 
 clickSound.volume = 0.2;
@@ -30,13 +27,13 @@ boomSound.volume = 0.3;
 winSound.volume = 0.4;
 
 const MinesDimonds = () => {
+  const { balance, setBalance } = useBalance()
   const [minesCount, setMinesCount] = useState(2);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
   const [openedTiles, setOpenedTiles] = useState(0);
   const [nextMultiplier, setNextMultiplier] = useState(0);
   const [win, setWin] = useState<number>(0);
-  const [balance, setBalance] = useState(100);
   const [grid, setGrid] = useState<Tile[]>(
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
@@ -53,7 +50,7 @@ const MinesDimonds = () => {
       alert("Insufficient balance!");
       return;
     }
-    setBalance((prev) => prev - betAmount);
+    setBalance(balance - betAmount);
     setIsPlaying(true);
     setOpenedTiles(0);
     setWin(0);
@@ -80,12 +77,11 @@ const MinesDimonds = () => {
     winSound.currentTime = 0;
     winSound.play();
     setIsPlaying(false);
-    setBalance((prev) => prev + win);
+    setBalance(balance + win);
     setOpenedTiles(0);
     setNextMultiplier(0);
   };
 
-  // Removed redundant specific bet logic (incBet, decBet etc) as BetControls handles the UI side
 
   const handleTileClick = async (index: number) => {
     if (!isPlaying || !grid[index].hidden) return;

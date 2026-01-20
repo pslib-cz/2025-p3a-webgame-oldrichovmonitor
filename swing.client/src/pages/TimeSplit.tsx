@@ -4,13 +4,11 @@ import GridLines from "../components/GridLines";
 import BetControls from "../components/BetControls";
 import { Link } from "react-router-dom";
 import "../css/games/timesplit.css";
+import { useBalance } from "../context/BalanceContext";
 
-interface Props{
-  balance: number;
-  setBalance: (balance: number)=> void
-}
 
-const TimeSplit:React.FC<Props> = ({balance, setBalance}) => {
+const TimeSplit = () => {
+  const { balance, setBalance } = useBalance();
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -45,7 +43,7 @@ const TimeSplit:React.FC<Props> = ({balance, setBalance}) => {
 
     setActiveTier(null);
     setResultMessage(null); // Clear previous message
-    setBalance((prev) => prev - betAmount);
+    setBalance(balance - betAmount);
     setWin(0);
     setIsPlaying(true);
     setGameState("playing");
@@ -94,7 +92,7 @@ const TimeSplit:React.FC<Props> = ({balance, setBalance}) => {
     setWin(winAmount);
 
     if (winAmount > 0) {
-      setBalance((prev) => prev + winAmount);
+      setBalance(balance + winAmount);
       setGameState("won");
       setResultMessage(`+${winAmount.toFixed(2)}$`);
     } else {

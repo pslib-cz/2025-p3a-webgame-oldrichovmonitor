@@ -4,18 +4,16 @@ import GridLines from "../components/GridLines";
 import { Link } from "react-router-dom";
 import BetControls from "../components/BetControls";
 import "../css/games/memory.css";
+import { useBalance } from "../context/BalanceContext";
 
-interface Props{
-  balance: number;
-  setBalance: (balance: number)=> void
-}
 interface Tile {
   id: number;
   status: "active" | "inactive";
   hidden: boolean;
 }
 
-const MemoryPattern:React.FC<Props> = ({balance, setBalance}) => {
+const MemoryPattern = () => {
+  const { balance, setBalance } = useBalance();
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const [pattern, setPattern] = useState<number[]>([]);
 
@@ -23,8 +21,6 @@ const MemoryPattern:React.FC<Props> = ({balance, setBalance}) => {
   const [patternLength, setPatternLength] = useState(3);
   const [isUserTurn, setIsUserTurn] = useState(false);
   const [roundOver, setRoundOver] = useState(false);
-
-  const [balance, setBalance] = useState(1000);
   const [betAmount, setBetAmount] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
   const [win, setWin] = useState<number>(0);

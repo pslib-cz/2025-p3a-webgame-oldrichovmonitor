@@ -2,13 +2,14 @@ import React, { use } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
+import { useBalance } from "../context/BalanceContext";
 
 interface Props {
   username: string;
-  balance: number;
 }
 
-const HomePage: React.FC<Props> = ({ username, balance }) => {
+const HomePage: React.FC<Props> = ({ username }) => {
+  const { balance } = useBalance()
   return (
     <div className="home-page page">
       <GridLines />
@@ -34,7 +35,7 @@ const HomePage: React.FC<Props> = ({ username, balance }) => {
                   fill="#EBB30B"
                 />
               </svg>
-              <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
+              <p className="subtitle ibmplexmono white">Balance: {balance}$</p>
             </div>
             <Link
               to="/"
