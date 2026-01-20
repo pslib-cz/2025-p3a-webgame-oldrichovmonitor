@@ -5,9 +5,10 @@ import GridLines from "../components/GridLines";
 
 interface Props {
   username: string;
+  balance: number;
 }
 
-const HomePage: React.FC<Props> = ({ username }) => {
+const HomePage: React.FC<Props> = ({ username, balance }) => {
   return (
     <div className="home-page page">
       <GridLines />

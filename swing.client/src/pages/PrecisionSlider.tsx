@@ -2,6 +2,11 @@ import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { useState, useEffect, useRef } from "react";
 
+interface Props{
+  balance: number;
+  setBalance: (balance: number)=> void
+}
+
 function PrecisionSlider() {
   const [sliderPosition, setSliderPosition] = useState(500);
   const [direction, setDirection] = useState(1);

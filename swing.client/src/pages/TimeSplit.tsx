@@ -5,8 +5,12 @@ import BetControls from "../components/BetControls";
 import { Link } from "react-router-dom";
 import "../css/games/timesplit.css";
 
-const TimeSplit = () => {
-  const [balance, setBalance] = useState(3000);
+interface Props{
+  balance: number;
+  setBalance: (balance: number)=> void
+}
+
+const TimeSplit:React.FC<Props> = ({balance, setBalance}) => {
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);

@@ -4,6 +4,10 @@ import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import BetControls from "../components/BetControls"; // Import the new component
 
+interface Props{
+  balance: number;
+  setBalance: (balance: number)=> void
+}
 interface Tile {
   id: number;
   status: "mine" | "diamond";
