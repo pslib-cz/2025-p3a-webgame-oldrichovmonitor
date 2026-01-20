@@ -1,7 +1,5 @@
 import Footer from "../components/Footer";
-import GridLines from "../components/GridLines";
 import { useState, useEffect, useRef } from "react";
-
 
 function PrecisionSlider() {
   const [sliderPosition, setSliderPosition] = useState(500);
@@ -21,9 +19,9 @@ function PrecisionSlider() {
       .then((res) => res.json())
       .then((data) => {
         if (data.maxMultiplier) setMaxMultiplier(data.maxMultiplier);
+        if (data.startSpeed) setSliderSpeed(data.startSpeed);
       });
   }, []);
-
   const animate = () => {
     setSliderPosition((prevPos) => {
       let angle = 0;
@@ -81,7 +79,7 @@ function PrecisionSlider() {
 
     try {
       const res = await fetch(
-        `/api/PrecisionSlider/Multiplier?distance=${distance}`
+        `/api/PrecisionSlider/Multiplier?distance=${distance}`,
       );
       const mult = await res.json();
       setMultiplier(mult);
@@ -93,7 +91,6 @@ function PrecisionSlider() {
 
   return (
     <div className="page-container">
-      {/*<GridLines />*/}
       <div className="content-container">
         <h1>Precision Slider</h1>
         <p>Stop the slider at the center (50%) to win max multiplier!</p>
@@ -170,6 +167,8 @@ function PrecisionSlider() {
               </button>
             )}
           </div>
+          <p>Multiplier: {multiplier}</p>
+          <p>Win: {win ? win - betAmount : win}</p>
         </div>
       </div>
       <Footer />
