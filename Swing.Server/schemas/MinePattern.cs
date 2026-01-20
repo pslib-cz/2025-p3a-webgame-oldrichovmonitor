@@ -29,7 +29,7 @@ namespace Swing.Server.classes
             int safeTiles = 25 - mines;
 
             
-            // Survival probability P(k)
+            
             float probability = 1f;
 
             for (int i = 0; i < openedTiles; i++)
@@ -37,11 +37,11 @@ namespace Swing.Server.classes
                 probability *= (float)(safeTiles - i) / (25 - i);
             }
 
-            // Multiplier with house edge
+            
             float multiplier = (1f - 0.05f) / probability;
 
-            // Optional rounding for UI
-            return multiplier / 3f;
+            
+            return multiplier / 2f;
         }
 
     }
