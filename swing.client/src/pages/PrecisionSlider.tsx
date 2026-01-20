@@ -1,14 +1,15 @@
 import Footer from "../components/Footer";
 import { useState, useEffect, useRef } from "react";
+import { useBalance } from "../context/BalanceContext";
 
 function PrecisionSlider() {
+  const { balance, setBalance } = useBalance();
   const [sliderPosition, setSliderPosition] = useState(500);
   const [direction, setDirection] = useState(1);
-  const [isMoving, setIsMoving] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [betAmount, setBetAmount] = useState(100);
   const [multiplier, setMultiplier] = useState<number | null>(null);
-  const [win, setWin] = useState<number | null>(null);
-  const [maxMultiplier, setMaxMultiplier] = useState(10);
+  const [win, setWin] = useState<number>(0);
   const [sliderSpeed, setSliderSpeed] = useState(30);
   const [peakPosition, setPeakPosition] = useState(500);
 
@@ -18,7 +19,6 @@ function PrecisionSlider() {
     fetch("/api/PrecisionSlider/Start")
       .then((res) => res.json())
       .then((data) => {
-        if (data.maxMultiplier) setMaxMultiplier(data.maxMultiplier);
         if (data.startSpeed) setSliderSpeed(data.startSpeed);
       });
   }, []);
@@ -52,7 +52,7 @@ function PrecisionSlider() {
   };
 
   useEffect(() => {
-    if (isMoving) {
+    if (isPlaying) {
       requestRef.current = requestAnimationFrame(animate);
     } else if (requestRef.current) {
       cancelAnimationFrame(requestRef.current);
@@ -60,19 +60,24 @@ function PrecisionSlider() {
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [isMoving, direction, sliderSpeed]);
+  }, [isPlaying, direction, sliderSpeed]);
 
   const handleStart = () => {
-    setIsMoving(true);
+    if (betAmount > balance) {
+      alert("Insufficient balance!");
+      return;
+    }
+    setIsPlaying(true);
     setMultiplier(null);
-    setWin(null);
+    setWin(0);
     setSliderPosition(0);
     setDirection(1);
     setPeakPosition(Math.floor(Math.random() * 600) + 200);
+    setBalance(balance - betAmount);
   };
 
   const handleStop = async () => {
-    setIsMoving(false);
+    setIsPlaying(false);
     if (requestRef.current) cancelAnimationFrame(requestRef.current);
 
     const distance = Math.abs(500 - sliderPosition) / 10;
@@ -82,12 +87,17 @@ function PrecisionSlider() {
         `/api/PrecisionSlider/Multiplier?distance=${distance}`,
       );
       const mult = await res.json();
+
+      const currentWin = Math.floor(betAmount * mult);
+
       setMultiplier(mult);
-      setWin(Math.floor(betAmount * mult));
+      setWin(currentWin);
+      setBalance(currentWin + balance);
     } catch (e) {
       console.error("Error calculating result:", e);
     }
   };
+
 
   return (
     <div className="page-container">
@@ -132,7 +142,7 @@ function PrecisionSlider() {
               borderRadius: "50%",
               transform: "translate(-50%, -50%)",
               zIndex: 2,
-              transition: isMoving ? "none" : "left 0.1s ease-out",
+              transition: isPlaying ? "none" : "left 0.1s ease-out",
             }}
           ></div>
         </div>
@@ -141,7 +151,7 @@ function PrecisionSlider() {
           <div className="bet-controls">
             <button
               onClick={() => setBetAmount(Math.max(10, betAmount - 10))}
-              disabled={isMoving}
+              disabled={isPlaying}
             >
               -
             </button>
@@ -150,14 +160,14 @@ function PrecisionSlider() {
             </span>
             <button
               onClick={() => setBetAmount(betAmount + 10)}
-              disabled={isMoving}
+              disabled={isPlaying}
             >
               +
             </button>
           </div>
 
           <div>
-            {!isMoving ? (
+            {!isPlaying ? (
               <button className="btn-primary" onClick={handleStart}>
                 BET
               </button>
@@ -168,7 +178,8 @@ function PrecisionSlider() {
             )}
           </div>
           <p>Multiplier: {multiplier}</p>
-          <p>Win: {win ? win - betAmount : win}</p>
+          <p>Win: {win - betAmount }</p>
+          <p>Balance: {balance}</p>
         </div>
       </div>
       <Footer />

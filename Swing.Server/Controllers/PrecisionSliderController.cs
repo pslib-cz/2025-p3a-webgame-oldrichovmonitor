@@ -18,8 +18,7 @@ namespace Swing.Server.Controllers
         public ActionResult<PrecisionSliderReturn> StartData()
         {
             return Ok(new PrecisionSliderReturn(
-                _precisionSlider.starterSpeed,
-                _precisionSlider.MaxMultiplier
+                _precisionSlider.starterSpeed
             ));
         }
 
@@ -38,12 +37,10 @@ namespace Swing.Server.Controllers
     public class PrecisionSliderReturn
     {
         public int startSpeed { get; set; }
-        public float maxMultiplier { get; set; }
 
-        public PrecisionSliderReturn(int startSpeed, float maxMultiplier)
+        public PrecisionSliderReturn(int startSpeed)
         {
             this.startSpeed = startSpeed;
-            this.maxMultiplier = maxMultiplier;
         }
     }
 }
