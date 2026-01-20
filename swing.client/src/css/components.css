@@ -64,3 +64,11 @@ footer {
   transform: none;
   left: auto;
 }
+.game__wrapper{
+  max-width: 400px;
+  margin: 0 auto;
+  margin-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
