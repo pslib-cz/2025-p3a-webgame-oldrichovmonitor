@@ -6,9 +6,8 @@ import { Link } from "react-router-dom";
 import "../css/games/timesplit.css";
 import { useBalance } from "../context/BalanceContext";
 
-
 const TimeSplit = () => {
-  const { balance, setBalance } = useBalance();
+  const { balance, setBalance, setLevel } = useBalance();
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,42 +24,73 @@ const TimeSplit = () => {
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/Game/Status");
+      if (res.ok) {
+        const data = await res.json();
+        setBalance(data.balance);
+        setLevel(data.level);
+      }
+    } catch (error) {
+      console.error("Failed to fetch game status", error);
+    }
+  };
+
+  useEffect(() => {
     if (!isPlaying && targetTime) setCurrentTime(0);
   }, [targetTime]);
 
-  const startGame = () => {
+  const startGame = async () => {
     if (isPlaying) return;
     if (betAmount > balance) {
       alert("Insufficient balance!");
       return;
     }
 
-    const min = 6000;
-    const max = 14000;
-    const randomTime = Math.floor(Math.random() * (max - min + 1) + min);
-    const newTarget = Math.floor(randomTime / 10) * 10;
-    setTargetTime(newTarget);
-
-    setActiveTier(null);
-    setResultMessage(null); // Clear previous message
-    setBalance(balance - betAmount);
-    setWin(0);
-    setIsPlaying(true);
-    setGameState("playing");
-    setCurrentTime(0);
-
-    intervalRef.current = setInterval(() => {
-      setCurrentTime((prev) => {
-        if (newTarget && prev >= newTarget + 5000) {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          setIsPlaying(false);
-          setGameState("lost");
-          setResultMessage("Too Late"); // Auto loss is always late
-          return newTarget + 5000; // Cap it visualy
-        }
-        return prev + 10;
+    try {
+      const res = await fetch(`/api/Game/Bet?amount=${betAmount}`, {
+        method: "POST",
       });
-    }, 10);
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setBalance(data.newBalance);
+
+          const min = 6000;
+          const max = 14000;
+          const randomTime = Math.floor(Math.random() * (max - min + 1) + min);
+          const newTarget = Math.floor(randomTime / 10) * 10;
+          setTargetTime(newTarget);
+
+          setActiveTier(null);
+          setResultMessage(null); // Clear previous message
+          setWin(0);
+          setIsPlaying(true);
+          setGameState("playing");
+          setCurrentTime(0);
+
+          intervalRef.current = setInterval(() => {
+            setCurrentTime((prev) => {
+              if (newTarget && prev >= newTarget + 5000) {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                setIsPlaying(false);
+                setGameState("lost");
+                setResultMessage("Too Late"); // Auto loss is always late
+                return newTarget + 5000; // Cap it visualy
+              }
+              return prev + 10;
+            });
+          }, 10);
+        }
+      }
+    } catch (e) {
+      console.error("Bet error", e);
+    }
   };
 
   const stopGame = async () => {
@@ -92,9 +122,11 @@ const TimeSplit = () => {
     setWin(winAmount);
 
     if (winAmount > 0) {
-      setBalance(balance + winAmount);
       setGameState("won");
       setResultMessage(`+${winAmount.toFixed(2)}$`);
+      fetch(`/api/Game/Win?amount=${winAmount}`, { method: "POST" }).then(() =>
+        fetchStatus(),
+      );
     } else {
       setGameState("lost");
       // Determine if early or late
@@ -107,7 +139,7 @@ const TimeSplit = () => {
 
     try {
       await fetch(
-        `/api/TimeSwing/Result?targetTime=${targetTime}&actualTime=${currentTime}&diff=${absDiff}&bet=${betAmount}&win=${winAmount}`
+        `/api/TimeSwing/Result?targetTime=${targetTime}&actualTime=${currentTime}&diff=${absDiff}&bet=${betAmount}&win=${winAmount}`,
       );
     } catch (e) {
       console.warn("API sync failed", e);
@@ -144,7 +176,10 @@ const TimeSplit = () => {
                 Balance: {balance.toFixed(2)}$
               </p>
             </div>
-            <Link to="/homepage" className="subtitle hoverable balance--order-switch">
+            <Link
+              to="/homepage"
+              className="subtitle hoverable balance--order-switch"
+            >
               Exit to Arcade
             </Link>
           </div>

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useBalance } from "../context/BalanceContext";
 
 function PrecisionSlider() {
-  const { balance, setBalance } = useBalance();
+  const { balance, setBalance, setLevel } = useBalance();
   const [sliderPosition, setSliderPosition] = useState(500);
   const [direction, setDirection] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -16,12 +16,27 @@ function PrecisionSlider() {
   const requestRef = useRef<number | null>(null);
 
   useEffect(() => {
+    fetchStatus();
     fetch("/api/PrecisionSlider/Start")
       .then((res) => res.json())
       .then((data) => {
         if (data.startSpeed) setSliderSpeed(data.startSpeed);
       });
   }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/Game/Status");
+      if (res.ok) {
+        const data = await res.json();
+        setBalance(data.balance);
+        setLevel(data.level);
+      }
+    } catch (error) {
+      console.error("Failed to fetch game status", error);
+    }
+  };
+
   const animate = () => {
     setSliderPosition((prevPos) => {
       let angle = 0;
@@ -62,18 +77,36 @@ function PrecisionSlider() {
     };
   }, [isPlaying, direction, sliderSpeed]);
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (betAmount > balance) {
       alert("Insufficient balance!");
       return;
     }
-    setIsPlaying(true);
-    setMultiplier(null);
-    setWin(0);
-    setSliderPosition(0);
-    setDirection(1);
-    setPeakPosition(Math.floor(Math.random() * 600) + 200);
-    setBalance(balance - betAmount);
+
+    try {
+      const res = await fetch(`/api/Game/Bet?amount=${betAmount}`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+
+        if (data.success) {
+          setBalance(data.newBalance);
+          setMultiplier(null);
+          setWin(0);
+          setSliderPosition(0);
+          setDirection(1);
+          setPeakPosition(Math.floor(Math.random() * 600) + 200);
+          setIsPlaying(true);
+        }
+      } else {
+        const errorMsg = await res.text();
+        alert(errorMsg || "Bet failed");
+      }
+    } catch (error) {
+      console.error("Bet request failed", error);
+    }
   };
 
   const handleStop = async () => {
@@ -92,12 +125,15 @@ function PrecisionSlider() {
 
       setMultiplier(mult);
       setWin(currentWin);
-      setBalance(currentWin + balance);
-    } catch (e) {
-      console.error("Error calculating result:", e);
+
+      if (currentWin > 0) {
+        await fetch(`/api/Game/Win?amount=${currentWin}`, { method: "POST" });
+      }
+      await fetchStatus();
+    } catch (error) {
+      console.log("Setting win failed");
     }
   };
-
 
   return (
     <div className="page-container">
@@ -178,7 +214,7 @@ function PrecisionSlider() {
             )}
           </div>
           <p>Multiplier: {multiplier}</p>
-          <p>Win: {win - betAmount }</p>
+          <p>Win: {win - betAmount}</p>
           <p>Balance: {balance}</p>
         </div>
       </div>

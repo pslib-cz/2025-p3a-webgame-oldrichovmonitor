@@ -16,7 +16,7 @@ interface Tile {
 const MULTIPLIERS = [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32];
 
 const MemoryPattern = () => {
-  const { balance, setBalance } = useBalance();
+  const { balance, setBalance, setLevel } = useBalance();
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const [pattern, setPattern] = useState<number[]>([]);
 
@@ -36,25 +36,46 @@ const MemoryPattern = () => {
     })),
   );
 
+
   useEffect(() => {
-    // Reset game state on mount (refresh) if not playing
+    fetchStatus();
     if (!isPlaying) {
       setRoundOver(false);
       setWin(0);
-      // We can optionally trigger a cleanup call to server to clear session?
-      // But server clears on newGame=true
     }
   }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/Game/Status");
+      if (res.ok) {
+        const data = await res.json();
+        setBalance(data.balance);
+        setLevel(data.level);
+      }
+    } catch (error) {
+      console.error("Failed to fetch game status", error);
+    }
+  };
 
   const startGame = async () => {
     if (isPlaying && !roundOver) return;
 
-    if (balance < betAmount) {
+    if (betAmount > balance) {
       alert("Insufficient balance!");
       return;
     }
 
-    setBalance(balance - betAmount);
+    try {
+      const res = await fetch(`/api/Game/Bet?amount=${betAmount}`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setBalance(data.newBalance);
+
     setIsPlaying(true);
     setRoundOver(false);
     setWin(0);
@@ -62,7 +83,15 @@ const MemoryPattern = () => {
     setUserSequence([]);
 
     // Explicitly send true to start new game pattern
-    fetchAndPlayPattern(3, true);
+          fetchAndPlayPattern(3, true);
+        }
+      } else {
+        const errorMsg = await res.text();
+        alert(errorMsg || "Bet failed");
+      }
+    } catch (error) {
+      console.error("Bet request failed", error);
+    }
   };
 
   const continueGame = () => {
@@ -74,18 +103,6 @@ const MemoryPattern = () => {
     fetchAndPlayPattern(newLength, false);
   };
 
-  // Improved Cash Out
-  const cashOut = () => {
-    // Add logic to cash out win amount
-    setBalance(balance + win);
-
-    setIsPlaying(false);
-    setRoundOver(false);
-    setIsUserTurn(false);
-    setWin(0);
-    setPatternLength(3);
-    setUserSequence([]);
-  };
 
   const fetchAndPlayPattern = async (length: number, newGame = false) => {
     setIsUserTurn(false);
@@ -160,6 +177,28 @@ const MemoryPattern = () => {
       const multiplier = await getMultiplier(patternLength);
       // Backend authority:
       setWin(Math.floor(betAmount * multiplier));
+    }
+  };
+
+  const cashOut = async () => {
+    setIsPlaying(false);
+    setRoundOver(false);
+    setIsUserTurn(false);
+
+    setIsPlaying(false);
+    setRoundOver(false);
+    setIsUserTurn(false);
+    setWin(0);
+    setPatternLength(3);
+    setUserSequence([]);
+
+    try {
+      if (win > 0) {
+        await fetch(`/api/Game/Win?amount=${win}`, { method: "POST" });
+      }
+      await fetchStatus();
+    } catch (error) {
+      console.error("Cashout failed", error);
     }
   };
 
