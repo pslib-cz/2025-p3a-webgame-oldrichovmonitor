@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import bombSound from "../assets/sounds/bomb.mp3";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
@@ -10,10 +10,10 @@ interface Tile {
   hidden: boolean;
 }
 const clickSound = new Audio(
-  "https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3"
+  "https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3",
 );
 const gemSound = new Audio(
-  "https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+  "https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3",
 );
 const boomSound = new Audio(bombSound);
 import gemSoundUrl from "../assets/sounds/gem.mp3";
@@ -27,7 +27,7 @@ boomSound.volume = 0.3;
 winSound.volume = 0.4;
 
 const MinesDimonds = () => {
-  const { balance, setBalance } = useBalance()
+  const { balance, setBalance, setLevel } = useBalance();
   const [minesCount, setMinesCount] = useState(2);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -39,49 +39,90 @@ const MinesDimonds = () => {
       id: i,
       status: "diamond",
       hidden: true,
-    }))
+    })),
   );
 
+  useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch("/api/Game/Status");
+      if (res.ok) {
+        const data = await res.json();
+        setBalance(data.balance);
+        setLevel(data.level);
+      }
+    } catch (error) {
+      console.error("Failed to fetch game status", error);
+    }
+  };
+
   const startGame = async () => {
-    clickSound.currentTime = 0;
-    clickSound.play();
     if (isPlaying) return;
     if (betAmount > balance) {
       alert("Insufficient balance!");
       return;
     }
-    setBalance(balance - betAmount);
-    setIsPlaying(true);
-    setOpenedTiles(0);
-    setWin(0);
-    setGrid(
-      Array.from({ length: 25 }, (_, i) => ({
-        id: i,
-        status: "diamond",
-        hidden: true,
-      }))
-    );
 
-    await fetch(`/api/MinePattern/StartGame/${minesCount}`);
+    try {
+      const res = await fetch(`/api/Game/Bet?amount=${betAmount}`, {
+        method: "POST",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setBalance(data.newBalance);
+
+          clickSound.currentTime = 0;
+          clickSound.play();
+          setIsPlaying(true);
+          setOpenedTiles(0);
+          setWin(0);
+          setGrid(
+            Array.from({ length: 25 }, (_, i) => ({
+              id: i,
+              status: "diamond",
+              hidden: true,
+            })),
+          );
+
+          await fetch(`/api/MinePattern/StartGame/${minesCount}`);
+        }
+      } else {
+        alert("Bet failed");
+      }
+    } catch (error) {
+      console.error("Bet error", error);
+    }
   };
   const getMultiplier = async (openedTiles: number) => {
     const response = await fetch(
-      `/api/MinePattern/Multiplier?openedTiles=${openedTiles}&mines=${minesCount}`
+      `/api/MinePattern/Multiplier?openedTiles=${openedTiles}&mines=${minesCount}`,
     );
     const multiplier = await response.json();
     return multiplier;
   };
 
-  const cashOut = () => {
+  const cashOut = async () => {
     if (!isPlaying) return;
     winSound.currentTime = 0;
     winSound.play();
     setIsPlaying(false);
-    setBalance(balance + win);
     setOpenedTiles(0);
     setNextMultiplier(0);
-  };
 
+    try {
+      if (win > 0) {
+        await fetch(`/api/Game/Win?amount=${win}`, { method: "POST" });
+      }
+      await fetchStatus();
+    } catch (error) {
+      console.error("Cashout failed", error);
+    }
+  };
 
   const handleTileClick = async (index: number) => {
     if (!isPlaying || !grid[index].hidden) return;
@@ -141,7 +182,10 @@ const MinesDimonds = () => {
                 Balance: {balance.toFixed(2)}$
               </p>
             </div>
-            <Link to="/homepage" className="subtitle hoverable balance--order-switch">
+            <Link
+              to="/homepage"
+              className="subtitle hoverable balance--order-switch"
+            >
               Exit to Arcade
             </Link>
           </div>
