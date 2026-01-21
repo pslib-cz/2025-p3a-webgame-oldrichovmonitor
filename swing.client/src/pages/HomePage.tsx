@@ -66,7 +66,7 @@ const HomePage = () => {
                 fill="#EBB30B"
               />
             </svg>
-            <p className="subtitle ibmplexmono white">Balance: 3 000$</p>
+            <p className="subtitle ibmplexmono white">Balance: {1000}$</p>
           </div>
           <p className="subtitle">Available games:</p>
           <div className="home-page__games">

@@ -1,3 +1,49 @@
-.grid-container--memmory{
-    background-color: transparent;
+:root {
+  --bg-color: #030712;
+  --surface: #0f172a;
+  --primary: #6d28d9;
+  --primary-light: #a78bfa;
+  --primary-glow: rgba(109, 40, 217, 0.6);
+  --gold: #f59e0b;
+  --red: #ef4444;
+  --cyan: #22d3ee;
+  --glass: rgba(255, 255, 255, 0.03);
+}
+
+.grid-container--memmory {
+  background-color: transparent;
+}
+.memory-multipliers {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1rem;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 15%,
+    black 85%,
+    transparent
+  );
+}
+.memory-multiplier {
+  padding: 0.4rem 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: Inter;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.3);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.memory-multiplier.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+.memory-multiplier.upcoming {
+  color: var(--primary-light);
+  border-color: rgba(109, 40, 217, 0.3);
 }

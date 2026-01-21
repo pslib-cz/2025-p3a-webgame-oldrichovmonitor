@@ -174,6 +174,21 @@ const MemoryPattern = () => {
           <p className="subtitle">Watch the sequence, then repeat it</p>
         </div>
         <div className="game__wrapper">
+          <div className="memory-multipliers">
+            <div className="memory-multiplier">.25x</div>
+            <div className="memory-multiplier">.5x</div>
+            <div className="memory-multiplier">.75x</div>
+            <div className="memory-multiplier">1.1x</div>
+            <div className="memory-multiplier">2.10x</div>
+            <div className="memory-multiplier">3.20x</div>
+            <div className="memory-multiplier">5.00x</div>
+            <div className="memory-multiplier">8.50x</div>
+            <div className="memory-multiplier">15x</div>
+            <div className="memory-multiplier">
+              32x const multipliers = [0.25, 0.5, 0.75, 1.1, 2.1, 3.2, 5.0, 8.5,
+              15, 32];
+            </div>
+          </div>
           <div className="grid-container grid-container--memmory">
             {grid.map((tile, index) => (
               <div
