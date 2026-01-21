@@ -27,9 +27,14 @@ namespace Swing.Server.Controllers
         }
 
         [HttpPost("Bet")]
-        public IActionResult PlaceBet([FromQuery] decimal amount)
+        public IActionResult PlaceBet([FromQuery] decimal amount, [FromQuery] string gameId)
         {
             if (amount <= 0) return BadRequest("Invalid amount");
+
+            if (!_gameState.CanPlayGame(gameId))
+            {
+                return BadRequest("Game is locked or does not exist!");
+            }
 
             if (_gameState.PlaceBet(amount))
             {

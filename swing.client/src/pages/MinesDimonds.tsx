@@ -67,9 +67,12 @@ const MinesDimonds = () => {
     }
 
     try {
-      const res = await fetch(`/api/Game/Bet?amount=${betAmount}`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `/api/Game/Bet?amount=${betAmount}&gameId=minesdimonds`,
+        {
+          method: "POST",
+        },
+      );
 
       if (res.ok) {
         const data = await res.json();

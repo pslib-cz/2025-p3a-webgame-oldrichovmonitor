@@ -33,6 +33,14 @@ namespace Swing.Server.classes
             return true;
         }
 
+        public bool CanPlayGame(string gameId)
+        {
+            var game = GameLibrary.AllGames.FirstOrDefault(g => g.Id == gameId);
+            if (game == null) return false;
+
+            return GetCurrentLevel() >= game.MinLevel;
+        }
+
         public void AddWin(decimal amount)
         {
             if (amount > 0) Balance += amount;
