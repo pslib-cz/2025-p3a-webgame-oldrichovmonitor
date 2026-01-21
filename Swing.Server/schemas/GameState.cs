@@ -8,9 +8,9 @@ namespace Swing.Server.classes
         private readonly Dictionary<int, decimal> _levelThresholds = new()
     {
         { 1, 0 },
-        { 2, 1000 },
-        { 3, 1100 },
-        { 4, 20000 }
+        { 2, 1500 },
+        { 3, 2500 },
+        { 4, 5000 }
     };
 
         public int GetCurrentLevel()
