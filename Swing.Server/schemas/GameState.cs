@@ -4,6 +4,7 @@ namespace Swing.Server.classes
 public class GameState
 {
     public decimal Balance { get; private set; } = 1000;
+    public string Username { get; set; } = "";
 
     // Definice hranic pro levely
     private readonly Dictionary<int, decimal> _levelThresholds = new()
@@ -15,7 +16,6 @@ public class GameState
         { 5, 100000 }
     };
 
-    // Metoda, která vrátí číslo 1-5 podle balance
     public int GetCurrentLevel()
     {
         int level = 1;
@@ -40,5 +40,9 @@ public class GameState
     {
         if (amount > 0) Balance += amount;
     }
+    public void SetUserame(string name)
+        {
+            Username = name;
+        }
 }
 }

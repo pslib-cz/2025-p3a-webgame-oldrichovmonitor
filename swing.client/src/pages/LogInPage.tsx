@@ -5,15 +5,23 @@ import GridLines from "../components/GridLines";
 import { useBalance } from "../context/BalanceContext";
 
 const LogInPage = () => {
-  const { setUsername } = useBalance()
   const [input, setIpnut] = useState("");
   const navigate = useNavigate();
+  const { setUsername } = useBalance()
 
-  const onEnter = (e: React.MouseEvent) => {
+  const onEnter = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!input.trim()) return; // require a name
+    if (!input.trim()) return;
+    navigate("/homepage");
     setUsername(input)
-    navigate("/homepage"); // go to HomePage with name
+    try{
+      await fetch(`/api/Game/SetUsername?name=${input}`, {
+        method: "POST"
+      })
+    }
+    catch (error) {
+      console.error("Failed to fetch game status", error);
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
@@ -6,7 +6,18 @@ import { useBalance } from "../context/BalanceContext";
 
 
 const HomePage = () => {
-  const { balance, username } = useBalance()
+  useEffect(()=>{
+    fetch("/api/Game/Status")
+    .then((res)=> res.json())
+    .then((data)=> {
+      if(data){
+        setBalance(data.balance)
+        setLevel(data.level)
+        setUsername(data.username)
+      }
+    })
+  }, [])
+  const { balance, username, setUsername, setBalance, setLevel } = useBalance()
   return (
     <div className="home-page page">
       <GridLines />

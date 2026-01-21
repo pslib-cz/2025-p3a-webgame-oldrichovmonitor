@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { Link } from "react-router-dom";
@@ -12,7 +12,6 @@ interface Tile {
   hidden: boolean;
 }
 
-// These match the backend logic for visual display
 const MULTIPLIERS = [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32];
 
 const MemoryPattern = () => {
@@ -82,7 +81,6 @@ const MemoryPattern = () => {
     setPatternLength(3);
     setUserSequence([]);
 
-    // Explicitly send true to start new game pattern
           fetchAndPlayPattern(3, true);
         }
       } else {
@@ -107,7 +105,6 @@ const MemoryPattern = () => {
   const fetchAndPlayPattern = async (length: number, newGame = false) => {
     setIsUserTurn(false);
     try {
-      // Add timestamp to prevent browser caching of the pattern
       const response = await fetch(
         `/api/MemoryPattern/GeneratePattern?length=${length}&newGame=${newGame.toString()}&t=${Date.now()}`,
       );
@@ -357,7 +354,7 @@ const MemoryPattern = () => {
         </div>
       </main>
 
-      {/* Removed old game-controls div footer since integrated above */}
+      <Footer/>
     </div>
   );
 };

@@ -20,7 +20,8 @@ namespace Swing.Server.Controllers
             return Ok(new
             {
                 balance = _gameState.Balance,
-                level = _gameState.GetCurrentLevel()
+                level = _gameState.GetCurrentLevel(),
+                username = _gameState.Username
             });
         }
 
@@ -34,6 +35,16 @@ namespace Swing.Server.Controllers
                 return Ok(new { success = true, newBalance = _gameState.Balance });
             }
             return BadRequest("Insufficient balance!");
+        }
+
+        [HttpPost("SetUsername")]
+        public IActionResult SetUsername([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Name is required");
+
+            _gameState.SetUserame(name);
+
+            return Ok(new { success = true, username = _gameState.Username });
         }
 
         [HttpPost("Win")]
