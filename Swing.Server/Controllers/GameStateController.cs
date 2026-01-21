@@ -21,7 +21,8 @@ namespace Swing.Server.Controllers
             {
                 balance = _gameState.Balance,
                 level = _gameState.GetCurrentLevel(),
-                username = _gameState.Username
+                username = _gameState.Username,
+                games = _gameState.GetGames()
             });
         }
 

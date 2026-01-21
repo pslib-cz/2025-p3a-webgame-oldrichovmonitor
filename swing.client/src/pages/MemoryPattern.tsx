@@ -35,7 +35,6 @@ const MemoryPattern = () => {
     })),
   );
 
-
   useEffect(() => {
     fetchStatus();
     if (!isPlaying) {
@@ -75,11 +74,11 @@ const MemoryPattern = () => {
         if (data.success) {
           setBalance(data.newBalance);
 
-    setIsPlaying(true);
-    setRoundOver(false);
-    setWin(0);
-    setPatternLength(3);
-    setUserSequence([]);
+          setIsPlaying(true);
+          setRoundOver(false);
+          setWin(0);
+          setPatternLength(3);
+          setUserSequence([]);
 
           fetchAndPlayPattern(3, true);
         }
@@ -97,10 +96,8 @@ const MemoryPattern = () => {
     setUserSequence([]);
     const newLength = patternLength + 1;
     setPatternLength(newLength);
-    // Continue with existing pattern
     fetchAndPlayPattern(newLength, false);
   };
-
 
   const fetchAndPlayPattern = async (length: number, newGame = false) => {
     setIsUserTurn(false);
@@ -172,7 +169,6 @@ const MemoryPattern = () => {
       setRoundOver(true);
 
       const multiplier = await getMultiplier(patternLength);
-      // Backend authority:
       setWin(Math.floor(betAmount * multiplier));
     }
   };
@@ -244,7 +240,6 @@ const MemoryPattern = () => {
           <p className="subtitle">Watch the sequence, then repeat it</p>
         </div>
         <div className="game__wrapper">
-          {/* Dynamic Multipliers */}
           <div className="memory-multipliers">
             {MULTIPLIERS.map((mul, i) => {
               const isActive = i === patternLength - 3;
@@ -354,7 +349,7 @@ const MemoryPattern = () => {
         </div>
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };

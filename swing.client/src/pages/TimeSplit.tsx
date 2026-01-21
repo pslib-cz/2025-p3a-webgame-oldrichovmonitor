@@ -18,7 +18,6 @@ const TimeSplit = () => {
   >("idle");
   const [activeTier, setActiveTier] = useState<number | null>(null);
 
-  // New state for the result text
   const [resultMessage, setResultMessage] = useState<string | null>(null);
 
   const intervalRef = useRef<number | null>(null);
@@ -80,8 +79,8 @@ const TimeSplit = () => {
                 if (intervalRef.current) clearInterval(intervalRef.current);
                 setIsPlaying(false);
                 setGameState("lost");
-                setResultMessage("Too Late"); // Auto loss is always late
-                return newTarget + 5000; // Cap it visualy
+                setResultMessage("Too Late");
+                return newTarget + 5000;
               }
               return prev + 10;
             });
@@ -129,7 +128,6 @@ const TimeSplit = () => {
       );
     } else {
       setGameState("lost");
-      // Determine if early or late
       if (timeDiff < 0) {
         setResultMessage("Too Early");
       } else {

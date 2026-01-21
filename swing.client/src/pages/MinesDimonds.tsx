@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import bombSound from "../assets/sounds/bomb.mp3";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
-import BetControls from "../components/BetControls"; // Import the new component
+import BetControls from "../components/BetControls";
 
 interface Tile {
   id: number;

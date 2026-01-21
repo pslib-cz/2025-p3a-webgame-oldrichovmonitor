@@ -1,48 +1,60 @@
 namespace Swing.Server.classes
 {
-    // GameState.cs
-public class GameState
-{
-    public decimal Balance { get; private set; } = 1000;
-    public string Username { get; set; } = "";
+    public class GameState
+    {
+        public decimal Balance { get; private set; } = 1000;
+        public string Username { get; set; } = "";
 
-    // Definice hranic pro levely
-    private readonly Dictionary<int, decimal> _levelThresholds = new()
+        private readonly Dictionary<int, decimal> _levelThresholds = new()
     {
         { 1, 0 },
         { 2, 1000 },
-        { 3, 5000 },
-        { 4, 20000 },
-        { 5, 100000 }
+        { 3, 1100 },
+        { 4, 20000 }
     };
 
-    public int GetCurrentLevel()
-    {
-        int level = 1;
-        foreach (var threshold in _levelThresholds)
+        public int GetCurrentLevel()
         {
-            if (Balance >= threshold.Value)
+            int level = 1;
+            foreach (var threshold in _levelThresholds)
             {
-                level = threshold.Key;
+                if (Balance >= threshold.Value)
+                {
+                    level = threshold.Key;
+                }
             }
+            return level;
         }
-        return level;
-    }
 
-    public bool PlaceBet(decimal amount)
-    {
-        if (amount <= 0 || amount > Balance) return false;
-        Balance -= amount;
-        return true;
-    }
+        public bool PlaceBet(decimal amount)
+        {
+            if (amount <= 0 || amount > Balance) return false;
+            Balance -= amount;
+            return true;
+        }
 
-    public void AddWin(decimal amount)
-    {
-        if (amount > 0) Balance += amount;
-    }
-    public void SetUserame(string name)
+        public void AddWin(decimal amount)
+        {
+            if (amount > 0) Balance += amount;
+        }
+        public void SetUserame(string name)
         {
             Username = name;
         }
-}
+
+        public object GetGames()
+        {
+            int Level = GetCurrentLevel();
+
+            return GameLibrary.AllGames.Select(game => new
+            {
+                id = game.Id,
+                name = game.Name,
+                description = game.Description,
+                route = game.Route,
+                minLevel = game.MinLevel,
+                isLocked = Level < game.MinLevel
+            });
+        }
+    }
 }
