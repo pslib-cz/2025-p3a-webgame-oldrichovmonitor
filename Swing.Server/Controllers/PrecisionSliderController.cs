@@ -18,24 +18,17 @@ namespace Swing.Server.Controllers
         public ActionResult<PrecisionSliderReturn> StartData()
         {
             return Ok(new PrecisionSliderReturn(
-                _precisionSlider.starterSpeed,
-                _precisionSlider.speedMultiplier,
-                _precisionSlider.starterArea,
-                _precisionSlider.areaMultiplier,
-                _precisionSlider.MaxMultiplier
+                _precisionSlider.starterSpeed
             ));
         }
 
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] float distance)
         {
-            if (distance < 0) distance = -distance;
-
+            distance = Math.Abs(distance);
             if (distance > 50) return Ok(0.0f);
-
             float t = distance / 50.0f;
-
-            float multiplier = _precisionSlider.MaxMultiplier * (1.0f - t);
+            float multiplier = _precisionSlider.MaxMultiplier * (float)Math.Pow(1.0f - t, _precisionSlider.Difficulty);
 
             return Ok((float)Math.Round(multiplier, 2));
         }
@@ -44,18 +37,10 @@ namespace Swing.Server.Controllers
     public class PrecisionSliderReturn
     {
         public int startSpeed { get; set; }
-        public float speedMultiplier { get; set; }
-        public int startArea { get; set; }
-        public float areaMultiplier { get; set; }
-        public float maxMultiplier { get; set; }
 
-        public PrecisionSliderReturn(int startSpeed, float speedMultiplier, int startArea, float areaMultiplier, float maxMultiplier)
+        public PrecisionSliderReturn(int startSpeed)
         {
             this.startSpeed = startSpeed;
-            this.speedMultiplier = speedMultiplier;
-            this.startArea = startArea;
-            this.areaMultiplier = areaMultiplier;
-            this.maxMultiplier = maxMultiplier;
         }
     }
 }
