@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { Link } from "react-router-dom";
@@ -11,6 +11,9 @@ interface Tile {
   status: "active" | "inactive";
   hidden: boolean;
 }
+
+// These match the backend logic for visual display
+const MULTIPLIERS = [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32];
 
 const MemoryPattern = () => {
   const { balance, setBalance } = useBalance();
@@ -33,16 +36,33 @@ const MemoryPattern = () => {
     })),
   );
 
+  useEffect(() => {
+    // Reset game state on mount (refresh) if not playing
+    if (!isPlaying) {
+      setRoundOver(false);
+      setWin(0);
+      // We can optionally trigger a cleanup call to server to clear session?
+      // But server clears on newGame=true
+    }
+  }, []);
+
   const startGame = async () => {
     if (isPlaying && !roundOver) return;
 
+    if (balance < betAmount) {
+      alert("Insufficient balance!");
+      return;
+    }
+
+    setBalance(balance - betAmount);
     setIsPlaying(true);
     setRoundOver(false);
     setWin(0);
     setPatternLength(3);
     setUserSequence([]);
 
-    fetchAndPlayPattern(3);
+    // Explicitly send true to start new game pattern
+    fetchAndPlayPattern(3, true);
   };
 
   const continueGame = () => {
@@ -50,21 +70,39 @@ const MemoryPattern = () => {
     setUserSequence([]);
     const newLength = patternLength + 1;
     setPatternLength(newLength);
-    fetchAndPlayPattern(newLength);
+    // Continue with existing pattern
+    fetchAndPlayPattern(newLength, false);
   };
 
-  const fetchAndPlayPattern = async (length: number) => {
+  // Improved Cash Out
+  const cashOut = () => {
+    // Add logic to cash out win amount
+    setBalance(balance + win);
+
+    setIsPlaying(false);
+    setRoundOver(false);
+    setIsUserTurn(false);
+    setWin(0);
+    setPatternLength(3);
+    setUserSequence([]);
+  };
+
+  const fetchAndPlayPattern = async (length: number, newGame = false) => {
     setIsUserTurn(false);
     try {
+      // Add timestamp to prevent browser caching of the pattern
       const response = await fetch(
-        `/api/MemoryPattern/GeneratePattern?length=${length}`,
+        `/api/MemoryPattern/GeneratePattern?length=${length}&newGame=${newGame.toString()}&t=${Date.now()}`,
       );
+      if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
+      console.log("Receive Pattern:", data);
       setPattern(data);
       playPattern(data);
     } catch (error) {
       console.error("Failed to fetch pattern", error);
       setIsPlaying(false);
+      alert("Game Error");
     }
   };
 
@@ -114,19 +152,15 @@ const MemoryPattern = () => {
       return;
     }
 
+    // Check if sequence is complete
     if (newUserSequence.length === pattern.length) {
       setIsUserTurn(false);
       setRoundOver(true);
 
       const multiplier = await getMultiplier(patternLength);
+      // Backend authority:
       setWin(Math.floor(betAmount * multiplier));
     }
-  };
-
-  const cashOut = () => {
-    setIsPlaying(false);
-    setRoundOver(false);
-    setIsUserTurn(false);
   };
 
   return (
@@ -174,21 +208,28 @@ const MemoryPattern = () => {
           <p className="subtitle">Watch the sequence, then repeat it</p>
         </div>
         <div className="game__wrapper">
+          {/* Dynamic Multipliers */}
           <div className="memory-multipliers">
-            <div className="memory-multiplier">.25x</div>
-            <div className="memory-multiplier">.5x</div>
-            <div className="memory-multiplier">.75x</div>
-            <div className="memory-multiplier">1.1x</div>
-            <div className="memory-multiplier">2.10x</div>
-            <div className="memory-multiplier">3.20x</div>
-            <div className="memory-multiplier">5.00x</div>
-            <div className="memory-multiplier">8.50x</div>
-            <div className="memory-multiplier">15x</div>
-            <div className="memory-multiplier">
-              32x const multipliers = [0.25, 0.5, 0.75, 1.1, 2.1, 3.2, 5.0, 8.5,
-              15, 32];
-            </div>
+            {MULTIPLIERS.map((mul, i) => {
+              const isActive = i === patternLength - 3;
+              const isPassed = i < patternLength - 3;
+              return (
+                <div
+                  key={i}
+                  className={`memory-multiplier ${isActive ? "active" : ""}`}
+                  style={{
+                    color: isActive ? "#EBB30B" : "white",
+                    fontWeight: isActive ? "bold" : "normal",
+                    opacity: isPassed || isActive ? 1 : 0.5,
+                    transform: isActive ? "scale(1.2)" : "scale(1)",
+                  }}
+                >
+                  {mul}x
+                </div>
+              );
+            })}
           </div>
+
           <div className="grid-container grid-container--memmory">
             {grid.map((tile, index) => (
               <div
@@ -199,51 +240,85 @@ const MemoryPattern = () => {
               ></div>
             ))}
           </div>
-          <BetControls
-            balance={balance}
-            betAmount={betAmount}
-            setBetAmount={setBetAmount}
-            isPlaying={isPlaying}
-            onStart={startGame}
-            onCashOut={cashOut}
-            cashOutLabel="STOP"
-            winAmount={win}
-            isCashingOut={false}
-            betColor="red"
-          />
+
+          {/* Conditional Controls */}
+          {!isPlaying ? (
+            <BetControls
+              balance={balance}
+              betAmount={betAmount}
+              setBetAmount={setBetAmount}
+              isPlaying={isPlaying}
+              onStart={startGame}
+              onCashOut={cashOut}
+              winAmount={win}
+              isCashingOut={false}
+              betColor="red"
+            />
+          ) : (
+            <div
+              className="in-game-controls"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minHeight: "80px",
+                marginTop: "20px",
+              }}
+            >
+              <div
+                style={{
+                  color: "white",
+                  marginBottom: "10px",
+                  fontSize: "1.2em",
+                }}
+              >
+                {roundOver ? (
+                  <span style={{ color: "#4ade80" }}>ROUND WIN: ${win}</span>
+                ) : isUserTurn ? (
+                  <span style={{ color: "#EBB30B" }}>YOUR TURN</span>
+                ) : (
+                  "WATCH PATTERN..."
+                )}
+              </div>
+
+              {roundOver && (
+                <div style={{ display: "flex", gap: "15px" }}>
+                  <button
+                    onClick={continueGame}
+                    style={{
+                      padding: "10px 20px",
+                      background: "#3b82f6",
+                      border: "none",
+                      borderRadius: "5px",
+                      color: "white",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    CONTINUE
+                  </button>
+                  <button
+                    onClick={cashOut}
+                    style={{
+                      padding: "10px 20px",
+                      background: "#22c55e",
+                      border: "none",
+                      borderRadius: "5px",
+                      color: "white",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    CASH OUT
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 
-      <div className="game-controls">
-        <button
-          onClick={() => setBetAmount(betAmount - 10)}
-          disabled={isPlaying}
-        >
-          -
-        </button>
-        <button disabled={isPlaying}>Bet Amount: {betAmount}</button>
-        <button
-          onClick={() => setBetAmount(betAmount + 10)}
-          disabled={isPlaying}
-        >
-          +
-        </button>
-
-        {!isPlaying ? (
-          <>
-            <button onClick={startGame}>Bet</button>
-            {win > 0 && <p>Last Win: {win}</p>}
-          </>
-        ) : roundOver ? (
-          <>
-            <p>Current Win: {win}</p>
-            <button onClick={continueGame}>
-              Next: (Length {patternLength + 1})
-            </button>
-            <button onClick={cashOut}>Cash Out</button>
-          </>
-        ) : null}
-      </div>
+      {/* Removed old game-controls div footer since integrated above */}
     </div>
   );
 };

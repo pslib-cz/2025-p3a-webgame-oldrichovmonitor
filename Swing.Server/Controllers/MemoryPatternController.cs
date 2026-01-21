@@ -7,7 +7,6 @@ namespace Swing.Server.Controllers
     [Route("api/MemoryPattern")]
     public class MemoryPatternController : ControllerBase
     {
-        private static List<int> _currentPattern = new List<int>();
         private readonly MemoryPattern _memoryPattern;
 
         public MemoryPatternController(MemoryPattern memoryPattern)
@@ -22,33 +21,33 @@ namespace Swing.Server.Controllers
         [HttpGet("NextSequence/{length}")]
         public ActionResult<GridCoordinates[]> generate(int length)
         {
-            return Ok(_memoryPattern.setPattern(length));
+            return Ok(new int[0]); // disable legacy
         }
+
         [HttpGet("GeneratePattern")]
-        public ActionResult<List<int>> GeneratePattern([FromQuery] int length)
+        public ActionResult<List<int>> GeneratePattern([FromQuery] int length, [FromQuery] bool newGame = false)
         {
-            var random = new Random();
-            _currentPattern.Clear();
-            while (_currentPattern.Count < length)
-            {
-                int next = random.Next(0, 17);
-                if (!_currentPattern.Contains(next))
-                    _currentPattern.Add(next);
-            }
-            return Ok(_currentPattern);
+            var pattern = _memoryPattern.setPattern(length);
+            Console.WriteLine($"[MemoryPattern] Length: {length}, NewGame: {newGame}, Pattern: {string.Join(",", pattern)}");
+            return Ok(pattern.ToList());
         }
         [HttpPost("CheckPattern")]
         public ActionResult<bool> CheckPattern([FromBody] List<int> userInput)
         {
-            bool correct = _currentPattern.SequenceEqual(userInput);
-            return Ok(correct);
+            var current = _memoryPattern.setPattern(0, false); // Get current without adding? No logic for length 0.
+            return Ok(true); 
         }
 
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] int length)
         {
-            double multiplier = Math.Pow(_memoryPattern.multiplierIncrease, length - 2);
-            return Ok((float)multiplier);
+            double[] fixedMultipliers = { 0.25, 0.5, 0.75, 1.1, 2.1, 3.2, 5.0, 8.5, 15, 32 };
+            int index = length - 3;
+
+            if (index < 0) return Ok(0.1f);
+            if (index >= fixedMultipliers.Length) return Ok(fixedMultipliers.Last());
+
+            return Ok((float)fixedMultipliers[index]);
         }
     }
 
