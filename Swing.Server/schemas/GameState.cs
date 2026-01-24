@@ -4,6 +4,7 @@ namespace Swing.Server.classes
     {
         public decimal Balance { get; private set; } = 1000;
         public string Username { get; set; } = "";
+        public HashSet<string> UnlockedGameIds { get; private set; } = new() { "" };
 
         private readonly Dictionary<int, decimal> _levelThresholds = new()
     {
@@ -61,8 +62,23 @@ namespace Swing.Server.classes
                 description = game.Description,
                 route = game.Route,
                 minLevel = game.MinLevel,
-                isLocked = Level < game.MinLevel
+                isLocked = !UnlockedGameIds.Contains(game.Id)
             });
+        }
+
+        public int GetAvailableUnlockPoints()
+        {
+            return GetCurrentLevel() - UnlockedGameIds.Count;
+        }
+
+        public bool UnlockGame(string gameId)
+        {
+            if (GetAvailableUnlockPoints() <= 0) return false;
+
+            if (UnlockedGameIds.Contains(gameId)) return false;
+
+            UnlockedGameIds.Add(gameId);
+            return true;
         }
     }
 }

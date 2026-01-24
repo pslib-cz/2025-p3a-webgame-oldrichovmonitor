@@ -22,6 +22,7 @@ namespace Swing.Server.Controllers
                 balance = _gameState.Balance,
                 level = _gameState.GetCurrentLevel(),
                 username = _gameState.Username,
+                availableUnlockPoints = _gameState.GetAvailableUnlockPoints(),
                 games = _gameState.GetGames()
             });
         }
