@@ -67,5 +67,15 @@ namespace Swing.Server.Controllers
                 level = _gameState.GetCurrentLevel()
             });
         }
+
+        [HttpPost("Unlock")]
+        public IActionResult UnlockGame([FromQuery] string gameId)
+        {
+            if (_gameState.UnlockGame(gameId))
+            {
+                return Ok(new { success = true });
+            }
+            return BadRequest("Not enough points!");
+        }
     }
 }

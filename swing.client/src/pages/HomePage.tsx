@@ -9,7 +9,6 @@ interface GameData {
   name: string;
   description: string;
   route: string;
-  minLevel: number;
   isLocked: boolean;
 }
 
@@ -106,7 +105,9 @@ const getGameIcon = (route: string) => {
 const HomePage = () => {
   const { balance, username, setUsername, setBalance, setLevel } = useBalance();
   const [games, setGames] = useState<GameData[]>([]);
-  useEffect(() => {
+  const [availablePoints, setAvailablePoints] = useState(0);
+
+  const fetchData = () => {
     fetch("/api/Game/Status")
       .then((res) => res.json())
       .then((data) => {
@@ -115,9 +116,23 @@ const HomePage = () => {
           setLevel(data.level);
           setUsername(data.username);
           setGames(data.games);
+          setAvailablePoints(data.availableUnlockPoints);
         }
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const handleUnlock = async (gameId: string) => {
+    const res = await fetch(`/api/Game/Unlock?gameId=${gameId}`, {
+      method: "POST",
+    });
+    if (res.ok) {
+      fetchData();
+    }
+  };
 
   return (
     <div className="home-page page">
@@ -183,26 +198,61 @@ const HomePage = () => {
           <p className="subtitle">Available games:</p>
           <div className="home-page__games">
             {games &&
-              games.map((game) => (
-                <Link
-                  key={game.id}
-                  to={game.route}
-                  className="game-link"
-                  style={
-                    game.isLocked ? { pointerEvents: "none", opacity: 0.5 } : {}
-                  }
-                >
-                  <article className="game">
-                    <div className="game__icon">{getGameIcon(game.route)}</div>
-                    <div className="game__text">
-                      <h3>
-                        {game.name} {game.isLocked && "(Locked)"}
-                      </h3>
-                      <p className="subtext limit-width">{game.description}</p>
-                    </div>
-                  </article>
-                </Link>
-              ))}
+              games.map((game) => {
+                if (!game.isLocked) {
+                  return (
+                    <Link
+                      key={game.id}
+                      to={game.route}
+                      className="game-link"
+                      style={
+                        game.isLocked
+                          ? { pointerEvents: "none", opacity: 0.5 }
+                          : {}
+                      }
+                    >
+                      <article className="game">
+                        <div className="game__icon">
+                          {getGameIcon(game.route)}
+                        </div>
+                        <div className="game__text">
+                          <h3>{game.name}</h3>
+                          <p className="subtext limit-width">
+                            {game.description}
+                          </p>
+                        </div>
+                      </article>
+                    </Link>
+                  );
+                }
+                return (
+                  <>
+                    <article key={game.id} className="game">
+                      <div className="game__icon">
+                        {getGameIcon(game.route)}
+                      </div>
+                      <div className="game__text">
+                        <h3>{game.name} (Locked)</h3>
+                        <p className="subtext limit-width">
+                          {game.description}
+                        </p>
+                        {availablePoints > 0 ? (
+                          <button
+                            onClick={() => handleUnlock(game.id)}
+                            className="btn"
+                          >
+                            UNLOCK
+                          </button>
+                        ) : (
+                          <div className="lock-message">
+                            Reach next level to unlock
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  </>
+                );
+              })}
 
             <article className="game comming-soon">
               <div className="game__icon comming-soon__icon">
