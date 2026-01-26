@@ -33,7 +33,6 @@ namespace Swing.Server.classes
 
             float realDanger = 1f - survival;
 
-            // 🔥 Mine-scaled inertia
             float safeTiles = totalTiles - mines;
             float inertia = safeTiles * 0.15f;
             float clickFactor = openedTiles / (openedTiles + inertia);
@@ -41,20 +40,24 @@ namespace Swing.Server.classes
             float delayedDanger = realDanger * clickFactor;
 
             const float flipDanger = 0.33f;
-            const float startMult = 0.9f;
+            const float startMult = 0.3f;   // ⬅️ lower start to get 0.32-ish
             const float maxMult = 4.0f;
 
             float t = delayedDanger / flipDanger;
 
             float multiplier;
+
             if (t < 1f)
             {
-                multiplier = startMult + (1f - startMult) * t;
+                // 🚀 FAST early growth
+                float eased = (float)Math.Sqrt(t);
+                multiplier = startMult + (1f - startMult) * eased;
             }
             else
             {
                 float excess = (t - 1f) / 2f;
                 if (excess > 1f) excess = 1f;
+
                 multiplier = 1f + (maxMult - 1f) * excess;
             }
 
