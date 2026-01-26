@@ -23,25 +23,42 @@ namespace Swing.Server.classes
         public float returnMultiplier(int openedTiles, int mines)
         {
 
-            if (openedTiles <= 0)
-                return 0f;
+            const int totalTiles = 25;
 
-            int safeTiles = 25 - mines;
-
-            
-            
-            float probability = 1f;
-
+            float survival = 1f;
             for (int i = 0; i < openedTiles; i++)
             {
-                probability *= (float)(safeTiles - i) / (25 - i);
+                survival *= (totalTiles - mines - i) / (float)(totalTiles - i);
             }
 
-            
-            float multiplier = (1f - 0.05f) / probability;
+            float realDanger = 1f - survival;
 
-            
-            return multiplier / 2f;
+            // 🔥 Mine-scaled inertia
+            float safeTiles = totalTiles - mines;
+            float inertia = safeTiles * 0.15f;
+            float clickFactor = openedTiles / (openedTiles + inertia);
+
+            float delayedDanger = realDanger * clickFactor;
+
+            const float flipDanger = 0.33f;
+            const float startMult = 0.9f;
+            const float maxMult = 4.0f;
+
+            float t = delayedDanger / flipDanger;
+
+            float multiplier;
+            if (t < 1f)
+            {
+                multiplier = startMult + (1f - startMult) * t;
+            }
+            else
+            {
+                float excess = (t - 1f) / 2f;
+                if (excess > 1f) excess = 1f;
+                multiplier = 1f + (maxMult - 1f) * excess;
+            }
+
+            return multiplier;
         }
 
     }
