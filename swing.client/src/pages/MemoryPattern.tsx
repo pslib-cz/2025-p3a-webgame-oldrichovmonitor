@@ -27,13 +27,11 @@ const MemoryPattern = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [win, setWin] = useState<number>(0);
 
-  const [grid, setGrid] = useState<Tile[]>(
-    Array.from({ length: 16 }, (_, i) => ({
-      id: i,
-      status: "inactive",
-      hidden: true,
-    })),
-  );
+  const grid: Tile[] = Array.from({ length: 16 }, (_, i) => ({
+    id: i,
+    status: "inactive",
+    hidden: true,
+  }));
 
   useEffect(() => {
     fetchStatus();
