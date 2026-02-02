@@ -43,7 +43,7 @@ namespace Swing.Server.classes
             const float startMult = 0.3f;   // ⬅️ lower start to get 0.32-ish
             const float maxMult = 4.0f;
 
-            float t = delayedDanger / flipDanger;
+            float t = delayedDanger / flipDanger;//i have a big ass penis
 
             float multiplier;
 
