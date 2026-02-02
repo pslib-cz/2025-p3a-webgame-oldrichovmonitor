@@ -97,7 +97,7 @@ const MemoryPattern = () => {
     setUserSequence([]);
     const newLength = patternLength + 1;
     setPatternLength(newLength);
-    // When continuing, it's NOT a new game, so newGame=false
+
     fetchAndPlayPattern(newLength, false);
   };
 
@@ -165,7 +165,7 @@ const MemoryPattern = () => {
       return;
     }
 
-    // Check if sequence is complete
+
     if (newUserSequence.length === pattern.length) {
       setIsUserTurn(false);
       setRoundOver(true);
@@ -175,11 +175,9 @@ const MemoryPattern = () => {
     }
   };
 
-  // NEW: Logic to handle Cash Out separately from resetting state completely
-  // The 'cashOut' function currently resets state before calling API.
-  // It should call API first, then reset state on success.
+
   const handleCashOut = async () => {
-    // Only allow cash out if round is over (user won the sequence)
+
     if (!roundOver) return;
 
     try {
@@ -195,7 +193,7 @@ const MemoryPattern = () => {
     } catch (error) {
       console.error("Cashout failed", error);
     } finally {
-      // Reset local game state
+
       setIsPlaying(false);
       setRoundOver(false);
       setIsUserTurn(false);
@@ -282,7 +280,6 @@ const MemoryPattern = () => {
             ))}
           </div>
 
-          {/* Conditional Controls */}
           {!isPlaying ? (
             <BetControls
               balance={balance}
@@ -290,7 +287,7 @@ const MemoryPattern = () => {
               setBetAmount={setBetAmount}
               isPlaying={isPlaying}
               onStart={startGame}
-              onCashOut={() => {}} // Not used when not playing
+              onCashOut={() => {}}
               winAmount={win}
               isCashingOut={false}
               betColor="red"
@@ -300,7 +297,7 @@ const MemoryPattern = () => {
               className="in-game-controls"
               style={{
                 display: "flex",
-                flexDirection: "row", // Changed to row for side-by-side buttons
+                flexDirection: "row",
                 justifyContent: "center",
                 gap: "1rem",
                 marginTop: "20px",
@@ -308,7 +305,7 @@ const MemoryPattern = () => {
                 maxWidth: "400px",
               }}
             >
-              {/* Controls only appear when round is over (user completed pattern) */}
+
               {roundOver ? (
                 <>
                   <button
@@ -335,7 +332,7 @@ const MemoryPattern = () => {
                     style={{
                       flex: 1,
                       padding: "1rem",
-                      background: "var(--slider-success)", // Reusing green variable or similar
+                      background: "var(--slider-success)",
                       border: "none",
                       borderRadius: "8px",
                       color: "white",

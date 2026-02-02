@@ -587,10 +587,11 @@ main {
 
 .login-character {
   position: absolute;
-  top: -160px;
-  right: -40px;
-  width: 250px;
+  bottom: -240px;
+  z-index: -1;
+  right: -20px;
+  width: 300px;
+  pointer-events: none;
   image-rendering: pixelated;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-  z-index: 10;
 }

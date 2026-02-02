@@ -38,10 +38,10 @@ const LogInPage = () => {
       </header>
       <main className="login-page__content">
         <article className="login-page__main">
-          <img 
-            src="/images/character_sitting.png" 
-            className="login-character" 
-            alt="Character" 
+          <img
+            src="/images/character_swing.png"
+            className="login-character"
+            alt="Character Swing"
           />
           <div className="login-page__card-body">
             <div className="login-page__card-header">

@@ -10,7 +10,7 @@ interface GameData {
   name: string;
   description: string;
   route: string;
-  isLocked: boolean; //víťa má malý penis
+  isLocked: boolean;
 }
 
 const getGameIcon = (route: string) => {

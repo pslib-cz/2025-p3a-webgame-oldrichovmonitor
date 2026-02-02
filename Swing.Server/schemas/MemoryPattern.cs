@@ -9,9 +9,22 @@
         public float speedMultiplier { get; set; } = 1.1f;
         public float multiplierIncrease { get; set; } = 1.2f;
 
+        public List<int> GeneratePattern()
+        {
+            List<int> pattern = new();
+            
+            while (pattern.Count < 16)
+            {
+                int nextNum = Random.Shared.Next(1, 17);
+                if (!pattern.Contains(nextNum))
+                {
+                    pattern.Add(nextNum);
+                }
+            }
+            return pattern;
+        }
         public int[] setPattern(int length, bool newGame = false)
         {
-            // Maximální délka patternu je 16 (počet políček), abychom předešli nekonečné smyčce při hledání unikátních čísel
             if (length > 16) length = 16;
 
             if (newGame)
@@ -19,7 +32,6 @@
                 _coordinates.Clear();
             }
 
-            // Použijeme Random.Shared pro lepší náhodnost (new Random() v rychlém sledu může generovat stejně)
             
             while (_coordinates.Count < length)
             {

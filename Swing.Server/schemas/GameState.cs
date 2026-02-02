@@ -14,7 +14,7 @@ namespace Swing.Server.classes
                 {
                     return cost;
                 }
-                return decimal.MaxValue; // Or handle as max level reached
+                return decimal.MaxValue;
             }
         }
         
@@ -93,9 +93,6 @@ namespace Swing.Server.classes
 
             decimal cost = UnlockCost;
 
-            // If cost is 0 (First level/Free), allow it regardless of balance checking (though 0 is always <= Balance)
-            // But we specifically track HasUsedFreeUnlock for the UI 
-            
             if (cost == 0 && !HasUsedFreeUnlock)
             {
                 UnlockedGameIds.Add(gameId);
@@ -103,16 +100,10 @@ namespace Swing.Server.classes
                 return true;
             }
 
-            // Normal payment
             if (Balance < cost) return false;
 
             Balance -= cost;
             UnlockedGameIds.Add(gameId);
-            
-            // If we unlocked something that wasn't the "free" one (cost > 0), we still mark free as used?
-            // Actually, if we pay for one, we consumed an unlock slot.
-            // But if cost was 0, HasUsedFreeUnlock handles it.
-            // If cost > 0, we just pay.
             
             return true;
         }

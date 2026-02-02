@@ -18,16 +18,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ balance }) => {
   return (
     <div className="progress-bar-container">
       <div className="progress-track">
-        {/* Background Track */}
         <div className="track-line"></div>
         
-        {/* Filled Progress */}
         <div 
           className="progress-fill" 
           style={{ width: `${percentage}%` }}
         ></div>
 
-        {/* Milestones */}
         {milestones.map((m) => {
           const mPercent = (m.value / maxBalance) * 100;
             const reached = balance >= m.value;
@@ -43,7 +40,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ balance }) => {
           );
         })}
 
-        {/* Character */}
         <div 
           className="character-thumb"
           style={{ left: `${percentage}%` }}

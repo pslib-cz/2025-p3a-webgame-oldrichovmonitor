@@ -8,7 +8,7 @@ interface BetControlsProps {
   isCashingOut: boolean;
   onStart: () => void;
   onCashOut: () => void;
-  cashOutLabel?: string; // "CASH OUT" or "STOP"
+  cashOutLabel?: string;
   winAmount?: number;
   betColor?: "green" | "red";
 }

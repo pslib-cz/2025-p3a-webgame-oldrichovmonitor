@@ -70,7 +70,7 @@ const TimeSplit = () => {
           setTargetTime(newTarget);
 
           setActiveTier(null);
-          setResultMessage(null); // Clear previous message
+          setResultMessage(null);
           setWin(0);
           setIsPlaying(true);
           setGameState("playing");
@@ -107,8 +107,6 @@ const TimeSplit = () => {
     let multiplier = 0;
     let tier = null;
 
-    // Easier multipliers
-    // Even easier multipliers
     if (absDiff <= 200) {
       multiplier = 10;
       tier = 200;
@@ -232,7 +230,6 @@ const TimeSplit = () => {
                   </>
                 )}
               </p>
-              {/* Result Message Display */}
               {resultMessage && !isPlaying && (
                 <p
                   className={`subtitle ibmplexmono timesplit__result-text ${

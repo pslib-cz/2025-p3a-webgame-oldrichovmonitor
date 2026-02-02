@@ -41,7 +41,7 @@ namespace Swing.Server.Controllers
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] int length)
         {
-            // Updated to match frontend MULTIPLIERS: [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32]
+            return Ok(new int[0]);
             double[] fixedMultipliers = { 1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32 };
             int index = length - 3;
 

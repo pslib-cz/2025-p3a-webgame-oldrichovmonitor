@@ -152,7 +152,7 @@ function PrecisionSlider() {
             src="/images/logo.png"
             alt="Logo"
             width={140}
-            /* height={112} */
+
           />
 
           <div className="header__nav game-page__nav">
