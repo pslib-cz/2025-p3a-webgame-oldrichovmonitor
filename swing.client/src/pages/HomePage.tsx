@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { useBalance } from "../context/BalanceContext";
+import ProgressBar from "../components/ProgressBar";
 
 interface GameData {
   id: string;
@@ -105,7 +106,8 @@ const getGameIcon = (route: string) => {
 const HomePage = () => {
   const { balance, username, setUsername, setBalance, setLevel } = useBalance();
   const [games, setGames] = useState<GameData[]>([]);
-  const [availablePoints, setAvailablePoints] = useState(0);
+  const [unlockCost, setUnlockCost] = useState(500);
+  const [hasUsedFreeUnlock, setHasUsedFreeUnlock] = useState(false);
 
   const fetchData = () => {
     fetch("/api/Game/Status")
@@ -116,7 +118,8 @@ const HomePage = () => {
           setLevel(data.level);
           setUsername(data.username);
           setGames(data.games);
-          setAvailablePoints(data.availableUnlockPoints);
+          setUnlockCost(data.unlockCost);
+          setHasUsedFreeUnlock(data.hasUsedFreeUnlock);
         }
       });
   };
@@ -137,6 +140,7 @@ const HomePage = () => {
   return (
     <div className="home-page page">
       <GridLines />
+
       <header className=" home-page__header">
         <div className="page__section header__content-wrapper">
           <div className="home-page__title-text">
@@ -165,6 +169,9 @@ const HomePage = () => {
               to="/"
               className="subtitle hoverable"
               style={{ textDecoration: "none" }}
+              onClick={async () => {
+                 await fetch("/api/Game/Reset", { method: "POST" });
+              }}
             >
               Sign out
             </Link>
@@ -218,7 +225,7 @@ const HomePage = () => {
                           <h3>{game.name}</h3>
                           <p className="subtext limit-width">
                             {game.description}
-                          </p>
+                        </p>
                         </div>
                       </article>
                     </Link>
@@ -235,23 +242,26 @@ const HomePage = () => {
                         <p className="subtext limit-width">
                           {game.description}
                         </p>
-                        {availablePoints > 0 ? (
-                          <button
-                            onClick={() => handleUnlock(game.id)}
-                            className="btn btn--unlock"
-                          >
-                            <span className="btn__icon">🔓</span> UNLOCK NOW
-                          </button>
-                        ) : (
-                          <div className="lock-message">
-                            <span className="lock-level-info">
-                              Level{" "}
-                              {availablePoints === -1 ? "locked" : "required"}
-                            </span>
-                            🔒 Reach next level to unlock
-                          </div>
-                        )}
                       </div>
+                      {!hasUsedFreeUnlock ? (
+                        <button
+                          onClick={() => handleUnlock(game.id)}
+                          className="btn btn--unlock btn--unlock--free"
+                        >
+                          <span className="btn__icon">🎁</span> UNLOCK FREE
+                        </button>
+                      ) : balance >= unlockCost ? (
+                        <button
+                          onClick={() => handleUnlock(game.id)}
+                          className="btn btn--unlock"
+                        >
+                          <span className="btn__icon">💰</span> UNLOCK ({unlockCost}$)
+                        </button>
+                      ) : (
+                        <div className="lock-message">
+                          🔒 Need {unlockCost}$ to unlock
+                        </div>
+                      )}
                     </article>
                   </>
                 );
@@ -276,6 +286,9 @@ const HomePage = () => {
                 Coming soon
               </p>
             </article>
+          </div>
+          <div style={{ width: '100%', marginTop: '40px', marginBottom: '40px' }}>
+             <ProgressBar balance={balance} />
           </div>
         </div>
       </main>

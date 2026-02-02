@@ -5,13 +5,27 @@ namespace Swing.Server.classes
         public decimal Balance { get; private set; } = 1000;
         public string Username { get; set; } = "";
         public HashSet<string> UnlockedGameIds { get; private set; } = new();
+        public decimal UnlockCost 
+        { 
+            get 
+            {
+                int nextCount = UnlockedGameIds.Count + 1;
+                if (_levelThresholds.TryGetValue(nextCount, out decimal cost))
+                {
+                    return cost;
+                }
+                return decimal.MaxValue; // Or handle as max level reached
+            }
+        }
+        
+        public bool HasUsedFreeUnlock { get; private set; } = false;
 
-        private readonly Dictionary<int, decimal> _levelThresholds = new()
+    private readonly Dictionary<int, decimal> _levelThresholds = new()
     {
-        { 1, 2000 },
-        { 2, 8000 },
-        { 3, 20000 },
-        { 4, 40000 }
+        { 1, 0 },
+        { 2, 4000 },
+        { 3, 8000 },
+        { 4, 16000 }
     };
 
         public int GetCurrentLevel()
@@ -75,12 +89,40 @@ namespace Swing.Server.classes
             var game = GameLibrary.AllGames.FirstOrDefault(g => g.Id == gameId);
             if (game == null) return false;
 
-            if (GetAvailableUnlockPoints() <= 0) return false;
-
             if (UnlockedGameIds.Contains(gameId)) return false;
 
+            decimal cost = UnlockCost;
+
+            // If cost is 0 (First level/Free), allow it regardless of balance checking (though 0 is always <= Balance)
+            // But we specifically track HasUsedFreeUnlock for the UI 
+            
+            if (cost == 0 && !HasUsedFreeUnlock)
+            {
+                UnlockedGameIds.Add(gameId);
+                HasUsedFreeUnlock = true;
+                return true;
+            }
+
+            // Normal payment
+            if (Balance < cost) return false;
+
+            Balance -= cost;
             UnlockedGameIds.Add(gameId);
+            
+            // If we unlocked something that wasn't the "free" one (cost > 0), we still mark free as used?
+            // Actually, if we pay for one, we consumed an unlock slot.
+            // But if cost was 0, HasUsedFreeUnlock handles it.
+            // If cost > 0, we just pay.
+            
             return true;
+        }
+
+        public void Reset()
+        {
+            Balance = 1000;
+            Username = "";
+            UnlockedGameIds.Clear();
+            HasUsedFreeUnlock = false;
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Swing.Server.Controllers
                 level = _gameState.GetCurrentLevel(),
                 username = _gameState.Username,
                 availableUnlockPoints = _gameState.GetAvailableUnlockPoints(),
+                unlockCost = _gameState.UnlockCost,
+                hasUsedFreeUnlock = _gameState.HasUsedFreeUnlock,
                 games = _gameState.GetGames()
             });
         }
@@ -73,9 +75,16 @@ namespace Swing.Server.Controllers
         {
             if (_gameState.UnlockGame(gameId))
             {
-                return Ok(new { success = true });
+                return Ok(new { success = true, newBalance = _gameState.Balance });
             }
-            return BadRequest("Not enough points!");
+            return BadRequest("Insufficient balance or game already unlocked!");
+        }
+
+        [HttpPost("Reset")]
+        public IActionResult ResetGame()
+        {
+            _gameState.Reset();
+            return Ok(new { success = true, message = "Game reset successfully" });
         }
     }
 }

@@ -38,6 +38,11 @@ const LogInPage = () => {
       </header>
       <main className="login-page__content">
         <article className="login-page__main">
+          <img 
+            src="/images/character_sitting.png" 
+            className="login-character" 
+            alt="Character" 
+          />
           <div className="login-page__card-body">
             <div className="login-page__card-header">
               <h2 className="login-page__title">Welcome Back</h2>

@@ -216,26 +216,115 @@ main {
 
 /* Unlock Button Styles */
 .btn--unlock {
-  /* Subtle dark style with border */
-  background: transparent;
-  color: #fbbf24; /* Gold text */
-  font-family: "IBM Plex Mono", monospace; /* IBM Plex Mono font */
-  font-weight: 600;
+  /* Premium gradient style with gold/purple theme */
+  background: linear-gradient(135deg, #f59e0b 0%, #eab308 50%, #d97706 100%);
+  color: #1a1a1a;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
   text-transform: uppercase;
-  padding: 8px 16px; /* Smaller padding */
-  border: 1px solid rgba(251, 191, 36, 0.4); /* Subtle gold border */
-  border-radius: 6px;
-  box-shadow: none; /* Removed heavy shadow */
-  transition: all 0.2s ease;
+  padding: 10px 18px;
+  border: 2px solid rgba(251, 191, 36, 0.6);
+  border-radius: 8px;
+  box-shadow: 
+    0 4px 12px rgba(251, 191, 36, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 0.85rem;
-  position: absolute; /* Absolute positioning */
-  top: 16px; /* Distance from top */
-  right: 16px; /* Distance from right */
-  z-index: 10; /* Ensure clickable */
+  font-size: 0.875rem;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  letter-spacing: 0.5px;
+}
+
+.btn--unlock:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 20px rgba(251, 191, 36, 0.4),
+    0 0 25px rgba(251, 191, 36, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  border-color: rgba(251, 191, 36, 0.8);
+}
+
+.btn--unlock:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Free Unlock Button - Green Success Theme */
+.btn--unlock--free {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #059669 100%);
+  color: #ffffff;
+  border: 2px solid rgba(52, 211, 153, 0.6);
+  box-shadow: 
+    0 4px 12px rgba(52, 211, 153, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  animation: shimmer 2s infinite;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.btn--unlock--free::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    box-shadow: 
+      0 4px 12px rgba(52, 211, 153, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 6px 16px rgba(52, 211, 153, 0.5),
+      0 0 20px rgba(52, 211, 153, 0.3),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.btn--unlock--free:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 8px 20px rgba(52, 211, 153, 0.5),
+    0 0 30px rgba(52, 211, 153, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  border-color: rgba(52, 211, 153, 0.9);
+}
+
+.btn--unlock--free:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn__icon {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 /* Also ensure .game card is relative so absolute positioning works */
@@ -245,36 +334,19 @@ main {
 
 /* Disable hover effects for locked games */
 .game.game--locked {
-  pointer-events: none; /* Disables all interaction including hover, but wait - we need the button to be clickable! */
-  /* So we cannot use pointer-events: none on the whole card if the button is inside. */
+  pointer-events: none;
 }
 
-/* Instead, assume layout.css defines .game:hover transform/shadow */
-.game.game--locked:hover {
-  transform: none;
-  box-shadow: none; /* Reset to default state, need to check what default is, often best to just match non-hover state */
-  /* Or use !important if specificity is an issue */
-  transform: none !important;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) !important; /* Reverting to probable default shadow found in typical cards */
-  background: #181f30 !important; /* Reverting any lightening on hover */
-  cursor: default;
-}
-
-/* Re-enable pointer events for the unlock button specifically if we did something drastic */
-.game.game--locked .btn--unlock {
+/* Re-enable pointer events for the unlock button specifically */
+.game.game--locked .btn--unlock,
+.game.game--locked .btn--unlock--free {
   pointer-events: auto;
   cursor: pointer;
 }
 
-/* Ensure the header/text inside doesn't imply clickability */
-.game.game--locked h3,
-.game.game--locked p {
-  cursor: default;
-}
-
 /* Lock Message Styles */
 .lock-message {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(166, 75, 75, 0.1);
   background: rgba(0, 0, 0, 0.2);
   padding: 12px 20px;
   border-radius: 8px;
@@ -282,36 +354,17 @@ main {
   font-size: 0.9rem;
   display: flex;
   align-items: center;
+  font-family: "Inter";
   gap: 10px;
-  margin-top: 1rem;
   backdrop-filter: blur(4px);
-  position: relative;
+  position: absolute;
+  right: 16px;
+  top: 16px;
   overflow: hidden;
   margin-left: auto; /* Push to right if in flex container */
   width: fit-content;
 }
 
-.lock-message::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  bottom: 0;
-  background: #64758b;
-}
-
-.lock-level-info {
-  font-weight: bold;
-  color: #cbd5e1;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-right: 5px;
-}
 
 /* Login page styles */
 
@@ -385,6 +438,7 @@ main {
   color: white;
 }
 .login-page__main {
+  position: relative;
   display: flex;
   padding: 1.5rem 2rem;
   min-width: 24.625rem;
@@ -424,4 +478,119 @@ main {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+
+/* ProgressBar Styles */
+.progress-bar-container {
+  max-width: 800px;
+  margin: 40px auto 60px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 5; /* Ensure above grid lines */
+}
+
+.progress-track {
+  position: relative;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #34d399 0%, #24D3EF 100%);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(36, 211, 239, 0.5);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.milestone {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+.milestone-marker {
+  width: 16px;
+  height: 16px;
+  background: #1a1a1a;
+  border: 2px solid #64748b;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.milestone-reached .milestone-marker {
+  background: #24D3EF;
+  border-color: #ffffff;
+  box-shadow: 0 0 10px #24D3EF;
+}
+
+.milestone-label {
+  position: absolute;
+  top: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.milestone-reached .milestone-label {
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(36, 211, 239, 0.8);
+}
+
+.character-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.character-wrapper {
+  position: relative;
+  width: 94px;
+  height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 74px; /* Push character above the bar */
+}
+
+.character-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated; 
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+.character-glow {
+    position: absolute;
+    width: 20px;
+    height: 6px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    bottom: 5px;
+    filter: blur(2px);
+    z-index: -1;
+}
+
+.login-character {
+  position: absolute;
+  top: -160px;
+  right: -40px;
+  width: 250px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  z-index: 10;
 }
