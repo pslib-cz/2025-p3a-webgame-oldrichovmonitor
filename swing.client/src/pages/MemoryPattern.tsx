@@ -99,6 +99,7 @@ const MemoryPattern = () => {
     setUserSequence([]);
     const newLength = patternLength + 1;
     setPatternLength(newLength);
+    // When continuing, it's NOT a new game, so newGame=false
     fetchAndPlayPattern(newLength, false);
   };
 
@@ -176,25 +177,33 @@ const MemoryPattern = () => {
     }
   };
 
-  const cashOut = async () => {
-    setIsPlaying(false);
-    setRoundOver(false);
-    setIsUserTurn(false);
-
-    setIsPlaying(false);
-    setRoundOver(false);
-    setIsUserTurn(false);
-    setWin(0);
-    setPatternLength(3);
-    setUserSequence([]);
+  // NEW: Logic to handle Cash Out separately from resetting state completely
+  // The 'cashOut' function currently resets state before calling API.
+  // It should call API first, then reset state on success.
+  const handleCashOut = async () => {
+    // Only allow cash out if round is over (user won the sequence)
+    if (!roundOver) return;
 
     try {
       if (win > 0) {
-        await fetch(`/api/Game/Win?amount=${win}`, { method: "POST" });
+        const res = await fetch(`/api/Game/Win?amount=${win}`, {
+          method: "POST",
+        });
+        if (res.ok) {
+          setBalance(balance + win);
+        }
       }
       await fetchStatus();
     } catch (error) {
       console.error("Cashout failed", error);
+    } finally {
+      // Reset local game state
+      setIsPlaying(false);
+      setRoundOver(false);
+      setIsUserTurn(false);
+      setWin(0);
+      setPatternLength(3);
+      setUserSequence([]);
     }
   };
 
@@ -283,7 +292,7 @@ const MemoryPattern = () => {
               setBetAmount={setBetAmount}
               isPlaying={isPlaying}
               onStart={startGame}
-              onCashOut={cashOut}
+              onCashOut={() => {}} // Not used when not playing
               winAmount={win}
               isCashingOut={false}
               betColor="red"
@@ -293,58 +302,65 @@ const MemoryPattern = () => {
               className="in-game-controls"
               style={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                minHeight: "80px",
+                flexDirection: "row", // Changed to row for side-by-side buttons
+                justifyContent: "center",
+                gap: "1rem",
                 marginTop: "20px",
+                width: "100%",
+                maxWidth: "400px",
               }}
             >
-              <div
-                style={{
-                  color: "white",
-                  marginBottom: "10px",
-                  fontSize: "1.2em",
-                }}
-              >
-                {roundOver ? (
-                  <span style={{ color: "#4ade80" }}>ROUND WIN: ${win}</span>
-                ) : isUserTurn ? (
-                  <span style={{ color: "#EBB30B" }}>YOUR TURN</span>
-                ) : (
-                  "WATCH PATTERN..."
-                )}
-              </div>
-
-              {roundOver && (
-                <div style={{ display: "flex", gap: "15px" }}>
+              {/* Controls only appear when round is over (user completed pattern) */}
+              {roundOver ? (
+                <>
                   <button
+                    className="memory-btn continue-btn"
                     onClick={continueGame}
                     style={{
-                      padding: "10px 20px",
-                      background: "#3b82f6",
+                      flex: 1,
+                      padding: "1rem",
+                      background: "var(--primary)",
                       border: "none",
-                      borderRadius: "5px",
+                      borderRadius: "8px",
                       color: "white",
-                      cursor: "pointer",
                       fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 0 var(--primary-light)",
                     }}
                   >
                     CONTINUE
                   </button>
                   <button
-                    onClick={cashOut}
+                    className="memory-btn cashout-btn"
+                    onClick={handleCashOut}
                     style={{
-                      padding: "10px 20px",
-                      background: "#22c55e",
+                      flex: 1,
+                      padding: "1rem",
+                      background: "var(--slider-success)", // Reusing green variable or similar
                       border: "none",
-                      borderRadius: "5px",
+                      borderRadius: "8px",
                       color: "white",
-                      cursor: "pointer",
                       fontWeight: "bold",
+                      fontSize: "1.1rem",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 0 #15803d",
                     }}
                   >
-                    CASH OUT
+                    CASH OUT (${win.toFixed(0)})
                   </button>
+                </>
+              ) : (
+                <div
+                  style={{
+                    color: "white",
+                    fontSize: "1.2rem",
+                    height: "54px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {isUserTurn ? "YOUR TURN" : "WATCH SEQUENCE..."}
                 </div>
               )}
             </div>

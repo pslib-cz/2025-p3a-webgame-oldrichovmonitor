@@ -42,6 +42,7 @@ main {
 
 .page > .grid-lines {
   /* Z-index je řešen v components.css (z-index: 0) */
+  pointer-events: none; /* Just to have a rule here and avoid lint error */
 }
 .home-page__header {
   padding: 1.25rem 0.75rem 2rem;
@@ -142,11 +143,14 @@ main {
   flex-direction: column;
   gap: 1rem;
   min-height: 11.5rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   /* justify-content: space-between; */
   border-radius: 1rem;
   border: 1px solid #2f3547;
   background: #191e36;
+  position: relative; /* Added for absolute positioning of children */
 }
 /* hover only on non-coming-soon cards */
 .home-page__games .game:not(.comming-soon):hover {
@@ -207,11 +211,111 @@ main {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  text-transform: uppercase;
+}
+
+/* Unlock Button Styles */
+.btn--unlock {
+  /* Subtle dark style with border */
+  background: transparent;
+  color: #fbbf24; /* Gold text */
+  font-family: "IBM Plex Mono", monospace; /* IBM Plex Mono font */
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 8px 16px; /* Smaller padding */
+  border: 1px solid rgba(251, 191, 36, 0.4); /* Subtle gold border */
+  border-radius: 6px;
+  box-shadow: none; /* Removed heavy shadow */
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  position: absolute; /* Absolute positioning */
+  top: 16px; /* Distance from top */
+  right: 16px; /* Distance from right */
+  z-index: 10; /* Ensure clickable */
+}
+
+/* Also ensure .game card is relative so absolute positioning works */
+.game {
+  position: relative;
+}
+
+/* Disable hover effects for locked games */
+.game.game--locked {
+  pointer-events: none; /* Disables all interaction including hover, but wait - we need the button to be clickable! */
+  /* So we cannot use pointer-events: none on the whole card if the button is inside. */
+}
+
+/* Instead, assume layout.css defines .game:hover transform/shadow */
+.game.game--locked:hover {
+  transform: none;
+  box-shadow: none; /* Reset to default state, need to check what default is, often best to just match non-hover state */
+  /* Or use !important if specificity is an issue */
+  transform: none !important;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) !important; /* Reverting to probable default shadow found in typical cards */
+  background: #181f30 !important; /* Reverting any lightening on hover */
+  cursor: default;
+}
+
+/* Re-enable pointer events for the unlock button specifically if we did something drastic */
+.game.game--locked .btn--unlock {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Ensure the header/text inside doesn't imply clickability */
+.game.game--locked h3,
+.game.game--locked p {
+  cursor: default;
+}
+
+/* Lock Message Styles */
+.lock-message {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  margin-left: auto; /* Push to right if in flex container */
+  width: fit-content;
+}
+
+.lock-message::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  bottom: 0;
+  background: #64758b;
+}
+
+.lock-level-info {
+  font-weight: bold;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
 }
 
 /* Login page styles */
 
-.login-page{
+.login-page {
   position: relative;
 }
 .login-page__header {
@@ -223,7 +327,7 @@ main {
 }
 .login-page__content {
   margin: 0 auto;
-  
+
   flex-grow: 1;
 }
 .login-page__title {
@@ -321,6 +425,3 @@ main {
   font-weight: 600;
   line-height: normal;
 }
-
-
-

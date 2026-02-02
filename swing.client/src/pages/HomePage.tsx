@@ -195,7 +195,6 @@ const HomePage = () => {
             </svg>
             <p className="subtitle ibmplexmono white">Balance: {1000}$</p>
           </div>
-          <p className="subtitle">Available games:</p>
           <div className="home-page__games">
             {games &&
               games.map((game) => {
@@ -227,25 +226,29 @@ const HomePage = () => {
                 }
                 return (
                   <>
-                    <article key={game.id} className="game">
+                    <article key={game.id} className="game game--locked">
                       <div className="game__icon">
                         {getGameIcon(game.route)}
                       </div>
                       <div className="game__text">
-                        <h3>{game.name} (Locked)</h3>
+                        <h3>{game.name}</h3>
                         <p className="subtext limit-width">
                           {game.description}
                         </p>
                         {availablePoints > 0 ? (
                           <button
                             onClick={() => handleUnlock(game.id)}
-                            className="btn"
+                            className="btn btn--unlock"
                           >
-                            UNLOCK
+                            <span className="btn__icon">🔓</span> UNLOCK NOW
                           </button>
                         ) : (
                           <div className="lock-message">
-                            Reach next level to unlock
+                            <span className="lock-level-info">
+                              Level{" "}
+                              {availablePoints === -1 ? "locked" : "required"}
+                            </span>
+                            🔒 Reach next level to unlock
                           </div>
                         )}
                       </div>

@@ -27,7 +27,7 @@ namespace Swing.Server.Controllers
         [HttpGet("GeneratePattern")]
         public ActionResult<List<int>> GeneratePattern([FromQuery] int length, [FromQuery] bool newGame = false)
         {
-            var pattern = _memoryPattern.setPattern(length);
+            var pattern = _memoryPattern.setPattern(length, newGame);
             Console.WriteLine($"[MemoryPattern] Length: {length}, NewGame: {newGame}, Pattern: {string.Join(",", pattern)}");
             return Ok(pattern.ToList());
         }
@@ -41,10 +41,11 @@ namespace Swing.Server.Controllers
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] int length)
         {
-            double[] fixedMultipliers = { 0.25, 0.5, 0.75, 1.1, 2.1, 3.2, 5.0, 8.5, 15, 32 };
+            // Updated to match frontend MULTIPLIERS: [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32]
+            double[] fixedMultipliers = { 1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32 };
             int index = length - 3;
 
-            if (index < 0) return Ok(0.1f);
+            if (index < 0) return Ok(0.0f); // Should not happen in normal flow
             if (index >= fixedMultipliers.Length) return Ok(fixedMultipliers.Last());
 
             return Ok((float)fixedMultipliers[index]);
