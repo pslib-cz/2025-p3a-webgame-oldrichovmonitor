@@ -1,4 +1,4 @@
-# Název:  Swing
+# Název:  Swing Playground
 ### Autoři:
 Jakub Kočí, Filip Patrman, Vít Provazník
 
