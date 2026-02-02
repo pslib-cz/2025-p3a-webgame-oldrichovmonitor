@@ -40,7 +40,7 @@ namespace Swing.Server.classes
             float delayedDanger = realDanger * clickFactor;
 
             const float flipDanger = 0.33f;
-            const float startMult = 0.3f;   // ⬅️ lower start to get 0.32-ish
+            const float startMult = 0.3f;   
             const float maxMult = 4.0f;
 
             float t = delayedDanger / flipDanger;//i have a big ass penis
@@ -49,7 +49,7 @@ namespace Swing.Server.classes
 
             if (t < 1f)
             {
-                // 🚀 FAST early growth
+                
                 float eased = (float)Math.Sqrt(t);
                 multiplier = startMult + (1f - startMult) * eased;
             }
