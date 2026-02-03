@@ -167,9 +167,11 @@ const HomePage = () => {
             </div>
             <Link
               to="/"
-              className="subtitle hoverable"
+              className="subtitle hoverable balance--order-switch"
               style={{ textDecoration: "none" }}
               onClick={async () => {
+                 localStorage.removeItem('swing_user_id');
+                 // Optional: Force reload to ensure clean state if needed, but fetch interceptor handles it.
                  await fetch("/api/Game/Reset", { method: "POST" });
               }}
             >
