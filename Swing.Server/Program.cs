@@ -12,7 +12,7 @@ builder.Services.AddSingleton<PrecisionSlider>();
 builder.Services.AddSingleton<MemoryPattern>();
 builder.Services.AddSingleton<MinePattern>();
 builder.Services.AddSingleton<TimeSwing>();
-builder.Services.AddSingleton<GameState>();
+builder.Services.AddScoped<GameState>();
 
 
 builder.Services.AddCors(options =>
