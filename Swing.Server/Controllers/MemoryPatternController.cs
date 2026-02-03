@@ -7,19 +7,30 @@ namespace Swing.Server.Controllers
     [Route("api/MemoryPattern")]
     public class MemoryPatternController : ControllerBase
     {
-        private readonly MemoryPattern _memoryPattern;
+        private readonly Services.GameStateService _gameStateService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MemoryPatternController(MemoryPattern memoryPattern)
+        public MemoryPatternController(Services.GameStateService gameStateService, IHttpContextAccessor httpContextAccessor)
         {
-            _memoryPattern = memoryPattern;
+            _gameStateService = gameStateService;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private GameState GetState()
+        {
+            string userId = Request.Headers["X-User-Id"].FirstOrDefault() ?? "guest";
+            return _gameStateService.GetState(userId);
+        }
+
         [HttpGet("StartGame")]
-        public ActionResult<MemoryPatternReturn> start()
+        public ActionResult<object> start()
         {
-            return Ok(new MemoryPatternReturn(_memoryPattern.startSequence, _memoryPattern.showSpeed, _memoryPattern.setPattern(_memoryPattern.startSequence), _memoryPattern.speedMultiplier));
+             // Legacy endpoint mostly, but we can return basic config
+             return Ok(new { startSequence = 3, showSpeed = 300 });
         }
+
         [HttpGet("NextSequence/{length}")]
-        public ActionResult<GridCoordinates[]> generate(int length)
+        public ActionResult<int[]> generate(int length)
         {
             return Ok(new int[0]); // disable legacy
         }
@@ -27,21 +38,68 @@ namespace Swing.Server.Controllers
         [HttpGet("GeneratePattern")]
         public ActionResult<List<int>> GeneratePattern([FromQuery] int length, [FromQuery] bool newGame = false)
         {
-            var pattern = _memoryPattern.setPattern(length, newGame);
-            Console.WriteLine($"[MemoryPattern] Length: {length}, NewGame: {newGame}, Pattern: {string.Join(",", pattern)}");
-            return Ok(pattern.ToList());
+            var state = GetState();
+            
+            if (newGame)
+            {
+                state.MemorySequence.Clear();
+                // Generate initial sequence of length 'length' (usually 3)
+                while(state.MemorySequence.Count < length)
+                {
+                    int nextNum = Random.Shared.Next(0, 16); 
+                    // Should we allow duplicates? Original code checked !Contains.
+                    if (!state.MemorySequence.Contains(nextNum))
+                    {
+                        state.MemorySequence.Add(nextNum);
+                    }
+                }
+            }
+            else
+            {
+                // Add ONE more number to existing sequence
+                // Ideally length passed from frontend matches current+1, but we can trust our state more
+                
+                // Ensure we have at least something if not newGame but empty (fallback)
+                if (state.MemorySequence.Count == 0)
+                {
+                    // Fallback to generating 3
+                     while(state.MemorySequence.Count < 3)
+                    {
+                        int nextNum = Random.Shared.Next(0, 16);
+                        if (!state.MemorySequence.Contains(nextNum)) state.MemorySequence.Add(nextNum);
+                    }
+                }
+                else
+                {
+                     // Add one new number logic
+                     int attempts = 0;
+                     while(attempts < 50) 
+                     {
+                        int nextNum = Random.Shared.Next(0, 16);
+                        if (!state.MemorySequence.Contains(nextNum))
+                        {
+                            state.MemorySequence.Add(nextNum);
+                            break;
+                        }
+                        attempts++;
+                     }
+                }
+            }
+
+            return Ok(state.MemorySequence);
         }
+
         [HttpPost("CheckPattern")]
         public ActionResult<bool> CheckPattern([FromBody] List<int> userInput)
         {
-            var current = _memoryPattern.setPattern(0, false); // Get current without adding? No logic for length 0.
-            return Ok(true); 
+             // We can validate on backend if needed, but for now frontend handles it.
+             return Ok(true); 
         }
 
         [HttpGet("Multiplier")]
         public ActionResult<float> GetMultiplier([FromQuery] int length)
         {
-            return Ok(new int[0]);
+            // return Ok(new int[0]); // REMOVED ERROR
             double[] fixedMultipliers = { 1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32 };
             int index = length - 3;
 

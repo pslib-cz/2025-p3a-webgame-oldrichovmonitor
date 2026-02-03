@@ -33,7 +33,7 @@ namespace Swing.Server.Controllers
             };
 
             int diff = Math.Abs(stoppedTime);
-            float multiplier = baseMultiplier * (float)Math.Exp(-diff / 1000.0);
+            float multiplier = baseMultiplier * (float)Math.Exp(-diff / 150.0);
             if (multiplier < 1.0f) multiplier = 1.0f;
             float win = bet * multiplier;
             return Ok(win);

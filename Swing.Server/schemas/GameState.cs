@@ -19,13 +19,17 @@ namespace Swing.Server.classes
         }
         
         public bool HasUsedFreeUnlock { get; private set; } = false;
+        
+        public HashSet<int> CurrentMines { get; set; } = new();
+
+        public List<int> MemorySequence { get; set; } = new();
 
     private readonly Dictionary<int, decimal> _levelThresholds = new()
     {
         { 1, 0 },
-        { 2, 4000 },
-        { 3, 8000 },
-        { 4, 16000 }
+        { 2, 5000 },
+        { 3, 25000 },
+        { 4, 100000 }
     };
 
         public int GetCurrentLevel()

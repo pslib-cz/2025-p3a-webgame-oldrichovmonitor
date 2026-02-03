@@ -5,14 +5,14 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ balance }) => {
-  const maxBalance = 16000;
+  const maxBalance = 100000;
   const percentage = Math.min(100, Math.max(0, (balance / maxBalance) * 100));
 
   const milestones = [
     { value: 0, label: "0$" },
-    { value: 4000, label: "4000$" },
-    { value: 8000, label: "8000$" },
-    { value: 16000, label: "16000$" },
+    { value: 5000, label: "5k$" },
+    { value: 25000, label: "25k$" },
+    { value: 100000, label: "100k$" },
   ];
 
   return (

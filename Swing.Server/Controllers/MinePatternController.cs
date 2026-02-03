@@ -9,21 +9,32 @@ namespace Swing.Server.Controllers
     public class MinePatternController : ControllerBase
     {
         private readonly MinePattern _minePattern;
-        private static HashSet<int> _currentMines = new HashSet<int>();
+        private readonly Services.GameStateService _gameStateService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MinePatternController(MinePattern minePattern)
+        public MinePatternController(MinePattern minePattern, Services.GameStateService gameStateService, IHttpContextAccessor httpContextAccessor)
         {
             _minePattern = minePattern;
+            _gameStateService = gameStateService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private GameState GetState()
+        {
+            string userId = Request.Headers["X-User-Id"].FirstOrDefault() ?? "guest";
+            return _gameStateService.GetState(userId);
         }
 
         [HttpGet("StartGame/{mines}")]
         public ActionResult<int[]> StartGame(int mines)
         {
-            _currentMines.Clear();
+            var state = GetState();
+            state.CurrentMines.Clear();
+            
             int[] ints = _minePattern.placement(mines);
             foreach (int i in ints)
             {
-                _currentMines.Add(i);
+                state.CurrentMines.Add(i);
             }
             return Ok(ints);
         }
@@ -31,7 +42,8 @@ namespace Swing.Server.Controllers
         [HttpGet("Reveal")]
         public ActionResult Reveal([FromQuery] int index)
         {
-            bool isMine = _currentMines.Contains(index);
+            var state = GetState();
+            bool isMine = state.CurrentMines.Contains(index);
             return Ok(new { isMine });
         }
 

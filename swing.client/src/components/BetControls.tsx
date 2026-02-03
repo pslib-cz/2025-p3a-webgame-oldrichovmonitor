@@ -26,7 +26,7 @@ const BetControls: React.FC<BetControlsProps> = ({
   winAmount = 0,
 }) => {
   const clampBet = (value: number) => {
-    return Math.max(1, Math.min(Math.floor(value), balance));
+    return Math.max(1, Math.min(Math.floor(value), balance, 10000));
   };
   const greenStyle = {
     background: "linear-gradient(to right, #10b981, #059669)",

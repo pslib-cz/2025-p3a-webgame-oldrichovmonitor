@@ -107,15 +107,15 @@ const TimeSplit = () => {
     let multiplier = 0;
     let tier = null;
 
-    if (absDiff <= 200) {
+    if (absDiff <= 40) {
       multiplier = 10;
-      tier = 200;
-    } else if (absDiff <= 500) {
+      tier = 40;
+    } else if (absDiff <= 100) {
       multiplier = 3;
-      tier = 500;
-    } else if (absDiff <= 1000) {
+      tier = 100;
+    } else if (absDiff <= 300) {
       multiplier = 1.1;
-      tier = 1000;
+      tier = 300;
     }
 
     setActiveTier(tier);
@@ -245,26 +245,26 @@ const TimeSplit = () => {
           <div className="timesplit__multiplier-container">
             <article
               className={`timesplit__multiplier ${
-                activeTier === 200 ? "timesplit__multiplier--active" : ""
+                activeTier === 40 ? "timesplit__multiplier--active" : ""
               }`}
             >
-              <p className="subtitle inter white">±0.20s</p>
+              <p className="subtitle inter white">±0.04s</p>
               <p className="gold ibmplexmono subtitle">10X</p>
             </article>
             <article
               className={`timesplit__multiplier ${
-                activeTier === 500 ? "timesplit__multiplier--active" : ""
+                activeTier === 100 ? "timesplit__multiplier--active" : ""
               }`}
             >
-              <p className="subtitle inter white">±0.50s</p>
+              <p className="subtitle inter white">±0.10s</p>
               <p className="gold ibmplexmono subtitle">3X</p>
             </article>
             <article
               className={`timesplit__multiplier ${
-                activeTier === 1000 ? "timesplit__multiplier--active" : ""
+                activeTier === 300 ? "timesplit__multiplier--active" : ""
               }`}
             >
-              <p className="subtitle inter white">±1.00s</p>
+              <p className="subtitle inter white">±0.30s</p>
               <p className="gold ibmplexmono subtitle">1.1X</p>
             </article>
           </div>

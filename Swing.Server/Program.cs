@@ -7,12 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<PrecisionSlider>();
-builder.Services.AddSingleton<MemoryPattern>();
+builder.Services.AddTransient<MemoryPattern>(); 
 builder.Services.AddSingleton<MinePattern>();
 builder.Services.AddSingleton<TimeSwing>();
-builder.Services.AddScoped<GameState>();
+builder.Services.AddSingleton<Swing.Server.Services.GameStateService>();
 
 
 builder.Services.AddCors(options =>

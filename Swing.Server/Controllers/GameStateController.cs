@@ -7,75 +7,73 @@ namespace Swing.Server.Controllers
     [Route("api/Game")]
     public class GameStateController : ControllerBase
     {
-        private readonly GameState _gameState;
+        private readonly Services.GameStateService _gameStateService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GameStateController(GameState gameState)
+        public GameStateController(Services.GameStateService gameStateService, IHttpContextAccessor httpContextAccessor)
         {
-            _gameState = gameState;
+            _gameStateService = gameStateService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private GameState GetState()
+        {
+            string userId = Request.Headers["X-User-Id"].FirstOrDefault() ?? "guest";
+            return _gameStateService.GetState(userId);
         }
 
         [HttpGet("Status")]
         public IActionResult GetStatus()
         {
+            var state = GetState();
             return Ok(new
             {
-                balance = _gameState.Balance,
-                level = _gameState.GetCurrentLevel(),
-                username = _gameState.Username,
-                availableUnlockPoints = _gameState.GetAvailableUnlockPoints(),
-                unlockCost = _gameState.UnlockCost,
-                hasUsedFreeUnlock = _gameState.HasUsedFreeUnlock,
-                games = _gameState.GetGames()
+                balance = state.Balance,
+                username = state.Username,
+                level = state.GetCurrentLevel(),
+                games = state.GetGames(),
+                unlockPoints = state.GetAvailableUnlockPoints(),
+                unlockCost = state.UnlockCost,
+                hasUsedFreeUnlock = state.HasUsedFreeUnlock
             });
         }
 
         [HttpPost("Bet")]
         public IActionResult PlaceBet([FromQuery] decimal amount, [FromQuery] string gameId)
         {
-            if (amount <= 0) return BadRequest("Invalid amount");
-
-            if (!_gameState.CanPlayGame(gameId))
+            var state = GetState();
+            if(!state.CanPlayGame(gameId)) return BadRequest("Game locked");
+            
+            if (state.PlaceBet(amount))
             {
-                return BadRequest("Game is locked or does not exist!");
+                return Ok(new { success = true, newBalance = state.Balance });
             }
-
-            if (_gameState.PlaceBet(amount))
-            {
-                return Ok(new { success = true, newBalance = _gameState.Balance });
-            }
-            return BadRequest("Insufficient balance!");
+            return BadRequest("Insufficient balance");
         }
 
         [HttpPost("SetUsername")]
         public IActionResult SetUsername([FromQuery] string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Name is required");
-
-            _gameState.SetUserame(name);
-
-            return Ok(new { success = true, username = _gameState.Username });
+            var state = GetState();
+            state.SetUserame(name);
+            return Ok(new { success = true });
         }
 
         [HttpPost("Win")]
         public IActionResult AddWin([FromQuery] decimal amount)
         {
-            if (amount < 0) return BadRequest("Invalid amount");
-
-            _gameState.AddWin(amount);
-
-            return Ok(new
-            {
-                balance = _gameState.Balance,
-                level = _gameState.GetCurrentLevel()
-            });
+             var state = GetState();
+             state.AddWin(amount);
+             return Ok(new { newBalance = state.Balance });
         }
 
         [HttpPost("Unlock")]
         public IActionResult UnlockGame([FromQuery] string gameId)
         {
-            if (_gameState.UnlockGame(gameId))
+            var state = GetState();
+            if (state.UnlockGame(gameId))
             {
-                return Ok(new { success = true, newBalance = _gameState.Balance });
+                return Ok(new { success = true, newBalance = state.Balance });
             }
             return BadRequest("Insufficient balance or game already unlocked!");
         }
@@ -83,7 +81,8 @@ namespace Swing.Server.Controllers
         [HttpPost("Reset")]
         public IActionResult ResetGame()
         {
-            _gameState.Reset();
+            var state = GetState();
+            state.Reset();
             return Ok(new { success = true, message = "Game reset successfully" });
         }
     }

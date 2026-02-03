@@ -171,8 +171,7 @@
   font-family: "IBM Plex Mono";
   font-size: 1.2rem;
   text-align: start;
-  /*  width: 100%; */
-  max-width: 100px; /* Or whatever width fits the design */
+  width: 100%;
 }
 .bet-controls__button {
   background-color: #1c2b45;
