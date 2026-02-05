@@ -49,6 +49,7 @@ namespace Swing.Server.classes
         {
             if (amount <= 0 || amount > Balance) return false;
             Balance -= amount;
+            if (Balance < 1) Balance = 1;
             return true;
         }
 
@@ -107,6 +108,7 @@ namespace Swing.Server.classes
             if (Balance < cost) return false;
 
             Balance -= cost;
+            if (Balance < 1) Balance = 1;
             UnlockedGameIds.Add(gameId);
             
             return true;

@@ -79,6 +79,7 @@ const LogInPage = () => {
                   placeholder="Enter your gamertag"
                   value={input}
                   onChange={(e) => setIpnut(e.target.value)}
+                  maxLength={15}
                 />
               </div>
             </div>

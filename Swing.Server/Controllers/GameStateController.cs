@@ -54,6 +54,9 @@ namespace Swing.Server.Controllers
         [HttpPost("SetUsername")]
         public IActionResult SetUsername([FromQuery] string name)
         {
+            if (string.IsNullOrEmpty(name)) return BadRequest("Name required");
+            if (name.Length > 15) name = name[..15];
+
             var state = GetState();
             state.SetUserame(name);
             return Ok(new { success = true });

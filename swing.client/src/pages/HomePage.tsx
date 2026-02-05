@@ -202,7 +202,7 @@ const HomePage = () => {
                 fill="#EBB30B"
               />
             </svg>
-            <p className="subtitle ibmplexmono white">Balance: {1000}$</p>
+            <p className="subtitle ibmplexmono white">Balance: {balance}$</p>
           </div>
           <div className="home-page__games">
             {games &&
