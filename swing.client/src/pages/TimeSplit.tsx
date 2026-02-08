@@ -5,9 +5,11 @@ import BetControls from "../components/BetControls";
 import { Link } from "react-router-dom";
 import "../css/games/timesplit.css";
 import { useBalance } from "../context/BalanceContext";
+import { useSound } from "../context/SoundContext";
 
 const TimeSplit = () => {
   const { balance, setBalance, setLevel } = useBalance();
+  const { playWin, playLose } = useSound();
   const [targetTime, setTargetTime] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState(10);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -83,6 +85,7 @@ const TimeSplit = () => {
                 setIsPlaying(false);
                 setGameState("lost");
                 setResultMessage("Too Late");
+                playLose();
                 return newTarget + 5000;
               }
               return prev + 10;
@@ -126,11 +129,13 @@ const TimeSplit = () => {
     if (winAmount > 0) {
       setGameState("won");
       setResultMessage(`+${winAmount.toFixed(2)}$`);
+      playWin();
       fetch(`/api/Game/Win?amount=${winAmount}`, { method: "POST" }).then(() =>
         fetchStatus(),
       );
     } else {
       setGameState("lost");
+      playLose();
       if (timeDiff < 0) {
         setResultMessage("Too Early");
       } else {

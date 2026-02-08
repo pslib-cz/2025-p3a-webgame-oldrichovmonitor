@@ -1,4 +1,4 @@
-import React from "react";
+import { useSound } from "../context/SoundContext";
 
 interface BetControlsProps {
   balance: number;
@@ -25,6 +25,7 @@ const BetControls: React.FC<BetControlsProps> = ({
   betColor = "green",
   winAmount = 0,
 }) => {
+  const { playClick } = useSound();
   const clampBet = (value: number) => {
     return Math.max(1, Math.min(Math.floor(value), balance, 10000));
   };
@@ -42,10 +43,10 @@ const BetControls: React.FC<BetControlsProps> = ({
 
   const activeStyle = betColor === "red" ? redStyle : greenStyle;
 
-  const incBet = () => setBetAmount(clampBet(betAmount + 10));
-  const decBet = () => setBetAmount(clampBet(betAmount - 10));
-  const doubleBet = () => setBetAmount(clampBet(betAmount * 2));
-  const halfBet = () => setBetAmount(clampBet(betAmount / 2));
+  const incBet = () => { playClick(); setBetAmount(clampBet(betAmount + 10)); };
+  const decBet = () => { playClick(); setBetAmount(clampBet(betAmount - 10)); };
+  const doubleBet = () => { playClick(); setBetAmount(clampBet(betAmount * 2)); };
+  const halfBet = () => { playClick(); setBetAmount(clampBet(betAmount / 2)); };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBetAmount(clampBet(Number(e.target.value)));
   };
@@ -110,7 +111,7 @@ const BetControls: React.FC<BetControlsProps> = ({
             flexDirection: "column",
             gap: "4px",
           }}
-          onClick={onCashOut}
+          onClick={() => { playClick(); onCashOut(); }}
         >
           <span>{cashOutLabel}</span>
           {isCashingOut ? (
@@ -120,7 +121,7 @@ const BetControls: React.FC<BetControlsProps> = ({
           ) : null}
         </button>
       ) : (
-        <button className="bet-button" onClick={onStart}>
+        <button className="bet-button" onClick={() => { playClick(); onStart(); }}>
           BET
         </button>
       )}

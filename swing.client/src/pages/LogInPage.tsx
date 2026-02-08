@@ -3,13 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { useBalance } from "../context/BalanceContext";
+import { useSound } from "../context/SoundContext";
 
 const LogInPage = () => {
   const [input, setIpnut] = useState("");
   const navigate = useNavigate();
-  const { setUsername } = useBalance()
+  const { setUsername } = useBalance();
+  const { playClick } = useSound();
 
   const onEnter = async (e: React.MouseEvent) => {
+    playClick();
     e.preventDefault();
     if (!input.trim()) return;
     setUsername(input);

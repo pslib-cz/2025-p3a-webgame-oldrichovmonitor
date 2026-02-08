@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import BetControls from "../components/BetControls";
 import "../css/games/memory.css";
 import { useBalance } from "../context/BalanceContext";
+import { useSound } from "../context/SoundContext";
 
 interface Tile {
   id: number;
@@ -16,6 +17,7 @@ const MULTIPLIERS = [1.01, 1.1, 1.2, 1.5, 2.1, 3.2, 5.0, 8.5, 15, 32];
 
 const MemoryPattern = () => {
   const { balance, setBalance, setLevel } = useBalance();
+  const { playClick, playSuccess, playError, playLose, playWin } = useSound();
   const [highlighted, setHighlighted] = useState<number | null>(null);
   const [pattern, setPattern] = useState<number[]>([]);
 
@@ -86,6 +88,7 @@ const MemoryPattern = () => {
       } else {
         const errorMsg = await res.text();
         alert(errorMsg || "Bet failed");
+        playError();
       }
     } catch (error) {
       console.error("Bet request failed", error);
@@ -148,6 +151,7 @@ const MemoryPattern = () => {
   const handleTileClick = async (index: number) => {
     if (!isPlaying || !isUserTurn || roundOver) return;
 
+    playClick();
     setHighlighted(index);
     setTimeout(() => setHighlighted(null), 200);
 
@@ -161,6 +165,7 @@ const MemoryPattern = () => {
       setIsUserTurn(false);
       setWin(0);
       setRoundOver(false);
+      playLose();
       alert("Wrong pattern! You lost.");
       return;
     }
@@ -169,6 +174,7 @@ const MemoryPattern = () => {
     if (newUserSequence.length === pattern.length) {
       setIsUserTurn(false);
       setRoundOver(true);
+      playSuccess();
 
       const multiplier = await getMultiplier(patternLength);
       setWin(Math.floor(betAmount * multiplier));
@@ -186,6 +192,7 @@ const MemoryPattern = () => {
           method: "POST",
         });
         if (res.ok) {
+          playWin();
           setBalance(balance + win);
         }
       }
@@ -310,7 +317,7 @@ const MemoryPattern = () => {
                 <>
                   <button
                     className="memory-btn continue-btn"
-                    onClick={continueGame}
+                    onClick={() => { playClick(); continueGame(); }}
                     style={{
                       flex: 1,
                       padding: "1rem",
@@ -328,7 +335,7 @@ const MemoryPattern = () => {
                   </button>
                   <button
                     className="memory-btn cashout-btn"
-                    onClick={handleCashOut}
+                    onClick={() => { playClick(); handleCashOut(); }}
                     style={{
                       flex: 1,
                       padding: "1rem",

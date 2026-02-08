@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import GridLines from "../components/GridLines";
 import { useBalance } from "../context/BalanceContext";
+import { useSound } from "../context/SoundContext";
 import ProgressBar from "../components/ProgressBar";
 
 interface GameData {
@@ -105,6 +106,7 @@ const getGameIcon = (route: string) => {
 
 const HomePage = () => {
   const { balance, username, setUsername, setBalance, setLevel } = useBalance();
+  const { playClick, playSuccess, playError } = useSound();
   const [games, setGames] = useState<GameData[]>([]);
   const [unlockCost, setUnlockCost] = useState(500);
   const [hasUsedFreeUnlock, setHasUsedFreeUnlock] = useState(false);
@@ -133,7 +135,10 @@ const HomePage = () => {
       method: "POST",
     });
     if (res.ok) {
+      playSuccess();
       fetchData();
+    } else {
+      playError();
     }
   };
 
@@ -170,6 +175,7 @@ const HomePage = () => {
               className="subtitle hoverable balance--order-switch"
               style={{ textDecoration: "none" }}
               onClick={async () => {
+                 playClick();
                  localStorage.removeItem('swing_user_id');
                  // Optional: Force reload to ensure clean state if needed, but fetch interceptor handles it.
                  await fetch("/api/Game/Reset", { method: "POST" });

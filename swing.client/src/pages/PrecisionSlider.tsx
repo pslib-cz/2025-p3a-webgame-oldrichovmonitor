@@ -2,12 +2,14 @@ import Footer from "../components/Footer";
 import { useState, useEffect, useRef } from "react";
 import "../css/games/slider.css";
 import { useBalance } from "../context/BalanceContext";
+import { useSound } from "../context/SoundContext";
 import { Link } from "react-router-dom";
 import GridLines from "../components/GridLines";
 import BetControls from "../components/BetControls";
 
 function PrecisionSlider() {
   const { balance, setBalance, setLevel } = useBalance();
+  const { playWin, playLose } = useSound();
   const [sliderPosition, setSliderPosition] = useState(500);
   const [direction, setDirection] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -134,7 +136,10 @@ function PrecisionSlider() {
       setWin(currentWin);
 
       if (currentWin > 0) {
+        playWin();
         await fetch(`/api/Game/Win?amount=${currentWin}`, { method: "POST" });
+      } else {
+        playLose();
       }
       await fetchStatus();
     } catch (error) {
