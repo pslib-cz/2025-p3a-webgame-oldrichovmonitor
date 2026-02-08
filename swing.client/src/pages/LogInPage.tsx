@@ -12,12 +12,12 @@ const LogInPage = () => {
   const onEnter = async (e: React.MouseEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-    navigate("/homepage");
-    setUsername(input)
-    try{
+    setUsername(input);
+    try {
       await fetch(`/api/Game/SetUsername?name=${input}`, {
         method: "POST"
-      })
+      });
+      navigate("/homepage");
     }
     catch (error) {
       console.error("Failed to fetch game status", error);

@@ -224,7 +224,7 @@ const MinesDimonds = () => {
             </label>
             <label className="mines-button mines-button__multiplier">
               <div className="mines-button__icon-wrapper">
-                <p className="mines-button__text">MULTIPLIER:</p>
+                <p className="mines-button__text">NEXT MULTIPLIER:</p>
               </div>
               <p className="mines-button__subtext">{nextMultiplier}x</p>
             </label>

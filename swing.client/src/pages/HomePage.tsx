@@ -261,7 +261,7 @@ const HomePage = () => {
                         </button>
                       ) : (
                         <div className="lock-message">
-                          🔒 Need {unlockCost}$ to unlock
+                          🔒 Need {unlockCost - balance}$ <span className="unlock-text-suffix">&nbsp;to unlock</span>
                         </div>
                       )}
                     </article>

@@ -355,7 +355,7 @@ main {
   display: flex;
   align-items: center;
   font-family: "Inter";
-  gap: 10px;
+  /* gap: 10px; Removed to keep sentence flow with span */
   backdrop-filter: blur(4px);
   position: absolute;
   right: 16px;
@@ -594,4 +594,10 @@ main {
   pointer-events: none;
   image-rendering: pixelated;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+@media (max-width: 1000px) {
+  .unlock-text-suffix {
+    display: none;
+  }
 }
