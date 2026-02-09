@@ -5,6 +5,8 @@ interface balanceContextProps{
     setBalance: (balance: number)=> void;
     username: string;
     setUsername: (name: string)=> void;
+    level: number;
+    setLevel: (level: number)=> void;
 }
 
 export const BalanceContext = createContext<balanceContextProps | undefined>(undefined);
@@ -13,10 +15,11 @@ export function BalanceProvider({ children }: { children: ReactNode }) {
   //nastavit a nacitat balance z databaze - upravit!!!!
   const [balance, setBalance] = useState<number>(1000)
   const [username, setUsername] = useState("")
+  const [level, setLevel] = useState<number>(0)
 
 
   return (
-    <BalanceContext.Provider value={{ balance, setBalance, username, setUsername }}>
+    <BalanceContext.Provider value={{ balance, setBalance, username, setUsername, level, setLevel }}>
       {children}
     </BalanceContext.Provider>
   );
