@@ -19,7 +19,7 @@ namespace Swing.Server.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private GameState GetState()
+        private UserData GetState()
         {
             string userId = Request.Headers["X-User-Id"].FirstOrDefault() ?? "guest";
             return _gameStateService.GetState(userId);
