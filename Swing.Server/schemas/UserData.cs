@@ -1,8 +1,12 @@
 namespace Swing.Server.classes
 {
-    public class GameState
+    public class UserData
     {
-        public decimal Balance { get; private set; } = 1000;
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public decimal Balance {  get; set; }
+        public bool[] unlockedGames = new bool[4];
+        /*public decimal Balance { get; private set; } = 1000;
         public string Username { get; set; } = "";
         public HashSet<string> UnlockedGameIds { get; private set; } = new();
         public decimal UnlockCost 
@@ -120,6 +124,6 @@ namespace Swing.Server.classes
             Username = "";
             UnlockedGameIds.Clear();
             HasUsedFreeUnlock = false;
-        }
+        }*/
     }
 }

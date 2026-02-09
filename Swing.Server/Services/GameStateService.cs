@@ -5,9 +5,9 @@ namespace Swing.Server.Services
 {
     public class GameStateService
     {
-        private readonly ConcurrentDictionary<string, GameState> _states = new();
+        private readonly ConcurrentDictionary<string, UserData> _states = new();
 
-        public GameState GetState(string userId)
+        public UserData GetState(string userId)
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -15,7 +15,7 @@ namespace Swing.Server.Services
                 userId = "guest"; 
             }
 
-            return _states.GetOrAdd(userId, _ => new GameState());
+            return _states.GetOrAdd(userId, _ => new UserData());
         }
     }
 }
