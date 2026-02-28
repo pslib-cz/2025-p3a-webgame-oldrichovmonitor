@@ -4,26 +4,22 @@
 @import url(typography.css) layer(init);
 @import url(layout.css) layer(layout);
 @import url(games/mines.css) layer(layout);
-/* @import url(games/timesplit.css) layer(layout); */
+@import url(games/timesplit.css) layer(layout);
 /* @import url(hamburger.css) layer(hamburger);
- */@import url(components.css) layer(components);
-
-
+ */
+@import url(components.css) layer(components);
 
 @layer init {
-    :root {
-        --background: #1D1616;
-        --primary: #8E1616;
-        --secondary: #D84040;
-        --text: #EEEEEE;
-        --hamburger-color: #EEEEEE;
-        --puprple: #6D28D9;
-    }
-    html{
-      scroll-behavior: smooth;
-      box-sizing: border-box;
-    }
-    
-
+  :root {
+    --background: #1d1616;
+    --primary: #8e1616;
+    --secondary: #d84040;
+    --text: #eeeeee;
+    --hamburger-color: #eeeeee;
+    --puprple: #6d28d9;
+  }
+  html {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+  }
 }
-

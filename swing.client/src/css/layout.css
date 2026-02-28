@@ -112,17 +112,23 @@ main {
 }
 .home-page__games {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 4 equal cards per row */
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   align-items: stretch;
+  width: 100%;
 }
 
-@media (max-width: 1200px) {
+@media (min-width: 1200px) {
   .home-page__games {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-@media (max-width: 900px) {
+@media (max-width: 1199px) and (min-width: 901px) {
+  .home-page__games {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 900px) and (min-width: 601px) {
   .home-page__games {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -225,7 +231,7 @@ main {
   padding: 10px 18px;
   border: 2px solid rgba(251, 191, 36, 0.6);
   border-radius: 8px;
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(251, 191, 36, 0.25),
     inset 0 1px 1px rgba(255, 255, 255, 0.3);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -243,7 +249,7 @@ main {
 
 .btn--unlock:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 8px 20px rgba(251, 191, 36, 0.4),
     0 0 25px rgba(251, 191, 36, 0.3),
     inset 0 1px 1px rgba(255, 255, 255, 0.4);
@@ -259,7 +265,7 @@ main {
   background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #059669 100%);
   color: #ffffff;
   border: 2px solid rgba(52, 211, 153, 0.6);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(52, 211, 153, 0.3),
     inset 0 1px 1px rgba(255, 255, 255, 0.2);
   animation: shimmer 2s infinite;
@@ -296,13 +302,14 @@ main {
 }
 
 @keyframes shimmer {
-  0%, 100% {
-    box-shadow: 
+  0%,
+  100% {
+    box-shadow:
       0 4px 12px rgba(52, 211, 153, 0.3),
       inset 0 1px 1px rgba(255, 255, 255, 0.2);
   }
   50% {
-    box-shadow: 
+    box-shadow:
       0 6px 16px rgba(52, 211, 153, 0.5),
       0 0 20px rgba(52, 211, 153, 0.3),
       inset 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -311,7 +318,7 @@ main {
 
 .btn--unlock--free:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 8px 20px rgba(52, 211, 153, 0.5),
     0 0 30px rgba(52, 211, 153, 0.4),
     inset 0 1px 1px rgba(255, 255, 255, 0.3);
@@ -364,7 +371,6 @@ main {
   margin-left: auto; /* Push to right if in flex container */
   width: fit-content;
 }
-
 
 /* Login page styles */
 
@@ -502,7 +508,7 @@ main {
   top: 0;
   left: 0;
   height: 100%;
-  background: linear-gradient(90deg, #34d399 0%, #24D3EF 100%);
+  background: linear-gradient(90deg, #34d399 0%, #24d3ef 100%);
   border-radius: 6px;
   box-shadow: 0 0 10px rgba(36, 211, 239, 0.5);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -528,15 +534,15 @@ main {
 }
 
 .milestone-reached .milestone-marker {
-  background: #24D3EF;
+  background: #24d3ef;
   border-color: #ffffff;
-  box-shadow: 0 0 10px #24D3EF;
+  box-shadow: 0 0 10px #24d3ef;
 }
 
 .milestone-label {
   position: absolute;
   top: 20px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: "IBM Plex Mono", monospace;
   font-size: 0.75rem;
   color: #94a3b8;
   white-space: nowrap;
@@ -570,19 +576,19 @@ main {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  image-rendering: pixelated; 
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 .character-glow {
-    position: absolute;
-    width: 20px;
-    height: 6px;
-    background: rgba(0,0,0,0.5);
-    border-radius: 50%;
-    bottom: 5px;
-    filter: blur(2px);
-    z-index: -1;
+  position: absolute;
+  width: 20px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  bottom: 5px;
+  filter: blur(2px);
+  z-index: -1;
 }
 
 .login-character {
@@ -593,7 +599,7 @@ main {
   width: 300px;
   pointer-events: none;
   image-rendering: pixelated;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
 }
 
 @media (max-width: 1000px) {

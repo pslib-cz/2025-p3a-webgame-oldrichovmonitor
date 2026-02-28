@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 
 interface GameProps {
-  id: string;
+  gameIndex: number;
   name: string;
   description: string;
   route: string;
   isLocked: boolean;
-  hasUsedFreeUnlock: boolean;
   balance: number;
   unlockCost: number;
-  onUnlock: (id: string) => void;
+  onUnlock: (gameIndex: number) => void;
 }
 
 const getGameIcon = (route: string) => {
@@ -103,19 +102,18 @@ const getGameIcon = (route: string) => {
 };
 
 const Game: React.FC<GameProps> = ({
-  id,
+  gameIndex,
   name,
   description,
   route,
   isLocked,
-  hasUsedFreeUnlock,
   balance,
   unlockCost,
   onUnlock,
 }) => {
   if (!isLocked) {
     return (
-      <Link to={route} className="game-link">
+      <Link to={route} className="game-link" aria-label={`Play ${name}`}>
         <article className="game">
           <div className="game__icon">{getGameIcon(route)}</div>
           <div className="game__text">
@@ -128,21 +126,22 @@ const Game: React.FC<GameProps> = ({
   }
 
   return (
-    <article className="game game--locked">
+    <article className="game game--locked" aria-label={`${name} - locked`}>
       <div className="game__icon">{getGameIcon(route)}</div>
       <div className="game__text">
         <h3>{name}</h3>
         <p className="subtext limit-width">{description}</p>
       </div>
-      {!hasUsedFreeUnlock ? (
+      {unlockCost === 0 ? (
         <button
-          onClick={() => onUnlock(id)}
+          onClick={() => onUnlock(gameIndex)}
           className="btn btn--unlock btn--unlock--free"
+          aria-label={`Unlock ${name} for free`}
         >
           <span className="btn__icon">🎁</span> UNLOCK FREE
         </button>
       ) : balance >= unlockCost ? (
-        <button onClick={() => onUnlock(id)} className="btn btn--unlock">
+        <button onClick={() => onUnlock(gameIndex)} className="btn btn--unlock" aria-label={`Unlock ${name} for ${unlockCost} dollars`}>
           <span className="btn__icon">💰</span> UNLOCK ({unlockCost}$)
         </button>
       ) : (

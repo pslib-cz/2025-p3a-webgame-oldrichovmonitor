@@ -21,6 +21,26 @@
     margin-inline: 2rem;
   }
 }
+
+/* Desktop: side-by-side layout for timesplit */
+@media (min-width: 900px) {
+  .time-split-game__wrapper {
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .timesplit__game-area {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .timesplit__controls {
+    position: sticky;
+    top: 1rem;
+  }
+}
 .timesplit__content {
   display: flex;
   padding: 2.375rem 2.375rem;
@@ -127,8 +147,6 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-}
-.timesplit__content-wrapper {
 }
 .timesplit__multiplier-container {
   display: flex;

@@ -39,11 +39,21 @@
 }
 .memory-multiplier.active {
   background: var(--primary);
-  color: white;
+  color: #ebb30b;
+  font-weight: bold;
   border-color: var(--primary-light);
   box-shadow: 0 0 15px var(--primary-glow);
+  transform: scale(1.2);
+}
+.memory-multiplier.passed {
+  opacity: 1;
+  color: white;
 }
 .memory-multiplier.upcoming {
   color: var(--primary-light);
   border-color: rgba(109, 40, 217, 0.3);
+}
+
+.tile--clickable {
+  cursor: pointer;
 }
