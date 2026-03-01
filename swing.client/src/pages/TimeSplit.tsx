@@ -168,9 +168,7 @@ const TimeSplit = () => {
                 <p className="subtitle ibmplexmono white timesplit__time">
                   {isPlaying && currentTime > 3000 ? (
                     <>
-                      <span className="timesplit__time--hidden">
-                        ??.??
-                      </span>
+                      <span className="timesplit__time--hidden">??.??</span>
                       <span className="timesplit__unit">s</span>
                     </>
                   ) : (

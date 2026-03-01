@@ -113,9 +113,7 @@ const BetControls: React.FC<BetControlsProps> = ({
         >
           <span>{cashOutLabel}</span>
           {isCashingOut ? (
-            <span className="bet-button__win">
-              {winAmount.toFixed(2)}$
-            </span>
+            <span className="bet-button__win">{winAmount.toFixed(2)}$</span>
           ) : null}
         </button>
       ) : (

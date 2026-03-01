@@ -141,7 +141,11 @@ const Game: React.FC<GameProps> = ({
           <span className="btn__icon">🎁</span> UNLOCK FREE
         </button>
       ) : balance >= unlockCost ? (
-        <button onClick={() => onUnlock(gameIndex)} className="btn btn--unlock" aria-label={`Unlock ${name} for ${unlockCost} dollars`}>
+        <button
+          onClick={() => onUnlock(gameIndex)}
+          className="btn btn--unlock"
+          aria-label={`Unlock ${name} for ${unlockCost} dollars`}
+        >
           <span className="btn__icon">💰</span> UNLOCK ({unlockCost}$)
         </button>
       ) : (
