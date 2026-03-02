@@ -44,4 +44,5 @@ COPY --from=client-build /app/client/dist ./wwwroot
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
+ENV ConnectionStrings__DefaultConnection="Data Source=/data/app.db"
 ENTRYPOINT ["dotnet", "Swing.Server.dll"]
