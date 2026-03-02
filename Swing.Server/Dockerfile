@@ -21,16 +21,13 @@ WORKDIR /app/server
 
 # Copy csproj and restore
 COPY Swing.Server/Swing.Server.csproj ./
+# Remove the esproj reference before restore (it's not needed in Docker)
+RUN sed -i '/<ProjectReference.*esproj/,/<\/ProjectReference>/d' Swing.Server.csproj
 RUN dotnet restore
 
 # Copy server source
 COPY Swing.Server/ ./
-
-# Copy built frontend into wwwroot
-COPY --from=client-build /app/client/dist ./wwwroot
-
-# Publish
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
 
 # =========================
@@ -39,11 +36,12 @@ RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 
-COPY --from=server-build /app/publish .
+# Copy published server
+COPY --from=server-build /app/publish ./
 
-ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Production
+# Copy built client into wwwroot
+COPY --from=client-build /app/client/dist ./wwwroot
 
 EXPOSE 8080
-
+ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "Swing.Server.dll"]
